@@ -1,5 +1,3 @@
-*_work/
-main.py
 __pycache__/
 *.pyc
 .env
