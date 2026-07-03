@@ -1,0 +1,6 @@
+*_work/
+main.py
+__pycache__/
+*.pyc
+.env
+.DS_Store
