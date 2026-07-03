@@ -1,5 +1,4 @@
-"""สวัสดี: ชื่อ"""
-
+""" สวัสดี: ชื่อ """
 first_name = input("")
 last_name = input("")
 
