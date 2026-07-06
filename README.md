@@ -21,7 +21,7 @@
 | **Email**            | 69070027@kmitl.ac.th                                      |
 | **Faculty (TH)**     | คณะเทคโนโลยีสารสนเทศ                                      |
 | **Faculty (EN)**     | School of Information Technology                          |
-| **Institution (TH)** | King Mongkut's Institute of Technology Ladkrabang (KMITL) |
+| **Institution (TH)** | สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง (สจล.)     |
 | **Institution (EN)** | King Mongkut's Institute of Technology Ladkrabang (KMITL) |
 
 ---
