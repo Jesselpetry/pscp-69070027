@@ -13,15 +13,16 @@
 
 ## 👤 Student Information
 
-| | |
-|---|---|
-| **Name (TH)** | นายฉัททัณฑ์ เพททริ |
-| **Name (EN)** | Chatan Petry |
-| **Student ID** | 69070027 |
-| **Email** | 69070027@kmitl.ac.th |
-| **Faculty (TH)** | คณะเทคโนโลยีสารสนเทศ |
-| **Faculty (EN)** | School of Information Technology |
-| **Institution** | King Mongkut's Institute of Technology Ladkrabang (KMITL) |
+|                      |                                                           |
+| -------------------- | --------------------------------------------------------- |
+| **Name (TH)**        | นายฉัททัณฑ์ เพททริ                                        |
+| **Name (EN)**        | Chatan Petry                                              |
+| **Student ID**       | 69070027                                                  |
+| **Email**            | 69070027@kmitl.ac.th                                      |
+| **Faculty (TH)**     | คณะเทคโนโลยีสารสนเทศ                                      |
+| **Faculty (EN)**     | School of Information Technology                          |
+| **Institution (TH)** | King Mongkut's Institute of Technology Ladkrabang (KMITL) |
+| **Institution (EN)** | King Mongkut's Institute of Technology Ladkrabang (KMITL) |
 
 ---
 
@@ -54,32 +55,32 @@ pscp-69070027/
 
 ### ✅ Solved
 
-| OJ ID | Problem Name | Status |
-|:---:|---|:---:|
-| 2981 | สวัสดี: ชื่อ (Sawasdee Name) | ✅ Pass |
-| 2988 | การตรวจสอบบัตรประชาชน (National ID Verification) | ✅ Pass |
-| 2995 | การตรวจสอบบัตรนักศึกษา (Student Card Verification) | ✅ Pass |
-| 2999 | Frame | ✅ Pass |
-| 3002 | Cyan's Password Generator | ✅ Pass |
-| 3019 | Safe Password | ✅ Pass |
+| OJ ID | Problem Name                                       | Status  |
+| :---: | -------------------------------------------------- | :-----: |
+| 2981  | สวัสดี: ชื่อ (Sawasdee Name)                       | ✅ Pass |
+| 2988  | การตรวจสอบบัตรประชาชน (National ID Verification)   | ✅ Pass |
+| 2995  | การตรวจสอบบัตรนักศึกษา (Student Card Verification) | ✅ Pass |
+| 2999  | Frame                                              | ✅ Pass |
+| 3002  | Cyan's Password Generator                          | ✅ Pass |
+| 3019  | Safe Password                                      | ✅ Pass |
 
 ### 🔄 In Progress
 
-| OJ ID | Problem Name | Status |
-|:---:|---|:---:|
-| 2997 | Elo | 🔄 In Progress |
-| 2998 | Euclidean Distance 2D | 🔄 In Progress |
-| 3008 | Heron of Alexandria | 🔄 In Progress |
-| 3015 | Pro | 🔄 In Progress |
-| 3016 | Seven | 🔄 In Progress |
+| OJ ID | Problem Name          |     Status     |
+| :---: | --------------------- | :------------: |
+| 2997  | Elo                   | 🔄 In Progress |
+| 2998  | Euclidean Distance 2D | 🔄 In Progress |
+| 3008  | Heron of Alexandria   | 🔄 In Progress |
+| 3015  | Pro                   | 🔄 In Progress |
+| 3016  | Seven                 | 🔄 In Progress |
 
 ### 📓 Learning Logs
 
-| OJ ID | Problem Name | Learning Log |
-|:---:|---|:---:|
-| 2996 | Anagram | 📓 [LEARNING-LOGS]-oj_2996-Anagram |
-| 3011 | Colors | 📓 [LEARNING-LOGS]-oj_3011-Colors |
-| 3017 | Bill | 📓 [LEARNING-LOGS]-oj_3017-Bill |
+| OJ ID | Problem Name |            Learning Log            |
+| :---: | ------------ | :--------------------------------: |
+| 2996  | Anagram      | 📓 [LEARNING-LOGS]-oj_2996-Anagram |
+| 3011  | Colors       | 📓 [LEARNING-LOGS]-oj_3011-Colors  |
+| 3017  | Bill         |  📓 [LEARNING-LOGS]-oj_3017-Bill   |
 
 ---
 
