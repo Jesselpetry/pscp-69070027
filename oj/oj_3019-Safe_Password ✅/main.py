@@ -2,16 +2,19 @@
 
 def main():
     """ Safe Password """
-    first_name = input("")
-    last_name = input("")
-    age = input("")
-    password = ""
+    pass_char = "H"
+    pass_digit = "4567"
+    pass_char_input = str(input(""))
+    pass_digit_input = str(input(""))
 
-    if len(first_name) >= 5 and len(last_name) >= 5:
-        password = first_name[:2] + last_name[-1] + age[-1]
+    if (pass_char_input == pass_char) and (pass_digit_input == pass_digit):
+        print("safe unlocked")
+    elif (pass_char_input == pass_char) and (pass_digit_input != pass_digit):
+        print("safe locked - change digit")
+    elif (pass_char_input != pass_char) and (pass_digit_input == pass_digit):
+        print("safe locked - change char")
     else:
-        password = first_name[:1] + age + last_name[-1]
-    print(password)
+        print("safe locked")
 
 if __name__ == "__main__":
     main()
