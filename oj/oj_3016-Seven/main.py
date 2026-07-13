@@ -2,8 +2,9 @@
 
 def main():
     """Seven"""
-    # คุณแค่มีหน้าที่เอาโค้ดมาแปะหรือพิมพ์ต่อตรงนี้ได้เลย
-    pass
+    x7 = int(input(""))
+    result = pow(7, x7, 10)
+    print(result)
 
 if __name__ == "__main__":
     main()
