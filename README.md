@@ -85,6 +85,11 @@ pscp-69070027/
 | 3019  | Safe Password                                      | ✅ Pass |
 | 3023  | Calculator                                         | ✅ Pass |
 | 3027  | กระต่ายน้อยล้อมรั้วลวดหนาม (Carrot Farm Fence)     | ✅ Pass |
+| 3059  | ผลการสอบ (Exam Result)                             | ✅ Pass |
+| 3060  | การตรวจสอบสระ (Vowel Verification)                | ✅ Pass |
+| 3061  | ผ่าน/ไม่ผ่าน (Pass Fail)                           | ✅ Pass |
+| 3062  | ค่าตั๋ว (Ticket Price)                            | ✅ Pass |
+| 3063  | รหัสเซฟ (Safe Code)                                | ✅ Pass |
 
 ### 🔄 In Progress
 
@@ -95,11 +100,6 @@ pscp-69070027/
 | 3016  | Seven                 | 🔄 In Progress |
 | 3020  | Coke                  | 🔄 In Progress |
 | 3021  | OverlapCircle         | 🔄 In Progress |
-| 3059  | ผลการสอบ              | 🔄 In Progress |
-| 3060  | การตรวจสอบสระ        | 🔄 In Progress |
-| 3061  | ผ่าน/ไม่ผ่าน          | 🔄 In Progress |
-| 3062  | ค่าตั๋ว               | 🔄 In Progress |
-| 3063  | รหัสเซฟ               | 🔄 In Progress |
 | 3064  | วันเกิด               | 🔄 In Progress |
 | 3065  | ตัวเลขโรมันแบบง่าย    | 🔄 In Progress |
 | 3066  | เหมือนกันหมด          | 🔄 In Progress |
