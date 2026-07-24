@@ -95,6 +95,18 @@ pscp-69070027/
 | 3016  | Seven                 | 🔄 In Progress |
 | 3020  | Coke                  | 🔄 In Progress |
 | 3021  | OverlapCircle         | 🔄 In Progress |
+| 3059  | ผลการสอบ              | 🔄 In Progress |
+| 3060  | การตรวจสอบสระ        | 🔄 In Progress |
+| 3061  | ผ่าน/ไม่ผ่าน          | 🔄 In Progress |
+| 3062  | ค่าตั๋ว               | 🔄 In Progress |
+| 3063  | รหัสเซฟ               | 🔄 In Progress |
+| 3064  | วันเกิด               | 🔄 In Progress |
+| 3065  | ตัวเลขโรมันแบบง่าย    | 🔄 In Progress |
+| 3066  | เหมือนกันหมด          | 🔄 In Progress |
+| 3067  | การเพิ่ม/ลด           | 🔄 In Progress |
+| 3068  | ปีอธิกสุรทิน          | 🔄 In Progress |
+| 3069  | ราศี                  | 🔄 In Progress |
+| 3070  | นับเลขคู่และเลขคี่    | 🔄 In Progress |
 
 ### 📓 Learning Logs
 
@@ -106,6 +118,10 @@ pscp-69070027/
 | 3022  | Temperature    | 📓 oj/[LEARNING-LOGS]-oj_3022-Temperature |
 | 3024  | SurprisingVote | 📓 oj/[LEARNING-LOGS]-oj_3024-SurprisingVote |
 | 3025  | Season         | 📓 oj/[LEARNING-LOGS]-oj_3025-Season  |
+| 3042  | หาร 10         | 📓 oj/[LEARNING-LOGS]-oj_3042-Divide_By_10 |
+| 3058  | BrickBridge    | 📓 oj/[LEARNING-LOGS]-oj_3058-BrickBridge |
+| 3071  | Numbers In Range | 📓 oj/[LEARNING-LOGS]-oj_3071-Numbers_In_Range |
+| 3072  | A-E-I-O-U      | 📓 oj/[LEARNING-LOGS]-oj_3072-A-E-I-O-U |
 
 ---
 
