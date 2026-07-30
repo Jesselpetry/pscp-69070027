@@ -2,8 +2,8 @@
 
 def main():
     """[LEARNING LOGS] สลับตัวอักษร"""
-    # คุณแค่มีหน้าที่เอาโค้ดมาแปะหรือพิมพ์ต่อตรงนี้ได้เลย
-    pass
+    text = input()
+    print(text[::-1].lower())
 
 if __name__ == "__main__":
     main()

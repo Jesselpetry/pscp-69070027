@@ -19,16 +19,18 @@ oj/oj_<problem-id>-<Problem_Name>/
 | `oj/oj_3019-Safe_Password/` | โจทย์ OJ หมายเลข 3019 ชื่อ Safe Password |
 | `oj/oj_2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
 
-หากโจทย์เป็น Learning Log ให้ใช้รูปแบบนี้แทน:
+| `oj/oj_2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
+
+หากโจทย์เป็น Learning Log ให้วางโฟลเดอร์ไว้ที่ root ในรูปแบบนี้:
 
 ```
-oj/[LEARNING-LOGS]-oj_<problem-id>-<Problem_Name>/
+oj_<problem-id>/
 ```
 
 **ตัวอย่าง:**
 
 ```
-oj/[LEARNING-LOGS]-oj_2996-Anagram/
+oj_2996/
 ```
 
 หลังจาก OJ ผ่าน (Pass) ให้เพิ่ม ` ✅` ต่อท้ายชื่อโฟลเดอร์:
@@ -51,7 +53,7 @@ oj/oj_<id>-<Name>/
 ### โจทย์ Learning Log
 
 ```
-oj/[LEARNING-LOGS]-oj_<id>-<Name>/
+oj_<id>/
 ├── main.py                    # โค้ด Python หลัก
 ├── SUBMISSION_TEMPLATE.th.md  # Template บันทึกการแก้โจทย์ (ภาษาไทย)
 ├── submission.md              # บันทึกการแก้โจทย์ของตนเอง (เขียนเอง!)
@@ -75,7 +77,7 @@ mkdir -p "oj/oj_<id>-<Problem_Name>"
 **โจทย์ Learning Log:**
 
 ```bash
-mkdir -p "oj/[LEARNING-LOGS]-oj_<id>-<Problem_Name>"
+mkdir -p "oj_<id>"
 ```
 
 ### ขั้นที่ 2 — สร้างไฟล์ `main.py`
@@ -104,13 +106,13 @@ if __name__ == "__main__":
 สำหรับโจทย์ Learning Log ให้คัดลอก `SUBMISSION_TEMPLATE.th.md` เข้าโฟลเดอร์:
 
 ```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj/[LEARNING-LOGS]-oj_<id>-<Problem_Name>/SUBMISSION_TEMPLATE.th.md"
+cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj_<id>/SUBMISSION_TEMPLATE.th.md"
 ```
 
 ตัวอย่าง:
 
 ```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj/[LEARNING-LOGS]-oj_2996-Anagram/SUBMISSION_TEMPLATE.th.md"
+cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj_2996/SUBMISSION_TEMPLATE.th.md"
 ```
 
 จากนั้นให้กรอก `submission.md` (เขียนเอง) และ `ai_reflection.md` (ถ้าใช้ AI) ตาม template
@@ -152,12 +154,13 @@ git mv "oj/oj_<id>-<Problem_Name>" "oj/oj_<id>-<Problem_Name> ✅"
 ### โจทย์ Learning Log
 
 ```
-[ ] สร้างโฟลเดอร์ oj/[LEARNING-LOGS]-oj_<id>-<Name>/
+[ ] สร้างโฟลเดอร์ oj_<id>/
 [ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
 [ ] คัดลอก SUBMISSION_TEMPLATE.th.md เข้าโฟลเดอร์
 [ ] กรอก submission.md ด้วยตนเอง
 [ ] กรอก ai_reflection.md (ถ้าใช้ AI)
 [ ] เพิ่มโจทย์ใน README.md ตาราง Learning Logs
+```
 [ ] ทดสอบโค้ดใน VS Code ก่อนส่ง OJ
 [ ] หลัง Pass: เปลี่ยนชื่อโฟลเดอร์เพิ่ม ✅ และอัปเดต README
 ```

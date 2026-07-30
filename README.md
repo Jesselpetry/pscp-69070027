@@ -32,13 +32,19 @@ This repository contains my OJ problem solutions and learning logs for the PSCP 
 
 ```
 pscp-69070027/
-├── oj/                              # All OJ problems (passed, in progress, learning logs)
-│   ├── [LEARNING-LOGS]-oj_2996-Anagram/ # Learning log — Anagram
-│   ├── [LEARNING-LOGS]-oj_3011-Colors/  # Learning log — Colors
-│   ├── [LEARNING-LOGS]-oj_3017-Bill/    # Learning log — Bill
-│   ├── [LEARNING-LOGS]-oj_3022-Temperature/ # Learning log — Temperature
-│   ├── [LEARNING-LOGS]-oj_3024-SurprisingVote/ # Learning log — SurprisingVote
-│   ├── [LEARNING-LOGS]-oj_3025-Season/  # Learning log — Season
+├── oj_2996/                         # Learning log — Anagram
+├── oj_3011/                         # Learning log — Colors
+├── oj_3017/                         # Learning log — Bill
+├── oj_3022/                         # Learning log — Temperature
+├── oj_3024/                         # Learning log — SurprisingVote
+├── oj_3025/                         # Learning log — Season
+├── oj_3031/                         # Learning log — Ink
+├── oj_3036/                         # Learning log — Castle
+├── oj_3042/                         # Learning log — Divide_By_10
+├── oj_3058/                         # Learning log — BrickBridge
+├── oj_3071/                         # Learning log — Numbers_In_Range
+├── oj_3072/                         # Learning log — A-E-I-O-U
+├── oj/                              # All standard OJ problems (passed, in progress)
 │   ├── oj_2981-Sawasdee_Name ✅/        # OJ 2981 — สวัสดี: ชื่อ
 │   ├── oj_2988-National_ID_Verification ✅/ # OJ 2988 — การตรวจสอบบัตรประชาชน
 │   ├── oj_2992-Swap_Number ✅/          # OJ 2992 — สลับหมายเลข
@@ -110,18 +116,20 @@ pscp-69070027/
 
 ### 📓 Learning Logs
 
-| OJ ID | Problem Name   |            Learning Log            |
-| :---: | -------------- | :--------------------------------: |
-| 2996  | Anagram        | 📓 oj/[LEARNING-LOGS]-oj_2996-Anagram |
-| 3011  | Colors         | 📓 oj/[LEARNING-LOGS]-oj_3011-Colors  |
-| 3017  | Bill           | 📓 oj/[LEARNING-LOGS]-oj_3017-Bill    |
-| 3022  | Temperature    | 📓 oj/[LEARNING-LOGS]-oj_3022-Temperature |
-| 3024  | SurprisingVote | 📓 oj/[LEARNING-LOGS]-oj_3024-SurprisingVote |
-| 3025  | Season         | 📓 oj/[LEARNING-LOGS]-oj_3025-Season  |
-| 3042  | หาร 10         | 📓 oj/[LEARNING-LOGS]-oj_3042-Divide_By_10 |
-| 3058  | BrickBridge    | 📓 oj/[LEARNING-LOGS]-oj_3058-BrickBridge |
-| 3071  | Numbers In Range | 📓 oj/[LEARNING-LOGS]-oj_3071-Numbers_In_Range |
-| 3072  | A-E-I-O-U      | 📓 oj/[LEARNING-LOGS]-oj_3072-A-E-I-O-U |
+| OJ ID | Problem Name   |   Learning Log   |
+| :---: | -------------- | :--------------: |
+| 2996  | Anagram        | 📓 [oj_2996](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_2996) |
+| 3011  | Colors         | 📓 [oj_3011](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3011) |
+| 3017  | Bill           | 📓 [oj_3017](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3017) |
+| 3022  | Temperature    | 📓 [oj_3022](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3022) |
+| 3024  | SurprisingVote | 📓 [oj_3024](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3024) |
+| 3025  | Season         | 📓 [oj_3025](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3025) |
+| 3031  | Ink            | 📓 [oj_3031](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3031) |
+| 3036  | Castle         | 📓 [oj_3036](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3036) |
+| 3042  | หาร 10         | 📓 [oj_3042](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3042) |
+| 3058  | BrickBridge    | 📓 [oj_3058](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3058) |
+| 3071  | Numbers In Range | 📓 [oj_3071](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3071) |
+| 3072  | A-E-I-O-U      | 📓 [oj_3072](file:///Users/chatan/Desktop/Keep/KMITL/IT-KMITL/Y1-S1/PSCP/pscp-69070027/oj_3072) |
 
 ---
 
