@@ -16,27 +16,25 @@ oj/oj_<problem-id>-<Problem_Name>/
 
 | โฟลเดอร์ | ความหมาย |
 |---|---|
-| `oj/oj_3019-Safe_Password/` | โจทย์ OJ หมายเลข 3019 ชื่อ Safe Password |
-| `oj/oj_2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
-
-| `oj/oj_2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
+| `oj/oj3019-Safe_Password/` | โจทย์ OJ หมายเลข 3019 ชื่อ Safe Password |
+| `oj/oj2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
 
 หากโจทย์เป็น Learning Log ให้วางโฟลเดอร์ไว้ที่ root ในรูปแบบนี้:
 
 ```
-oj_<problem-id>/
+oj<problem-id>/
 ```
 
 **ตัวอย่าง:**
 
 ```
-oj_2996/
+oj2996/
 ```
 
 หลังจาก OJ ผ่าน (Pass) ให้เพิ่ม ` ✅` ต่อท้ายชื่อโฟลเดอร์:
 
 ```
-oj/oj_3019-Safe_Password ✅/
+oj/oj3019-Safe_Password ✅/
 ```
 
 ---
@@ -46,14 +44,14 @@ oj/oj_3019-Safe_Password ✅/
 ### โจทย์ปกติ (ไม่ใช่ Learning Log)
 
 ```
-oj/oj_<id>-<Name>/
+oj/oj<id>-<Name>/
 └── main.py          # โค้ด Python หลัก
 ```
 
 ### โจทย์ Learning Log
 
 ```
-oj_<id>/
+oj<id>/
 ├── main.py                    # โค้ด Python หลัก
 ├── SUBMISSION_TEMPLATE.th.md  # Template บันทึกการแก้โจทย์ (ภาษาไทย)
 ├── submission.md              # บันทึกการแก้โจทย์ของตนเอง (เขียนเอง!)
@@ -71,13 +69,13 @@ oj_<id>/
 **โจทย์ปกติ:**
 
 ```bash
-mkdir -p "oj/oj_<id>-<Problem_Name>"
+mkdir -p "oj/oj<id>-<Problem_Name>"
 ```
 
 **โจทย์ Learning Log:**
 
 ```bash
-mkdir -p "oj_<id>"
+mkdir -p "oj<id>"
 ```
 
 ### ขั้นที่ 2 — สร้างไฟล์ `main.py`
@@ -106,13 +104,13 @@ if __name__ == "__main__":
 สำหรับโจทย์ Learning Log ให้คัดลอก `SUBMISSION_TEMPLATE.th.md` เข้าโฟลเดอร์:
 
 ```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj_<id>/SUBMISSION_TEMPLATE.th.md"
+cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj<id>/SUBMISSION_TEMPLATE.th.md"
 ```
 
 ตัวอย่าง:
 
 ```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj_2996/SUBMISSION_TEMPLATE.th.md"
+cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj2996/SUBMISSION_TEMPLATE.th.md"
 ```
 
 จากนั้นให้กรอก `submission.md` (เขียนเอง) และ `ai_reflection.md` (ถ้าใช้ AI) ตาม template
@@ -134,7 +132,7 @@ cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj_2996/SUBMISSION_TE
 และเปลี่ยนชื่อโฟลเดอร์เพิ่ม ` ✅`:
 
 ```bash
-git mv "oj/oj_<id>-<Problem_Name>" "oj/oj_<id>-<Problem_Name> ✅"
+git mv "oj/oj<id>-<Problem_Name>" "oj/oj<id>-<Problem_Name> ✅"
 ```
 
 ---
@@ -144,7 +142,7 @@ git mv "oj/oj_<id>-<Problem_Name>" "oj/oj_<id>-<Problem_Name> ✅"
 ### โจทย์ปกติ
 
 ```
-[ ] สร้างโฟลเดอร์ oj/oj_<id>-<Name>/
+[ ] สร้างโฟลเดอร์ oj/oj<id>-<Name>/
 [ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
 [ ] เพิ่มโจทย์ใน README.md ตาราง Problem Index
 [ ] ทดสอบโค้ดใน VS Code ก่อนส่ง OJ
@@ -154,7 +152,7 @@ git mv "oj/oj_<id>-<Problem_Name>" "oj/oj_<id>-<Problem_Name> ✅"
 ### โจทย์ Learning Log
 
 ```
-[ ] สร้างโฟลเดอร์ oj_<id>/
+[ ] สร้างโฟลเดอร์ oj<id>/
 [ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
 [ ] คัดลอก SUBMISSION_TEMPLATE.th.md เข้าโฟลเดอร์
 [ ] กรอก submission.md ด้วยตนเอง
