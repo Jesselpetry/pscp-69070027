@@ -87,32 +87,44 @@ pscp-69070027/
 | 3004  | หาระยะทางระหว่างจุด 3D (Distance 3D)                | ✅ Pass |
 | 3005  | กระต่ายน้อยจ่ายตลาด (Rabbit Shopping)              | ✅ Pass |
 | 3006  | Gift I                                             | ✅ Pass |
+| 3008  | Heron of Alexandria                                | ✅ Pass |
 | 3010  | Quadrant                                           | ✅ Pass |
+| 3015  | Pro                                                | ✅ Pass |
+| 3016  | Seven                                              | ✅ Pass |
 | 3019  | Safe Password                                      | ✅ Pass |
+| 3020  | Coke                                               | ✅ Pass |
+| 3021  | OverlapCircle                                      | ✅ Pass |
 | 3023  | Calculator                                         | ✅ Pass |
 | 3027  | กระต่ายน้อยล้อมรั้วลวดหนาม (Carrot Farm Fence)     | ✅ Pass |
+| 3030  | Saitama                                            | ✅ Pass |
+| 3032  | คะแนนสอบ (Exam Score)                              | ✅ Pass |
+| 3033  | กระดาษห่อของขวัญ (Gift Wrapping Paper)             | ✅ Pass |
+| 3035  | TikTok AR Filter                                   | ✅ Pass |
+| 3037  | ค่ามากที่สุด (Max Value)                            | ✅ Pass |
+| 3038  | ค่าน้อยที่สุด (Min Value)                            | ✅ Pass |
+| 3039  | ค่าน้อยที่สุด 4 จำนวน (Min Value 4)                | ✅ Pass |
+| 3040  | เหรียญ (Coin)                                      | ✅ Pass |
+| 3041  | หารลงตัว (Divisible)                               | ✅ Pass |
 | 3059  | ผลการสอบ (Exam Result)                             | ✅ Pass |
 | 3060  | การตรวจสอบสระ (Vowel Verification)                | ✅ Pass |
 | 3061  | ผ่าน/ไม่ผ่าน (Pass Fail)                           | ✅ Pass |
 | 3062  | ค่าตั๋ว (Ticket Price)                            | ✅ Pass |
 | 3063  | รหัสเซฟ (Safe Code)                                | ✅ Pass |
+| 3064  | วันเกิด (Birthday)                                 | ✅ Pass |
+| 3065  | ตัวเลขโรมันแบบง่าย (Simple Roman Numerals)         | ✅ Pass |
+| 3066  | เหมือนกันหมด (All Same)                            | ✅ Pass |
+| 3067  | การเพิ่ม/ลด (Increment Decrement)                  | ✅ Pass |
+| 3068  | ปีอธิกสุรทิน (LeapYear)                            | ✅ Pass |
+| 3070  | นับเลขคู่และเลขคี่ (Count Even Odd)                | ✅ Pass |
 
 ### 🔄 In Progress
 
-| OJ ID | Problem Name          |     Status     |
-| :---: | --------------------- | :------------: |
-| 3008  | Heron of Alexandria   | 🔄 In Progress |
-| 3015  | Pro                   | 🔄 In Progress |
-| 3016  | Seven                 | 🔄 In Progress |
-| 3020  | Coke                  | 🔄 In Progress |
-| 3021  | OverlapCircle         | 🔄 In Progress |
-| 3064  | วันเกิด               | 🔄 In Progress |
-| 3065  | ตัวเลขโรมันแบบง่าย    | 🔄 In Progress |
-| 3066  | เหมือนกันหมด          | 🔄 In Progress |
-| 3067  | การเพิ่ม/ลด           | 🔄 In Progress |
-| 3068  | ปีอธิกสุรทิน          | 🔄 In Progress |
-| 3069  | ราศี                  | 🔄 In Progress |
-| 3070  | นับเลขคู่และเลขคี่    | 🔄 In Progress |
+| OJ ID | Problem Name                             |     Status     |
+| :---: | ---------------------------------------- | :------------: |
+| 3014  | นม (Milk)                                | 🔄 In Progress |
+| 3018  | พื้นที่สี่เหลี่ยมผืนผ้า (RectangleArea)  | 🔄 In Progress |
+| 3034  | Pod                                      | 🔄 In Progress |
+| 3069  | ราศี (Zodiac)                            | 🔄 In Progress |
 
 ### 📓 Learning Logs
 
