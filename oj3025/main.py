@@ -5,7 +5,7 @@ def main():
     month = int(input())
     day = int(input())
 
-    winter = [1,2]
+    winter = [1,2]  
     spring = [4,5]
     summer = [7,8]
     fall = [10,11]

@@ -116,6 +116,7 @@ pscp-69070027/
 | 3067  | การเพิ่ม/ลด (Increment Decrement)                  | ✅ Pass |
 | 3068  | ปีอธิกสุรทิน (LeapYear)                            | ✅ Pass |
 | 3070  | นับเลขคู่และเลขคี่ (Count Even Odd)                | ✅ Pass |
+| 3106  | Basic ATM                                          | ✅ Pass |
 
 ### 🔄 In Progress
 
