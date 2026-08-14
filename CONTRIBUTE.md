@@ -9,7 +9,7 @@
 ทุกโฟลเดอร์โจทย์ต้องสร้างอยู่ภายใต้โฟลเดอร์ `oj/` โดยใช้รูปแบบดังนี้:
 
 ```
-oj/oj_<problem-id>-<Problem_Name>/
+oj/oj<problem-id>-<Problem_Name>/
 ```
 
 **ตัวอย่าง:**
@@ -141,7 +141,7 @@ git mv "oj/oj<id>-<Problem_Name>" "oj/oj<id>-<Problem_Name> ✅"
 
 ### โจทย์ปกติ
 
-```
+```text
 [ ] สร้างโฟลเดอร์ oj/oj<id>-<Name>/
 [ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
 [ ] เพิ่มโจทย์ใน README.md ตาราง Problem Index
@@ -151,14 +151,13 @@ git mv "oj/oj<id>-<Problem_Name>" "oj/oj<id>-<Problem_Name> ✅"
 
 ### โจทย์ Learning Log
 
-```
+```text
 [ ] สร้างโฟลเดอร์ oj<id>/
 [ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
 [ ] คัดลอก SUBMISSION_TEMPLATE.th.md เข้าโฟลเดอร์
 [ ] กรอก submission.md ด้วยตนเอง
 [ ] กรอก ai_reflection.md (ถ้าใช้ AI)
 [ ] เพิ่มโจทย์ใน README.md ตาราง Learning Logs
-```
 [ ] ทดสอบโค้ดใน VS Code ก่อนส่ง OJ
 [ ] หลัง Pass: เปลี่ยนชื่อโฟลเดอร์เพิ่ม ✅ และอัปเดต README
 ```
@@ -170,13 +169,13 @@ git mv "oj/oj<id>-<Problem_Name>" "oj/oj<id>-<Problem_Name> ✅"
 รันโค้ดด้วยคำสั่ง:
 
 ```bash
-python "oj/oj_<id>-<Problem_Name>/main.py"
+python "oj/oj<id>-<Problem_Name>/main.py"
 ```
 
 หรือบน macOS อาจใช้:
 
 ```bash
-python3 "oj/oj_<id>-<Problem_Name>/main.py"
+python3 "oj/oj<id>-<Problem_Name>/main.py"
 ```
 
 ---

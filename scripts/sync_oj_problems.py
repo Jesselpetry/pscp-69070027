@@ -76,7 +76,8 @@ async def eval_js_on_page(page_num):
                     attempt_count,
                     percentage,
                     expire_date,
-                    is_learning_log: name.includes("[LEARNING LOGS]"),
+                    is_learning_log: name.includes("[LEARNING LOGS]") || name.includes("[LEARNING LOG]"),
+                    is_recommended: name.toLowerCase().includes("[recommend"),
                     url: href
                 };
             }).filter(Boolean);
