@@ -7,11 +7,11 @@ def main():
 
     for i in range(1, n + 1):
         # ต้องเช็กเงื่อนไขที่เจาะจงที่สุด (หารด้วย 15 ลงตัว) ก่อนเสมอ
-        if i % 15 == 0:
+        if not i % 15:
             print("FizzBuzz")
-        elif i % 3 == 0:
+        elif not i % 3:
             print("Fizz")
-        elif i % 5 == 0:
+        elif not i % 5:
             print("Buzz")
         else:
             print(i)
