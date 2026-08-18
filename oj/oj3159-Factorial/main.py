@@ -2,7 +2,7 @@
 
 def main():
     """Factorial"""
-    # solution code here
-
+    i = 1
+    print(chr(i))
 if __name__ == "__main__":
     main()

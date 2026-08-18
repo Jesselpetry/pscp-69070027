@@ -7,5 +7,4 @@ def main():
     print(f"*{text}*")
     print("*"*(len(text)+2))
 
-if __name__ == "__main__":
-    main()
+main()
