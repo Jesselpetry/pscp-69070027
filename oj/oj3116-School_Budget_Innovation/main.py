@@ -12,7 +12,7 @@ def main():
     digits = []
     for place in range(1, 11):
         place_value = place - 1
-        if place % 2 != 0:
+        if place % 2:
             value = first_code + place_value
         else:
             value = last_code - place_value

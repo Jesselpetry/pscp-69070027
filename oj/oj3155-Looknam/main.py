@@ -7,7 +7,7 @@ def main():
     result = ""
     for position in range(len(number)):
         digits_left = len(number) - position
-        if position > 0 and digits_left % 3 == 0:
+        if position > 0 and not digits_left % 3:
             result = result + ","
         result = result + number[position]
 

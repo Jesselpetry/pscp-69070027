@@ -6,7 +6,7 @@ def main():
 
     result = ""
     for position in range(1, amount + 1):
-        if position % 5 == 0:
+        if not position % 5:
             result = result + "X"
         else:
             result = result + "*"

@@ -13,7 +13,7 @@ def main():
         stay_minutes = stay_minutes + 24 * 60
 
     hours = stay_minutes // 60
-    if stay_minutes % 60 != 0:
+    if stay_minutes % 60:
         hours = hours + 1
 
     if stay_minutes <= 15:

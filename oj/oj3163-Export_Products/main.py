@@ -14,7 +14,7 @@ def main():
     for index in range(1, amount + 1):
         stock = int(data[index])
         total = total + stock
-        if stock % 2 == 0:
+        if not stock % 2:
             even_count = even_count + 1
         else:
             odd_count = odd_count + 1
