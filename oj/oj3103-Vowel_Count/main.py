@@ -1,16 +1,13 @@
 """ จำนวนสระ """
 
-import sys
-
 def main():
     """จำนวนสระ"""
-    data = sys.stdin.read().split()
-    amount = int(data[0])
+    amount = int(input())
     vowels = ["A", "E", "I", "O", "U"]
 
     count = 0
-    for index in range(1, amount + 1):
-        letter = data[index].upper()
+    for _ in range(amount):
+        letter = input().strip().upper()
         if letter in vowels:
             count = count + 1
 
