@@ -11,7 +11,7 @@ def main():
     for day in range(days):
         sold = int(input())
         total = total + sold
-        if day == 0:
+        if not day:
             highest = sold
             lowest = sold
         elif sold > highest:

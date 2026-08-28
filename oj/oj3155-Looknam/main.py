@@ -5,11 +5,11 @@ def main():
     number = input().strip()
 
     result = ""
-    for position in range(len(number)):
+    for position, digit in enumerate(number):
         digits_left = len(number) - position
         if position > 0 and not digits_left % 3:
             result = result + ","
-        result = result + number[position]
+        result = result + digit
 
     print(result)
 
