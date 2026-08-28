@@ -43,7 +43,7 @@ def load_config():
         "course_id": DEFAULT_COURSE_ID,
         "exclude_learning_logs": True,
         "poll_interval": 2.0,
-        "poll_timeout": 15.0,
+        "poll_timeout": 20.0,
         "cookie": ""
     }
     if os.path.exists(CONFIG_FILE):
@@ -98,11 +98,9 @@ def validate_cookie(cookie):
 
 def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
     """Resolve iJudge session cookie from various potential sources."""
-    # 1. CLI direct string
     if cli_cookie and cli_cookie.strip():
         return cli_cookie.strip()
 
-    # 2. CLI cookie file
     if cli_cookie_file and os.path.exists(cli_cookie_file):
         try:
             with open(cli_cookie_file, "r", encoding="utf-8") as f:
@@ -110,16 +108,13 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
         except Exception:
             pass
 
-    # 3. Environment Variable
     env_cookie = os.environ.get("IJUDGE_COOKIE")
     if env_cookie and env_cookie.strip():
         return env_cookie.strip()
 
-    # 4. Config file
     if config and config.get("cookie", "").strip():
         return config["cookie"].strip()
 
-    # 5. .ijudge_cookie in workspace or pscp root
     for candidate in [
         os.path.join(PSCP_ROOT, ".ijudge_cookie"),
         os.path.join(WORKSPACE_ROOT, ".ijudge_cookie")
@@ -133,7 +128,6 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
             except Exception:
                 pass
 
-    # 6. Check .env / .env.local
     for env_file in [
         os.path.join(WORKSPACE_ROOT, ".env.local"),
         os.path.join(WORKSPACE_ROOT, ".env"),
@@ -165,7 +159,6 @@ def prompt_enter_cookie(config):
         print("[!] No cookie entered. Operation cancelled.")
         return config.get("cookie", "")
 
-    # Validate
     print("[*] Validating cookie with iJudge server...", end="", flush=True)
     auth_info = validate_cookie(raw_input_cookie)
     if auth_info["valid"]:
@@ -194,21 +187,18 @@ def load_all_problems():
 
 def find_solution_file(problem_id):
     """Locate the Python solution file for a problem."""
-    # Check oj/oj<id>-* directories
     for path in glob.glob(os.path.join(OJ_DIR, f"oj{problem_id}-*")):
         if os.path.isdir(path):
             main_py = os.path.join(path, "main.py")
             if os.path.exists(main_py):
                 return main_py
 
-    # Check root-level oj<id> directories
     root_oj = os.path.join(PSCP_ROOT, f"oj{problem_id}")
     if os.path.isdir(root_oj):
         main_py = os.path.join(root_oj, "main.py")
         if os.path.exists(main_py):
             return main_py
 
-    # Check loose files
     candidates = glob.glob(os.path.join(PSCP_ROOT, "**", f"*{problem_id}*.py"), recursive=True)
     candidates = [c for c in candidates if not c.endswith("problem.md") and not "scripts" in c and not "node_modules" in c]
     if candidates:
@@ -235,7 +225,6 @@ def filter_problems(all_problems, args, config):
 
     filtered = []
 
-    # Filter by specific IDs
     if args.ids:
         target_ids = set()
         for token in args.ids.split(","):
@@ -247,12 +236,10 @@ def filter_problems(all_problems, args, config):
                 target_ids.add(int(token))
         filtered = [p for p in all_problems if p.get("id") in target_ids]
 
-    # Filter by Expire Date
     elif args.expire:
         query = args.expire.strip().lower()
         filtered = [p for p in all_problems if query in p.get("expire_date", "").lower()]
 
-    # Filter by Week
     elif args.week is not None:
         target_weeks = set()
         for token in str(args.week).split(","):
@@ -260,23 +247,18 @@ def filter_problems(all_problems, args, config):
                 target_weeks.add(int(token.strip()))
         filtered = [p for p in all_problems if p.get("week") in target_weeks]
 
-    # Filter by All
     elif args.all:
         filtered = list(all_problems)
 
-    # Interactive Menu
     else:
         filtered = interactive_selection_menu(all_problems, config)
 
-    # Apply Learning Log exclusion
     if exclude_ll:
         filtered = [p for p in filtered if not p.get("is_learning_log", False) and "Learning Log" not in p.get("name", "")]
 
-    # Apply Recommended filter
     if getattr(args, "recommended_only", False):
         filtered = [p for p in filtered if p.get("is_recommended", False)]
 
-    # Sort by ID
     filtered.sort(key=lambda p: p.get("id", 0))
     return filtered
 
@@ -300,7 +282,6 @@ def interactive_selection_menu(all_problems, config):
         print(f"  Status: {auth_status}")
         print("=" * 65)
 
-        # Group by expire dates
         expire_groups = {}
         for p in all_problems:
             exp = p.get("expire_date") or "No Expire Date"
@@ -357,8 +338,12 @@ def interactive_selection_menu(all_problems, config):
 def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
     """Submit a single problem to iJudge."""
     url = f"https://ijudge.it.kmitl.ac.th/problems/{problem_id}/description?problemPage=0"
+    
+    # Ensure clean single trailing newline to avoid PEP8 trailing newline warnings
+    clean_code = code.rstrip() + "\n"
+    
     payload = json.dumps([{
-        "code": code,
+        "code": clean_code,
         "lang_type": "Python",
         "course_problem_id": problem_id,
         "course_id": course_id
@@ -378,7 +363,7 @@ def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
     return None
 
 
-def poll_submission_status(submission_id, cookie, poll_timeout=15.0, poll_interval=2.0):
+def poll_submission_status(submission_id, cookie, poll_timeout=20.0, poll_interval=2.0):
     """Poll iJudge overview endpoint to retrieve submission result and PEP8 score."""
     url = f"https://ijudge.it.kmitl.ac.th/submissions/{submission_id}/overview"
     headers = {
@@ -389,6 +374,8 @@ def poll_submission_status(submission_id, cookie, poll_timeout=15.0, poll_interv
     }
 
     start_time = time.time()
+    last_info = {"result": "Pending", "score": 0.0, "pep8": 0.0, "ready": False}
+
     while time.time() - start_time < poll_timeout:
         try:
             req = urllib.request.Request(url, headers=headers)
@@ -399,16 +386,21 @@ def poll_submission_status(submission_id, cookie, poll_timeout=15.0, poll_interv
             m_score = re.search(r"\"score\":([\d\.]+)", body)
             m_pep8 = re.search(r"\"pep8_score\":([\d\.]+)", body)
 
-            if m_res and m_res.group(1) != "null":
+            if m_res:
                 result = m_res.group(1)
                 score = float(m_score.group(1)) if m_score else 0.0
                 pep8 = float(m_pep8.group(1)) if m_pep8 else 0.0
-                return {"result": result, "score": score, "pep8": pep8, "ready": True}
+                last_info = {"result": result, "score": score, "pep8": pep8, "ready": False}
+
+                # Only finish if grading has completed (not Judging / Pending / In queue)
+                if result not in ("Judging", "Pending", "In queue", "In Queue", "null", ""):
+                    last_info["ready"] = True
+                    return last_info
         except Exception:
             pass
         time.sleep(poll_interval)
 
-    return {"result": "Pending", "score": 0.0, "pep8": 0.0, "ready": False}
+    return last_info
 
 
 def main():
@@ -430,21 +422,18 @@ def main():
 
     config = load_config()
 
-    # Handle direct cookie update flag
     if args.set_cookie:
         prompt_enter_cookie(config)
         return
 
     all_problems = load_all_problems()
 
-    # Determine problems to submit
     selected_problems = filter_problems(all_problems, args, config)
 
     if not selected_problems:
         print("[!] No problems matched the specified filters.")
         sys.exit(0)
 
-    # Locate solution files and inspect for lint warnings
     problem_plans = []
     for p in selected_problems:
         pid = p["id"]
@@ -472,7 +461,6 @@ def main():
             "warnings": warnings
         })
 
-    # Render Preview Table
     print("\n" + "=" * 90)
     print(f"  iJudge Submission Batch Preview ({len(problem_plans)} problems)")
     print("=" * 90)
@@ -511,19 +499,16 @@ def main():
         print("[!] No solution files available to submit. Aborting.")
         return
 
-    # Obtain and validate Cookie
     cookie = find_cookie(args.cookie, args.cookie_file, config)
     if not cookie:
         cookie = prompt_enter_cookie(config)
 
-    # Prompt Confirmation
     if not args.yes:
         confirm = input(f"\nSubmit {ready_count} problem(s) to iJudge? [Y/n]: ").strip().lower()
         if confirm not in ("", "y", "yes"):
             print("Submission cancelled.")
             return
 
-    # Execute Submissions
     print("\n" + "=" * 90)
     print("  Submitting to iJudge...")
     print("=" * 90)
@@ -549,8 +534,7 @@ def main():
                 results_summary.append({"pid": pid, "name": name, "status": "Failed", "score": "-", "pep8": "-"})
                 continue
 
-            # Poll for result
-            poll_info = poll_submission_status(sub_id, cookie, poll_timeout=config.get("poll_timeout", 15.0), poll_interval=config.get("poll_interval", 2.0))
+            poll_info = poll_submission_status(sub_id, cookie, poll_timeout=config.get("poll_timeout", 20.0), poll_interval=config.get("poll_interval", 2.0))
             res = poll_info["result"]
             score = poll_info["score"]
             pep8 = poll_info["pep8"]
@@ -572,10 +556,8 @@ def main():
             print(f" ❌ Error: {e}")
             results_summary.append({"pid": pid, "name": name, "status": f"Error: {e}", "score": "-", "pep8": "-"})
 
-        # Short pause between submissions
         time.sleep(1.0)
 
-    # Final Summary Table
     print("\n" + "=" * 90)
     print("  Submission Summary Report")
     print("=" * 90)
