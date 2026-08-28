@@ -4,7 +4,7 @@ Standardized CLI tool to submit PSCP OJ problems to iJudge.
 
 Features:
 - Configurable targeting: by Expire Date, Week, Specific Problem IDs, Range, or All.
-- Cookie management: CLI argument, environment variables, .env / .env.local, config file, or interactive prompt.
+- Interactive Cookie Management: Enter, update, validate, and persist iJudge session cookies.
 - Auto-filters out Learning Logs by default.
 - Pre-submission lint checks (pylint warnings & sys.stdin.read detection).
 - Beautiful terminal preview table with explicit confirmation prompt.
@@ -66,6 +66,36 @@ def save_config(config):
         print(f"[!] Warning: Failed to save {CONFIG_FILE}: {e}")
 
 
+def validate_cookie(cookie):
+    """Validate iJudge cookie against submissions endpoint and return user profile info."""
+    if not cookie or not cookie.strip():
+        return {"valid": False, "username": None, "fullname": None, "error": "Empty cookie"}
+
+    url = "https://ijudge.it.kmitl.ac.th/submissions/me"
+    headers = {
+        "User-Agent": DEFAULT_HEADERS["User-Agent"],
+        "Accept": "*/*",
+        "rsc": "1",
+        "Cookie": cookie
+    }
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = resp.read().decode("utf-8")
+        m_user = re.search(r"\"username\":\"([^\"]+)\"", body)
+        m_name = re.search(r"\"fullname\":\"([^\"]+)\"", body)
+        if m_user:
+            return {
+                "valid": True,
+                "username": m_user.group(1),
+                "fullname": m_name.group(1) if m_name else "",
+                "error": None
+            }
+        return {"valid": False, "username": None, "fullname": None, "error": "Not authenticated (invalid session)"}
+    except Exception as e:
+        return {"valid": False, "username": None, "fullname": None, "error": str(e)}
+
+
 def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
     """Resolve iJudge session cookie from various potential sources."""
     # 1. CLI direct string
@@ -122,25 +152,35 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
     return None
 
 
-def prompt_for_cookie(config):
-    """Prompt user interactively for iJudge cookie and offer to save it."""
+def prompt_enter_cookie(config):
+    """Prompt user to enter/update cookie interactively, validate it, and persist."""
     print("\n" + "=" * 65)
-    print("  iJudge Cookie Required")
+    print("  Enter iJudge Session Cookie")
     print("=" * 65)
-    print("No active iJudge cookie found.")
-    print("You can get your Cookie string from your browser's Developer Tools (Network tab).")
+    print("Paste your full iJudge Cookie string from your browser.")
+    print("(e.g. from Browser DevTools > Network tab > Cookie header)")
     print("-" * 65)
-    cookie_input = input("Paste your iJudge Cookie here: ").strip()
-    if not cookie_input:
-        print("[!] Error: No cookie provided. Aborting.")
-        sys.exit(1)
+    raw_input_cookie = input("Cookie: ").strip()
+    if not raw_input_cookie:
+        print("[!] No cookie entered. Operation cancelled.")
+        return config.get("cookie", "")
 
-    save_choice = input("Do you want to save this cookie to submit_config.json for future use? [Y/n]: ").strip().lower()
-    if save_choice in ("", "y", "yes"):
-        config["cookie"] = cookie_input
+    # Validate
+    print("[*] Validating cookie with iJudge server...", end="", flush=True)
+    auth_info = validate_cookie(raw_input_cookie)
+    if auth_info["valid"]:
+        print(f" ✅ Success!\n    Logged in as: {auth_info['username']} ({auth_info['fullname']})")
+        config["cookie"] = raw_input_cookie
         save_config(config)
-
-    return cookie_input
+        return raw_input_cookie
+    else:
+        print(f" ❌ Validation Warning: {auth_info['error']}")
+        save_anyway = input("Save this cookie anyway? [y/N]: ").strip().lower()
+        if save_anyway in ("y", "yes"):
+            config["cookie"] = raw_input_cookie
+            save_config(config)
+            return raw_input_cookie
+        return config.get("cookie", "")
 
 
 def load_all_problems():
@@ -226,7 +266,7 @@ def filter_problems(all_problems, args, config):
 
     # Interactive Menu
     else:
-        filtered = interactive_selection_menu(all_problems)
+        filtered = interactive_selection_menu(all_problems, config)
 
     # Apply Learning Log exclusion
     if exclude_ll:
@@ -241,60 +281,77 @@ def filter_problems(all_problems, args, config):
     return filtered
 
 
-def interactive_selection_menu(all_problems):
-    """Render interactive CLI menu to pick problem batch."""
-    print("\n" + "=" * 65)
-    print("  Select OJ Problems to Submit")
-    print("=" * 65)
+def interactive_selection_menu(all_problems, config):
+    """Render interactive CLI menu to pick problem batch or configure cookie."""
+    while True:
+        current_cookie = config.get("cookie", "")
+        auth_status = "Checking..."
+        if current_cookie:
+            auth_info = validate_cookie(current_cookie)
+            if auth_info["valid"]:
+                auth_status = f"✅ Logged in as {auth_info['username']} ({auth_info['fullname']})"
+            else:
+                auth_status = "⚠️ Cookie Expired or Invalid"
+        else:
+            auth_status = "❌ No Cookie Set"
 
-    # Group by expire dates
-    expire_groups = {}
-    for p in all_problems:
-        exp = p.get("expire_date") or "No Expire Date"
-        expire_groups.setdefault(exp, []).append(p)
+        print("\n" + "=" * 65)
+        print("  PSCP iJudge Submission Tool")
+        print(f"  Status: {auth_status}")
+        print("=" * 65)
 
-    sorted_dates = sorted(expire_groups.keys(), key=lambda d: ("1" if "2026" in d else "2", d))
+        # Group by expire dates
+        expire_groups = {}
+        for p in all_problems:
+            exp = p.get("expire_date") or "No Expire Date"
+            expire_groups.setdefault(exp, []).append(p)
 
-    print("Options:")
-    for idx, d in enumerate(sorted_dates, 1):
-        count = len(expire_groups[d])
-        ll_count = sum(1 for p in expire_groups[d] if p.get("is_learning_log"))
-        print(f"  [{idx:2d}] Expire: {d:<26} ({count} problems, {ll_count} Learning Logs)")
-    
-    print(f"  [ W] Filter by Week (e.g. Week 1, 2, 3)")
-    print(f"  [ I] Enter Specific Problem IDs / Ranges (e.g. 3155-3167, 3129)")
-    print(f"  [ A] All Problems ({len(all_problems)} total)")
-    print(f"  [ Q] Quit")
-    print("-" * 65)
+        sorted_dates = sorted(expire_groups.keys(), key=lambda d: ("1" if "2026" in d else "2", d))
 
-    choice = input("Enter your choice: ").strip()
-    if not choice or choice.lower() == "q":
-        print("Aborted.")
-        sys.exit(0)
+        print("Options:")
+        for idx, d in enumerate(sorted_dates, 1):
+            count = len(expire_groups[d])
+            ll_count = sum(1 for p in expire_groups[d] if p.get("is_learning_log"))
+            print(f"  [{idx:2d}] Expire: {d:<26} ({count} problems, {ll_count} Learning Logs)")
+        
+        print(f"  [ W] Filter by Week (e.g. Week 1, 2, 3)")
+        print(f"  [ I] Enter Specific Problem IDs / Ranges (e.g. 3155-3167, 3129)")
+        print(f"  [ A] All Problems ({len(all_problems)} total)")
+        print(f"  [ C] Enter / Update iJudge Cookie")
+        print(f"  [ Q] Quit")
+        print("-" * 65)
 
-    if choice.isdigit() and 1 <= int(choice) <= len(sorted_dates):
-        selected_date = sorted_dates[int(choice) - 1]
-        return expire_groups[selected_date]
-    elif choice.lower() == "w":
-        weeks_str = input("Enter week numbers separated by comma (e.g. 1, 2, 5): ").strip()
-        weeks = {int(w.strip()) for w in weeks_str.split(",") if w.strip().isdigit()}
-        return [p for p in all_problems if p.get("week") in weeks]
-    elif choice.lower() == "i":
-        ids_str = input("Enter problem IDs or ranges (e.g. 3129, 3155-3167): ").strip()
-        target_ids = set()
-        for token in ids_str.split(","):
-            token = token.strip()
-            if "-" in token:
-                start, end = map(int, token.split("-", 1))
-                target_ids.update(range(start, end + 1))
-            elif token.isdigit():
-                target_ids.add(int(token))
-        return [p for p in all_problems if p.get("id") in target_ids]
-    elif choice.lower() == "a":
-        return list(all_problems)
-    else:
-        print("[!] Invalid choice.")
-        sys.exit(1)
+        choice = input("Enter your choice: ").strip()
+        if not choice or choice.lower() == "q":
+            print("Aborted.")
+            sys.exit(0)
+
+        if choice.lower() == "c":
+            prompt_enter_cookie(config)
+            continue
+
+        if choice.isdigit() and 1 <= int(choice) <= len(sorted_dates):
+            selected_date = sorted_dates[int(choice) - 1]
+            return expire_groups[selected_date]
+        elif choice.lower() == "w":
+            weeks_str = input("Enter week numbers separated by comma (e.g. 1, 2, 5): ").strip()
+            weeks = {int(w.strip()) for w in weeks_str.split(",") if w.strip().isdigit()}
+            return [p for p in all_problems if p.get("week") in weeks]
+        elif choice.lower() == "i":
+            ids_str = input("Enter problem IDs or ranges (e.g. 3129, 3155-3167): ").strip()
+            target_ids = set()
+            for token in ids_str.split(","):
+                token = token.strip()
+                if "-" in token:
+                    start, end = map(int, token.split("-", 1))
+                    target_ids.update(range(start, end + 1))
+                elif token.isdigit():
+                    target_ids.add(int(token))
+            return [p for p in all_problems if p.get("id") in target_ids]
+        elif choice.lower() == "a":
+            return list(all_problems)
+        else:
+            print("[!] Invalid choice. Please try again.")
 
 
 def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
@@ -364,6 +421,7 @@ def main():
     parser.add_argument("--recommended-only", action="store_true", help="Only submit recommended problems")
     parser.add_argument("--cookie", "-c", type=str, help="iJudge session cookie")
     parser.add_argument("--cookie-file", type=str, help="Path to cookie text file")
+    parser.add_argument("--set-cookie", action="store_true", help="Interactively enter and save a new iJudge cookie")
     parser.add_argument("--yes", "-y", action="store_true", help="Skip confirmation prompt and submit immediately")
     parser.add_argument("--dry-run", action="store_true", help="Preview matched problems and files without submitting")
     parser.add_argument("--course-id", type=int, default=DEFAULT_COURSE_ID, help=f"iJudge Course ID (default: {DEFAULT_COURSE_ID})")
@@ -371,6 +429,12 @@ def main():
     args = parser.parse_args()
 
     config = load_config()
+
+    # Handle direct cookie update flag
+    if args.set_cookie:
+        prompt_enter_cookie(config)
+        return
+
     all_problems = load_all_problems()
 
     # Determine problems to submit
@@ -447,10 +511,10 @@ def main():
         print("[!] No solution files available to submit. Aborting.")
         return
 
-    # Obtain Cookie
+    # Obtain and validate Cookie
     cookie = find_cookie(args.cookie, args.cookie_file, config)
     if not cookie:
-        cookie = prompt_for_cookie(config)
+        cookie = prompt_enter_cookie(config)
 
     # Prompt Confirmation
     if not args.yes:
