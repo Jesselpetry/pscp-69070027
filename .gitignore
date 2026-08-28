@@ -1,4 +1,7 @@
 __pycache__/
 *.pyc
-.env
+.env*
 .DS_Store
+submit_config.json
+.ijudge_cookie
+*.cookie
