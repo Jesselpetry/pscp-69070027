@@ -3,6 +3,7 @@
 Standardized CLI tool to submit PSCP OJ problems to iJudge.
 
 Features:
+- Multi-Course Support: Regular PSCP (Course 78) & Midterm Exam (Course 84).
 - Configurable targeting: by Expire Date, Week, Specific Problem IDs, Range, or All.
 - Interactive Cookie Management: Enter, update, validate, and persist iJudge session cookies.
 - Auto-filters out Learning Logs by default.
@@ -25,6 +26,7 @@ PSCP_ROOT = os.path.dirname(SCRIPT_DIR)
 WORKSPACE_ROOT = os.path.dirname(PSCP_ROOT)
 CONFIG_FILE = os.path.join(PSCP_ROOT, "submit_config.json")
 PROBLEMS_JSON = os.path.join(PSCP_ROOT, "oj_problems.json")
+COURSE_84_JSON = os.path.join(PSCP_ROOT, "data", "course_84_problems.json")
 OJ_DIR = os.path.join(PSCP_ROOT, "oj")
 
 DEFAULT_COURSE_ID = 78
@@ -34,6 +36,19 @@ DEFAULT_HEADERS = {
     "Content-Type": "text/plain;charset=UTF-8",
     "next-action": "7fc32d2dd54d0b8574db835d9b74354be0cac2fbd7",
     "Origin": "https://ijudge.it.kmitl.ac.th"
+}
+
+# Alias map for Midterm Course 84 problem IDs to local directory keywords
+MIDTERM_ALIAS_MAP = {
+    3243: ["Stats"],
+    3242: ["ijudge-itkmitl", "ijudge"],
+    3143: ["Pizza_Time", "Pizza"],
+    3138: ["ThaiPlus", "FakeThaiPlus"],
+    3142: ["Triangle"],
+    3146: ["Units"],
+    3240: ["PM_Watch", "PM"],
+    3239: ["Code_Cleaner", "Cleaner"],
+    3148: ["RealThaiPlus", "RealThai"]
 }
 
 
@@ -176,8 +191,14 @@ def prompt_enter_cookie(config):
         return config.get("cookie", "")
 
 
-def load_all_problems():
-    """Load oj_problems.json."""
+def load_all_problems(course_id=DEFAULT_COURSE_ID):
+    """Load problems from appropriate JSON registry depending on course ID."""
+    if course_id == 84:
+        if os.path.exists(COURSE_84_JSON):
+            with open(COURSE_84_JSON, "r", encoding="utf-8") as f:
+                return json.load(f)
+        return []
+
     if not os.path.exists(PROBLEMS_JSON):
         print(f"[!] Error: {PROBLEMS_JSON} not found.")
         sys.exit(1)
@@ -185,20 +206,39 @@ def load_all_problems():
         return json.load(f)
 
 
-def find_solution_file(problem_id):
+def find_solution_file(problem_id, problem_name=""):
     """Locate the Python solution file for a problem."""
+    # 1. Direct ID matching in oj/oj<id>-*
     for path in glob.glob(os.path.join(OJ_DIR, f"oj{problem_id}-*")):
         if os.path.isdir(path):
             main_py = os.path.join(path, "main.py")
             if os.path.exists(main_py):
                 return main_py
 
+    # 2. Check root-level oj<id> directories
     root_oj = os.path.join(PSCP_ROOT, f"oj{problem_id}")
     if os.path.isdir(root_oj):
         main_py = os.path.join(root_oj, "main.py")
         if os.path.exists(main_py):
             return main_py
 
+    # 3. Check Midterm Alias Map (for Course 84)
+    if problem_id in MIDTERM_ALIAS_MAP:
+        for keyword in MIDTERM_ALIAS_MAP[problem_id]:
+            for p in glob.glob(os.path.join(OJ_DIR, f"*{keyword}*")):
+                main_py = os.path.join(p, "main.py")
+                if os.path.exists(main_py):
+                    return main_py
+
+    # 4. Check problem name in oj directory
+    if problem_name:
+        sanitized = re.sub(r"[^\w\s]", "", problem_name).strip().replace(" ", "_")
+        for p in glob.glob(os.path.join(OJ_DIR, f"*{sanitized}*")):
+            main_py = os.path.join(p, "main.py")
+            if os.path.exists(main_py):
+                return main_py
+
+    # 5. Check loose files across repo
     candidates = glob.glob(os.path.join(PSCP_ROOT, "**", f"*{problem_id}*.py"), recursive=True)
     candidates = [c for c in candidates if not c.endswith("problem.md") and not "scripts" in c and not "node_modules" in c]
     if candidates:
@@ -224,6 +264,7 @@ def filter_problems(all_problems, args, config):
     exclude_ll = not args.include_learning_log if hasattr(args, "include_learning_log") else config.get("exclude_learning_logs", True)
 
     filtered = []
+    resolved_course = args.course_id
 
     if args.ids:
         target_ids = set()
@@ -247,11 +288,15 @@ def filter_problems(all_problems, args, config):
                 target_weeks.add(int(token.strip()))
         filtered = [p for p in all_problems if p.get("week") in target_weeks]
 
-    elif args.all:
+    elif args.all or args.midterm:
         filtered = list(all_problems)
+        if args.midterm:
+            resolved_course = 84
 
     else:
-        filtered = interactive_selection_menu(all_problems, config)
+        filtered, chosen_course = interactive_selection_menu(all_problems, config)
+        if chosen_course:
+            resolved_course = chosen_course
 
     if exclude_ll:
         filtered = [p for p in filtered if not p.get("is_learning_log", False) and "Learning Log" not in p.get("name", "")]
@@ -260,11 +305,11 @@ def filter_problems(all_problems, args, config):
         filtered = [p for p in filtered if p.get("is_recommended", False)]
 
     filtered.sort(key=lambda p: p.get("id", 0))
-    return filtered
+    return filtered, resolved_course
 
 
 def interactive_selection_menu(all_problems, config):
-    """Render interactive CLI menu to pick problem batch or configure cookie."""
+    """Render interactive CLI menu to pick problem batch, course, or configure cookie."""
     while True:
         current_cookie = config.get("cookie", "")
         auth_status = "Checking..."
@@ -277,10 +322,10 @@ def interactive_selection_menu(all_problems, config):
         else:
             auth_status = "❌ No Cookie Set"
 
-        print("\n" + "=" * 65)
+        print("\n" + "=" * 70)
         print("  PSCP iJudge Submission Tool")
         print(f"  Status: {auth_status}")
-        print("=" * 65)
+        print("=" * 70)
 
         expire_groups = {}
         for p in all_problems:
@@ -289,18 +334,20 @@ def interactive_selection_menu(all_problems, config):
 
         sorted_dates = sorted(expire_groups.keys(), key=lambda d: ("1" if "2026" in d else "2", d))
 
-        print("Options:")
+        print("Regular Course (Course 78) - Options:")
         for idx, d in enumerate(sorted_dates, 1):
             count = len(expire_groups[d])
             ll_count = sum(1 for p in expire_groups[d] if p.get("is_learning_log"))
             print(f"  [{idx:2d}] Expire: {d:<26} ({count} problems, {ll_count} Learning Logs)")
         
+        print("\nSpecial Options:")
+        print(f"  [ M] Midterm Exam (Course 84: 9 problems)")
         print(f"  [ W] Filter by Week (e.g. Week 1, 2, 3)")
         print(f"  [ I] Enter Specific Problem IDs / Ranges (e.g. 3155-3167, 3129)")
-        print(f"  [ A] All Problems ({len(all_problems)} total)")
+        print(f"  [ A] All Problems (Course 78, {len(all_problems)} total)")
         print(f"  [ C] Enter / Update iJudge Cookie")
         print(f"  [ Q] Quit")
-        print("-" * 65)
+        print("-" * 70)
 
         choice = input("Enter your choice: ").strip()
         if not choice or choice.lower() == "q":
@@ -311,13 +358,17 @@ def interactive_selection_menu(all_problems, config):
             prompt_enter_cookie(config)
             continue
 
+        if choice.lower() == "m":
+            m_probs = load_all_problems(course_id=84)
+            return m_probs, 84
+
         if choice.isdigit() and 1 <= int(choice) <= len(sorted_dates):
             selected_date = sorted_dates[int(choice) - 1]
-            return expire_groups[selected_date]
+            return expire_groups[selected_date], 78
         elif choice.lower() == "w":
             weeks_str = input("Enter week numbers separated by comma (e.g. 1, 2, 5): ").strip()
             weeks = {int(w.strip()) for w in weeks_str.split(",") if w.strip().isdigit()}
-            return [p for p in all_problems if p.get("week") in weeks]
+            return [p for p in all_problems if p.get("week") in weeks], 78
         elif choice.lower() == "i":
             ids_str = input("Enter problem IDs or ranges (e.g. 3129, 3155-3167): ").strip()
             target_ids = set()
@@ -328,9 +379,9 @@ def interactive_selection_menu(all_problems, config):
                     target_ids.update(range(start, end + 1))
                 elif token.isdigit():
                     target_ids.add(int(token))
-            return [p for p in all_problems if p.get("id") in target_ids]
+            return [p for p in all_problems if p.get("id") in target_ids], 78
         elif choice.lower() == "a":
-            return list(all_problems)
+            return list(all_problems), 78
         else:
             print("[!] Invalid choice. Please try again.")
 
@@ -339,7 +390,6 @@ def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
     """Submit a single problem to iJudge."""
     url = f"https://ijudge.it.kmitl.ac.th/problems/{problem_id}/description?problemPage=0"
     
-    # Ensure clean single trailing newline to avoid PEP8 trailing newline warnings
     clean_code = code.rstrip() + "\n"
     
     payload = json.dumps([{
@@ -392,7 +442,6 @@ def poll_submission_status(submission_id, cookie, poll_timeout=20.0, poll_interv
                 pep8 = float(m_pep8.group(1)) if m_pep8 else 0.0
                 last_info = {"result": result, "score": score, "pep8": pep8, "ready": False}
 
-                # Only finish if grading has completed (not Judging / Pending / In queue)
                 if result not in ("Judging", "Pending", "In queue", "In Queue", "null", ""):
                     last_info["ready"] = True
                     return last_info
@@ -409,6 +458,7 @@ def main():
     parser.add_argument("--week", "-w", type=str, help="Filter by week number(s) (e.g. '5' or '1,2,3')")
     parser.add_argument("--ids", "-i", type=str, help="Filter by problem IDs/ranges (e.g. '3129,3155-3167')")
     parser.add_argument("--all", "-a", action="store_true", help="Submit all problems")
+    parser.add_argument("--midterm", "-m", action="store_true", help="Select Midterm Exam Course (Course 84)")
     parser.add_argument("--include-learning-log", action="store_true", help="Include Learning Log problems (default: False)")
     parser.add_argument("--recommended-only", action="store_true", help="Only submit recommended problems")
     parser.add_argument("--cookie", "-c", type=str, help="iJudge session cookie")
@@ -416,7 +466,7 @@ def main():
     parser.add_argument("--set-cookie", action="store_true", help="Interactively enter and save a new iJudge cookie")
     parser.add_argument("--yes", "-y", action="store_true", help="Skip confirmation prompt and submit immediately")
     parser.add_argument("--dry-run", action="store_true", help="Preview matched problems and files without submitting")
-    parser.add_argument("--course-id", type=int, default=DEFAULT_COURSE_ID, help=f"iJudge Course ID (default: {DEFAULT_COURSE_ID})")
+    parser.add_argument("--course-id", type=int, help=f"iJudge Course ID (default: {DEFAULT_COURSE_ID})")
 
     args = parser.parse_args()
 
@@ -426,9 +476,10 @@ def main():
         prompt_enter_cookie(config)
         return
 
-    all_problems = load_all_problems()
+    init_course_id = 84 if args.midterm else (args.course_id or config.get("course_id", DEFAULT_COURSE_ID))
+    all_problems = load_all_problems(course_id=init_course_id)
 
-    selected_problems = filter_problems(all_problems, args, config)
+    selected_problems, course_id = filter_problems(all_problems, args, config)
 
     if not selected_problems:
         print("[!] No problems matched the specified filters.")
@@ -437,7 +488,8 @@ def main():
     problem_plans = []
     for p in selected_problems:
         pid = p["id"]
-        file_path = find_solution_file(pid)
+        pname = p.get("name", "")
+        file_path = find_solution_file(pid, problem_name=pname)
         file_exists = bool(file_path and os.path.exists(file_path))
         code_content = ""
         warnings = []
@@ -462,7 +514,8 @@ def main():
         })
 
     print("\n" + "=" * 90)
-    print(f"  iJudge Submission Batch Preview ({len(problem_plans)} problems)")
+    course_label = "Course 84 (Midterm)" if course_id == 84 else f"Course {course_id} (Regular)"
+    print(f"  iJudge Submission Batch Preview: {course_label} ({len(problem_plans)} problems)")
     print("=" * 90)
     print(f"{'#':<3} | {'OJ ID':<6} | {'Problem Name':<30} | {'Status':<10} | {'File / Warnings'}")
     print("-" * 90)
@@ -504,17 +557,17 @@ def main():
         cookie = prompt_enter_cookie(config)
 
     if not args.yes:
-        confirm = input(f"\nSubmit {ready_count} problem(s) to iJudge? [Y/n]: ").strip().lower()
+        confirm = input(f"\nSubmit {ready_count} problem(s) to iJudge ({course_label})? [Y/n]: ").strip().lower()
         if confirm not in ("", "y", "yes"):
             print("Submission cancelled.")
             return
 
     print("\n" + "=" * 90)
-    print("  Submitting to iJudge...")
+    print(f"  Submitting to iJudge ({course_label})...")
     print("=" * 90)
 
     results_summary = []
-    course_id = args.course_id or config.get("course_id", DEFAULT_COURSE_ID)
+    actual_course_id = course_id
 
     for idx, plan in enumerate(problem_plans, 1):
         p = plan["problem"]
@@ -528,7 +581,7 @@ def main():
 
         print(f"[{idx:2d}/{len(problem_plans)}] 📤 Submitting OJ {pid:4d} ({name})...", end="", flush=True)
         try:
-            sub_id = submit_problem(pid, plan["code"], cookie, course_id=course_id)
+            sub_id = submit_problem(pid, plan["code"], cookie, course_id=actual_course_id)
             if not sub_id:
                 print(" ❌ Submission Failed (Server rejected request)")
                 results_summary.append({"pid": pid, "name": name, "status": "Failed", "score": "-", "pep8": "-"})
@@ -559,7 +612,7 @@ def main():
         time.sleep(1.0)
 
     print("\n" + "=" * 90)
-    print("  Submission Summary Report")
+    print(f"  Submission Summary Report ({course_label})")
     print("=" * 90)
     print(f"{'#':<3} | {'OJ ID':<6} | {'Problem Name':<30} | {'Sub ID':<7} | {'Result':<10} | {'Score':<7} | {'PEP8':<6}")
     print("-" * 90)
