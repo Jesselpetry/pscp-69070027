@@ -1,18 +1,15 @@
 """ สินค้าส่งออก """
 
-import sys
-
 def main():
     """สินค้าส่งออก"""
-    data = sys.stdin.read().split()
-    amount = int(data[0])
+    amount = int(input())
 
     total = 0
     even_count = 0
     odd_count = 0
 
-    for index in range(1, amount + 1):
-        stock = int(data[index])
+    for _ in range(amount):
+        stock = int(input())
         total = total + stock
         if not stock % 2:
             even_count = even_count + 1
@@ -25,3 +22,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

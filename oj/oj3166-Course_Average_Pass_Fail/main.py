@@ -1,17 +1,14 @@
 """ ผ่านหรือไม่ ค่าเฉลี่ยรายวิชา """
 
-import sys
-
 def main():
     """ผ่านหรือไม่ ค่าเฉลี่ยรายวิชา"""
-    data = sys.stdin.read().split()
-    subjects = int(data[0])
+    subjects = int(input())
 
-    total = 0
+    total = 0.0
     all_passed = True
 
-    for index in range(1, subjects + 1):
-        score = int(data[index])
+    for _ in range(subjects):
+        score = float(input())
         total = total + score
         if score < 50:
             all_passed = False
@@ -26,3 +23,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

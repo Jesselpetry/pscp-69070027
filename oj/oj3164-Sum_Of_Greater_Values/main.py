@@ -1,18 +1,15 @@
 """ ผลรวมของค่าที่มากกว่า """
 
-import sys
-
 def main():
     """ผลรวมของค่าที่มากกว่า"""
-    data = sys.stdin.read().split()
-    pairs = int(data[0])
+    pairs = int(input())
 
     greater_values = []
     total = 0
 
-    for index in range(pairs):
-        first = int(data[1 + index * 2])
-        second = int(data[2 + index * 2])
+    for _ in range(pairs):
+        first = int(input())
+        second = int(input())
         if first > second:
             greater = first
         else:
@@ -20,7 +17,11 @@ def main():
         greater_values.append(str(greater))
         total = total + greater
 
-    print(" + ".join(greater_values), "=", total)
+    if pairs == 1:
+        print(greater_values[0])
+    elif pairs > 1:
+        print(" + ".join(greater_values), "=", total)
 
 if __name__ == "__main__":
     main()
+
