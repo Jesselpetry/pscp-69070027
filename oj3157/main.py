@@ -1,19 +1,16 @@
 """ เกมสะสมแต้ม """
 
-import sys
-
 def main():
     """เกมสะสมแต้ม"""
-    data = sys.stdin.read().split()
-    rounds = int(data[0])
+    rounds = int(input())
     score = 0
 
-    for index in range(1, rounds + 1):
-        command = data[index]
+    for _ in range(rounds):
+        command = input().strip()
         if command == "+":
-            score = score + 10
+            score += 10
         else:
-            score = score - 5
+            score -= 5
 
     print(score)
 
