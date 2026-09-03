@@ -12,7 +12,7 @@ def main():
             continue
         is_prime = True
         for divisor in range(2, int(number ** 0.5) + 1):
-            if number % divisor == 0:
+            if not number % divisor:
                 is_prime = False
                 break
         if is_prime:
