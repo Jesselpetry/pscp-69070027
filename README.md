@@ -27,8 +27,8 @@
 ## 📊 Overall Progress Dashboard
 
 - **Total Problems Tracked**: `108`
-- **✅ Solved / Passed**: `59` (54.6%)
-- **🔄 In Progress / Pending**: `49`
+- **✅ Solved / Passed**: `63` (58.3%)
+- **🔄 In Progress / Pending**: `45`
 
 ### 📅 Weekly Progress (นับตั้งแต่สัปดาห์แรกที่เปิดเทอม)
 
@@ -36,9 +36,9 @@
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | **Week 1** | บทนำ ตัวแปร และการรับส่งข้อมูลพื้นฐาน (Basic I/O & Variables) | 15 | 15 | 0 | **100.0%** |
 | **Week 2** | การทำงานแบบมีเงื่อนไขพื้นฐาน (Basic Conditionals & Logic) | 26 | 24 | 2 | **92.3%** |
-| **Week 3** | การทำงานแบบมีเงื่อนไขขั้นสูง (Nested Conditionals & Advanced Logic) | 15 | 14 | 1 | **93.3%** |
+| **Week 3** | การทำงานแบบมีเงื่อนไขขั้นสูง (Nested Conditionals & Advanced Logic) | 15 | 15 | 0 | **100.0%** |
 | **Week 4** | การทำงานซ้ำแบบ While Loop และตัวแปรสะสม (While Loops & Accumulators) | 15 | 1 | 14 | **6.7%** |
-| **Week 5** | การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing) | 15 | 2 | 13 | **13.3%** |
+| **Week 5** | การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing) | 15 | 5 | 10 | **33.3%** |
 | **Week 6** | ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences) | 13 | 3 | 10 | **23.1%** |
 | **Week 7** | ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam) | 9 | 0 | 9 | **0.0%** |
 
@@ -48,7 +48,7 @@
 | :--- | :---: | :---: | :---: |
 | **🎯 Midterm Mock Exam** | 9 | 0 | 9 |
 | **🌟 Recommended Problems** | 10 | 10 | 0 |
-| **📓 Learning Logs** | 21 | 9 | 12 |
+| **📓 Learning Logs** | 21 | 13 | 8 |
 
 ---
 
@@ -121,14 +121,14 @@ pscp-69070027/
 | **3036** | [LEARNING LOGS] ปราสาท | Week 2 | 🔄 *In Progress* | [`oj3036`](oj3036) | - | - | [`main.py`](oj3036/main.py) |
 | **3042** | [LEARNING LOGS] หาร 10 | Week 2 | ✅ **Passed** | [`oj3042`](oj3042) | - | [`submission.md`](oj3042/submission.md) | [`main.py`](oj3042/main.py) |
 | **3058** | [LEARNING LOGS] BrickBridge | Week 3 | ✅ **Passed** | [`oj3058`](oj3058) | [`problem.md`](oj3058/problem.md) | [`submission.md`](oj3058/submission.md) | [`main.py`](oj3058/main.py) |
-| **3071** | [LEARNING LOGS] จำนวนในช่วง [A,B] ที่หารด้วย d เหลือเศษ r | Week 3 | 🔄 *In Progress* | [`oj3071`](oj3071) | [`problem.md`](oj3071/problem.md) | - | [`main.py`](oj3071/main.py) |
+| **3071** | [LEARNING LOGS] จำนวนในช่วง [A,B] ที่หารด้วย d เหลือเศษ r | Week 3 | ✅ **Passed** | [`oj3071`](oj3071) | [`problem.md`](oj3071/problem.md) | [`submission.md`](oj3071/submission.md) | [`main.py`](oj3071/main.py) |
 | **3072** | [LEARNING LOGS] A-E-I-O-U | Week 3 | ✅ **Passed** | [`oj3072`](oj3072) | [`problem.md`](oj3072/problem.md) | [`submission.md`](oj3072/submission.md) | [`main.py`](oj3072/main.py) |
 | **3110** | [LEARNING LOGS] สงคราม...ส่งด่วน | Week 4 | 🔄 *In Progress* | [`oj3110`](oj3110) | [`problem.md`](oj3110/problem.md) | - | [`main.py`](oj3110/main.py) |
 | **3111** | [LEARNING LOGS] สหกรณ์โรงเรียน | Week 4 | 🔄 *In Progress* | [`oj3111`](oj3111) | [`problem.md`](oj3111/problem.md) | - | [`main.py`](oj3111/main.py) |
 | **3115** | [LEARNING LOGS] Arcade of Time: Store Check | Week 4 | 🔄 *In Progress* | [`oj3115`](oj3115) | [`problem.md`](oj3115/problem.md) | - | [`main.py`](oj3115/main.py) |
-| **3135** | [LEARNING LOGS] ของขวัญและขโมย | Week 5 | 🔄 *In Progress* | [`oj3135`](oj3135) | [`problem.md`](oj3135/problem.md) | - | [`main.py`](oj3135/main.py) |
-| **3157** | [LEARNING LOGS] เกมสะสมแต้ม | Week 5 | 🔄 *In Progress* | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | - | [`main.py`](oj3157/main.py) |
-| **3160** | [LEARNING LOGS] หาจำนวนเฉพาะ | Week 5 | 🔄 *In Progress* | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | - | [`main.py`](oj3160/main.py) |
+| **3135** | [LEARNING LOGS] ของขวัญและขโมย | Week 5 | ✅ **Passed** | [`oj3135`](oj3135) | [`problem.md`](oj3135/problem.md) | [`submission.md`](oj3135/submission.md) | [`main.py`](oj3135/main.py) |
+| **3157** | [LEARNING LOGS] เกมสะสมแต้ม | Week 5 | ✅ **Passed** | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | [`submission.md`](oj3157/submission.md) | [`main.py`](oj3157/main.py) |
+| **3160** | [LEARNING LOGS] หาจำนวนเฉพาะ | Week 5 | ✅ **Passed** | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | [`submission.md`](oj3160/submission.md) | [`main.py`](oj3160/main.py) |
 | **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | 🔄 *In Progress* | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | - | [`main.py`](oj3227/main.py) |
 | **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | 🔄 *In Progress* | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | - | [`main.py`](oj3232/main.py) |
 | **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | 🔄 *In Progress* | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | - | [`main.py`](oj3233/main.py) |
