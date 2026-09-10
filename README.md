@@ -26,9 +26,9 @@
 
 ## 📊 Overall Progress Dashboard
 
-- **Total Problems Tracked**: `108`
-- **✅ Solved / Passed**: `63` (58.3%)
-- **🔄 In Progress / Pending**: `45`
+- **Total Problems Tracked**: `135`
+- **✅ Solved / Passed**: `63` (46.7%)
+- **🔄 In Progress / Pending**: `72`
 
 ### 📅 Weekly Progress (นับตั้งแต่สัปดาห์แรกที่เปิดเทอม)
 
@@ -41,6 +41,8 @@
 | **Week 5** | การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing) | 15 | 5 | 10 | **33.3%** |
 | **Week 6** | ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences) | 13 | 3 | 10 | **23.1%** |
 | **Week 7** | ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam) | 9 | 0 | 9 | **0.0%** |
+| **Week 8** | ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations) | 12 | 0 | 12 | **0.0%** |
+| **Week 9** | ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms) | 15 | 0 | 15 | **0.0%** |
 
 ### 🏷️ Category Breakdown
 
@@ -48,7 +50,7 @@
 | :--- | :---: | :---: | :---: |
 | **🎯 Midterm Mock Exam** | 9 | 0 | 9 |
 | **🌟 Recommended Problems** | 10 | 10 | 0 |
-| **📓 Learning Logs** | 21 | 13 | 8 |
+| **📓 Learning Logs** | 27 | 13 | 14 |
 
 ---
 
@@ -132,6 +134,12 @@ pscp-69070027/
 | **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | 🔄 *In Progress* | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | - | [`main.py`](oj3227/main.py) |
 | **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | 🔄 *In Progress* | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | - | [`main.py`](oj3232/main.py) |
 | **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | 🔄 *In Progress* | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | - | [`main.py`](oj3233/main.py) |
+| **3293** | [LEARNING LOGS] BigFrame | Week 8 | 🔄 *In Progress* | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
+| **3296** | [LEARNING LOGS] RGB Mixed | Week 8 | 🔄 *In Progress* | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
+| **3299** | [LEARNING LOGS] แปลงดอกไม้ | Week 8 | 🔄 *In Progress* | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
+| **3355** | [LEARNING LOGS] Shorten | Week 9 | 🔄 *In Progress* | [`oj3355`](oj3355) | [`problem.md`](oj3355/problem.md) | - | [`main.py`](oj3355/main.py) |
+| **3357** | [LEARNING LOGS] Giraffe | Week 9 | 🔄 *In Progress* | [`oj3357`](oj3357) | [`problem.md`](oj3357/problem.md) | - | [`main.py`](oj3357/main.py) |
+| **3360** | [LEARNING LOGS] หั่นขนมปัง | Week 9 | 🔄 *In Progress* | [`oj3360`](oj3360) | [`problem.md`](oj3360/problem.md) | - | [`main.py`](oj3360/main.py) |
 
 ---
 
@@ -256,6 +264,57 @@ pscp-69070027/
 | **3236** | รหัสแฝดเทค | 🔄 *In Progress* | [`oj3236-Twin_Tech_Code`](oj/oj3236-Twin_Tech_Code) | [`problem.md`](oj/oj3236-Twin_Tech_Code/problem.md) | [`main.py`](oj/oj3236-Twin_Tech_Code/main.py) |
 | **3237** | [Recommend] สามเหลี่ยม | ✅ **Passed** | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](oj/oj3237-Triangle%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3237-Triangle%20%E2%9C%85/main.py) |
 | **3238** | Elon Musk (X-shape) | 🔄 *In Progress* | [`oj3238-Elon_Musk_X_Shape`](oj/oj3238-Elon_Musk_X_Shape) | [`problem.md`](oj/oj3238-Elon_Musk_X_Shape/problem.md) | [`main.py`](oj/oj3238-Elon_Musk_X_Shape/main.py) |
+
+### 📅 Week 7 / Midterm: ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam)
+
+> รวม `9` ข้อ (ผ่านแล้ว `0/9`)
+
+| OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
+| :---: | :--- | :---: | :--- | :---: | :---: |
+| **3274** | [ MIDTERM ] Triangle | 🔄 *In Progress* | [`oj3274-MIDTERM_Triangle`](oj/oj3274-MIDTERM_Triangle) | [`problem.md`](oj/oj3274-MIDTERM_Triangle/problem.md) | [`main.py`](oj/oj3274-MIDTERM_Triangle/main.py) |
+| **3275** | [ MIDTERM ] PIZZA TIME | 🔄 *In Progress* | [`oj3275-MIDTERM_Pizza_Time`](oj/oj3275-MIDTERM_Pizza_Time) | [`problem.md`](oj/oj3275-MIDTERM_Pizza_Time/problem.md) | [`main.py`](oj/oj3275-MIDTERM_Pizza_Time/main.py) |
+| **3276** | [ MIDTERM ] FakeThaiPlus | 🔄 *In Progress* | [`oj3276-MIDTERM_FakeThaiPlus`](oj/oj3276-MIDTERM_FakeThaiPlus) | [`problem.md`](oj/oj3276-MIDTERM_FakeThaiPlus/problem.md) | [`main.py`](oj/oj3276-MIDTERM_FakeThaiPlus/main.py) |
+| **3277** | [ MIDTERM ] RealThaiPlus | 🔄 *In Progress* | [`oj3277-MIDTERM_RealThaiPlus`](oj/oj3277-MIDTERM_RealThaiPlus) | [`problem.md`](oj/oj3277-MIDTERM_RealThaiPlus/problem.md) | [`main.py`](oj/oj3277-MIDTERM_RealThaiPlus/main.py) |
+| **3278** | [ MIDTERM ] Units | 🔄 *In Progress* | [`oj3278-MIDTERM_Units`](oj/oj3278-MIDTERM_Units) | [`problem.md`](oj/oj3278-MIDTERM_Units/problem.md) | [`main.py`](oj/oj3278-MIDTERM_Units/main.py) |
+| **3279** | [ MIDTERM ] PM WATCH | 🔄 *In Progress* | [`oj3279-MIDTERM_PM_Watch`](oj/oj3279-MIDTERM_PM_Watch) | [`problem.md`](oj/oj3279-MIDTERM_PM_Watch/problem.md) | [`main.py`](oj/oj3279-MIDTERM_PM_Watch/main.py) |
+| **3280** | [ MIDTERM ] CODE CLEANER | 🔄 *In Progress* | [`oj3280-MIDTERM_Code_Cleaner`](oj/oj3280-MIDTERM_Code_Cleaner) | [`problem.md`](oj/oj3280-MIDTERM_Code_Cleaner/problem.md) | [`main.py`](oj/oj3280-MIDTERM_Code_Cleaner/main.py) |
+| **3281** | [ MIDTERM ] ijudge-itkmitl | 🔄 *In Progress* | [`oj3281-MIDTERM_ijudge-itkmitl`](oj/oj3281-MIDTERM_ijudge-itkmitl) | [`problem.md`](oj/oj3281-MIDTERM_ijudge-itkmitl/problem.md) | [`main.py`](oj/oj3281-MIDTERM_ijudge-itkmitl/main.py) |
+| **3282** | [ MIDTERM ] Stats | 🔄 *In Progress* | [`oj3282-MIDTERM_Stats`](oj/oj3282-MIDTERM_Stats) | [`problem.md`](oj/oj3282-MIDTERM_Stats/problem.md) | [`main.py`](oj/oj3282-MIDTERM_Stats/main.py) |
+
+### 📅 Week 8: ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations)
+
+> รวม `9` ข้อ (ผ่านแล้ว `0/9`)
+
+| OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
+| :---: | :--- | :---: | :--- | :---: | :---: |
+| **3290** | Left Arrow | 🔄 *In Progress* | [`oj3290-Left_Arrow`](oj/oj3290-Left_Arrow) | [`problem.md`](oj/oj3290-Left_Arrow/problem.md) | [`main.py`](oj/oj3290-Left_Arrow/main.py) |
+| **3291** | Right Arrow | 🔄 *In Progress* | [`oj3291-Right_Arrow`](oj/oj3291-Right_Arrow) | [`problem.md`](oj/oj3291-Right_Arrow/problem.md) | [`main.py`](oj/oj3291-Right_Arrow/main.py) |
+| **3292** | Arrow | 🔄 *In Progress* | [`oj3292-Arrow`](oj/oj3292-Arrow) | [`problem.md`](oj/oj3292-Arrow/problem.md) | [`main.py`](oj/oj3292-Arrow/main.py) |
+| **3294** | Teaching schedule | 🔄 *In Progress* | [`oj3294-Teaching_schedule`](oj/oj3294-Teaching_schedule) | [`problem.md`](oj/oj3294-Teaching_schedule/problem.md) | [`main.py`](oj/oj3294-Teaching_schedule/main.py) |
+| **3295** | Electric_Using | 🔄 *In Progress* | [`oj3295-Electric_Using`](oj/oj3295-Electric_Using) | [`problem.md`](oj/oj3295-Electric_Using/problem.md) | [`main.py`](oj/oj3295-Electric_Using/main.py) |
+| **3297** | ตั๋วหนังสุดป่วน | 🔄 *In Progress* | [`oj3297-Movie_Ticket_Trouble`](oj/oj3297-Movie_Ticket_Trouble) | [`problem.md`](oj/oj3297-Movie_Ticket_Trouble/problem.md) | [`main.py`](oj/oj3297-Movie_Ticket_Trouble/main.py) |
+| **3298** | กระต่ายน้อยรัก BUU | 🔄 *In Progress* | [`oj3298-Little_Rabbit_Loves_BUU`](oj/oj3298-Little_Rabbit_Loves_BUU) | [`problem.md`](oj/oj3298-Little_Rabbit_Loves_BUU/problem.md) | [`main.py`](oj/oj3298-Little_Rabbit_Loves_BUU/main.py) |
+| **3300** | สมดุลย์ชีวิต | 🔄 *In Progress* | [`oj3300-Life_Balance`](oj/oj3300-Life_Balance) | [`problem.md`](oj/oj3300-Life_Balance/problem.md) | [`main.py`](oj/oj3300-Life_Balance/main.py) |
+| **3301** | ใส่กล่อง | 🔄 *In Progress* | [`oj3301-Put_In_Box`](oj/oj3301-Put_In_Box) | [`problem.md`](oj/oj3301-Put_In_Box/problem.md) | [`main.py`](oj/oj3301-Put_In_Box/main.py) |
+
+### 📅 Week 9: ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms)
+
+> รวม `12` ข้อ (ผ่านแล้ว `0/12`)
+
+| OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
+| :---: | :--- | :---: | :--- | :---: | :---: |
+| **3349** | กองชาม | 🔄 *In Progress* | [`oj3349-Bowl_Stack`](oj/oj3349-Bowl_Stack) | [`problem.md`](oj/oj3349-Bowl_Stack/problem.md) | [`main.py`](oj/oj3349-Bowl_Stack/main.py) |
+| **3350** | ขายรถยนต์ | 🔄 *In Progress* | [`oj3350-Sell_Car`](oj/oj3350-Sell_Car) | [`problem.md`](oj/oj3350-Sell_Car/problem.md) | [`main.py`](oj/oj3350-Sell_Car/main.py) |
+| **3351** | พูดจาภาษากระต่าย | 🔄 *In Progress* | [`oj3351-Rabbit_Language`](oj/oj3351-Rabbit_Language) | [`problem.md`](oj/oj3351-Rabbit_Language/problem.md) | [`main.py`](oj/oj3351-Rabbit_Language/main.py) |
+| **3352** | LastStand | 🔄 *In Progress* | [`oj3352-LastStand`](oj/oj3352-LastStand) | [`problem.md`](oj/oj3352-LastStand/problem.md) | [`main.py`](oj/oj3352-LastStand/main.py) |
+| **3353** | PickThemAgain | 🔄 *In Progress* | [`oj3353-PickThemAgain`](oj/oj3353-PickThemAgain) | [`problem.md`](oj/oj3353-PickThemAgain/problem.md) | [`main.py`](oj/oj3353-PickThemAgain/main.py) |
+| **3354** | Hint | 🔄 *In Progress* | [`oj3354-Hint`](oj/oj3354-Hint) | [`problem.md`](oj/oj3354-Hint/problem.md) | [`main.py`](oj/oj3354-Hint/main.py) |
+| **3356** | Bus Seat | 🔄 *In Progress* | [`oj3356-Bus_Seat`](oj/oj3356-Bus_Seat) | [`problem.md`](oj/oj3356-Bus_Seat/problem.md) | [`main.py`](oj/oj3356-Bus_Seat/main.py) |
+| **3358** | Pig | 🔄 *In Progress* | [`oj3358-Pig`](oj/oj3358-Pig) | [`problem.md`](oj/oj3358-Pig/problem.md) | [`main.py`](oj/oj3358-Pig/main.py) |
+| **3359** | กองชาม | 🔄 *In Progress* | [`oj3359-Bowl_Stack_II`](oj/oj3359-Bowl_Stack_II) | [`problem.md`](oj/oj3359-Bowl_Stack_II/problem.md) | [`main.py`](oj/oj3359-Bowl_Stack_II/main.py) |
+| **3361** | ขายรถยนต์ | 🔄 *In Progress* | [`oj3361-Sell_Car_II`](oj/oj3361-Sell_Car_II) | [`problem.md`](oj/oj3361-Sell_Car_II/problem.md) | [`main.py`](oj/oj3361-Sell_Car_II/main.py) |
+| **3362** | บุพเพสันนิวาส | 🔄 *In Progress* | [`oj3362-Destiny_Love`](oj/oj3362-Destiny_Love) | [`problem.md`](oj/oj3362-Destiny_Love/problem.md) | [`main.py`](oj/oj3362-Destiny_Love/main.py) |
+| **3363** | ไข้หวัดกระต่ายสายพันธุ์ใหม่ | 🔄 *In Progress* | [`oj3363-New_Rabbit_Flu_Strain`](oj/oj3363-New_Rabbit_Flu_Strain) | [`problem.md`](oj/oj3363-New_Rabbit_Flu_Strain/problem.md) | [`main.py`](oj/oj3363-New_Rabbit_Flu_Strain/main.py) |
 
 ---
 

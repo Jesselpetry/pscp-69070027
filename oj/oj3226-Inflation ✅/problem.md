@@ -1,4 +1,4 @@
-# OJ 3226: [Recommend] Inflation
+# OJ 3226: Inflation
 
 > - **iJudge cp_id**: 3226 — ภาษา Python
 > - **เวลาจำกัด**: 1 วินาที | **หน่วยความจำ**: 32,000 KB

@@ -10,7 +10,12 @@ import json
 import os
 import re
 import subprocess
+import sys
 import urllib.parse
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from ijudge import get_week  # noqa: E402
 
 PSCP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 README_PATH = os.path.join(PSCP_ROOT, "README.md")
@@ -23,28 +28,6 @@ OJ_PROBLEMS_IHELP = os.path.join(IHELP_ROOT, "data", "oj_problems.json")
 def url_quote(path):
     return urllib.parse.quote(path)
 
-def get_week(item):
-    pid = item["id"]
-    name = item.get("name", "")
-    exp = item.get("expire_date", "")
-    
-    if item.get("is_midterm") or "[ MIDTERM ]" in name.upper() or (3274 <= pid <= 3282):
-        return 7
-    if "11 September" in exp or (3226 <= pid <= 3238):
-        return 6
-    if "4 September" in exp or pid in [3129, 3135] or (3155 <= pid <= 3167):
-        return 5
-    if "28 August" in exp or (3058 <= pid <= 3116):
-        if pid <= 3072:
-            return 3
-        else:
-            return 4
-    if "14 August" in exp or "16 August" in exp or "17 August" in exp or (3020 <= pid <= 3042):
-        return 2
-    if "31 July" in exp or "7 August" in exp or pid <= 3019:
-        return 1
-    return 1
-
 WEEK_TITLES = {
     1: "Week 1: บทนำ ตัวแปร และการรับส่งข้อมูลพื้นฐาน (Basic I/O & Variables)",
     2: "Week 2: การทำงานแบบมีเงื่อนไขพื้นฐาน (Basic Conditionals & Logic)",
@@ -52,7 +35,9 @@ WEEK_TITLES = {
     4: "Week 4: การทำงานซ้ำแบบ While Loop และตัวแปรสะสม (While Loops & Accumulators)",
     5: "Week 5: การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing)",
     6: "Week 6: ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences)",
-    7: "Week 7 / Midterm: ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam)"
+    7: "Week 7 / Midterm: ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam)",
+    8: "Week 8: ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations)",
+    9: "Week 9: ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms)"
 }
 
 def load_master_metadata():
@@ -236,7 +221,7 @@ def generate_readme():
     lines.append("")
     lines.append("| Week | Topic / Focus | Total | Passed | In Progress | Completion |")
     lines.append("| :---: | :--- | :---: | :---: | :---: | :---: |")
-    for w in range(1, 8):
+    for w in range(1, 10):
         w_records = [r for r in records if r["week"] == w]
         w_pass = sum(1 for r in w_records if r["is_passed"])
         w_pend = len(w_records) - w_pass
@@ -363,7 +348,7 @@ def generate_readme():
     lines.append("## 💻 4. Standard OJ Problems (จำแนกตามสัปดาห์ตั้งแต่เปิดเทอม)")
     lines.append("")
 
-    for w in range(1, 7):
+    for w in range(1, 10):
         w_std_records = [r for r in records if r["week"] == w and not r["is_ll"]]
         if not w_std_records:
             continue

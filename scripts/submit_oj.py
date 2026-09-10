@@ -21,6 +21,10 @@ import sys
 import time
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from ijudge import USER_AGENT, load_config, save_config, validate_cookie  # noqa: E402
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PSCP_ROOT = os.path.dirname(SCRIPT_DIR)
 WORKSPACE_ROOT = os.path.dirname(PSCP_ROOT)
@@ -31,7 +35,7 @@ OJ_DIR = os.path.join(PSCP_ROOT, "oj")
 
 DEFAULT_COURSE_ID = 78
 DEFAULT_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "User-Agent": USER_AGENT,
     "Accept": "text/x-component",
     "Content-Type": "text/plain;charset=UTF-8",
     "next-action": "7fc32d2dd54d0b8574db835d9b74354be0cac2fbd7",
@@ -50,65 +54,6 @@ MIDTERM_ALIAS_MAP = {
     3239: ["Code_Cleaner", "Cleaner"],
     3148: ["RealThaiPlus", "RealThai"]
 }
-
-
-def load_config():
-    """Load configuration from submit_config.json if it exists."""
-    config = {
-        "course_id": DEFAULT_COURSE_ID,
-        "exclude_learning_logs": True,
-        "poll_interval": 2.0,
-        "poll_timeout": 20.0,
-        "cookie": ""
-    }
-    if os.path.exists(CONFIG_FILE):
-        try:
-            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                user_conf = json.load(f)
-                config.update(user_conf)
-        except Exception as e:
-            print(f"[!] Warning: Failed to parse {CONFIG_FILE}: {e}")
-    return config
-
-
-def save_config(config):
-    """Save configuration to submit_config.json."""
-    try:
-        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(config, f, indent=2, ensure_ascii=False)
-        print(f"[*] Configuration saved to {CONFIG_FILE}")
-    except Exception as e:
-        print(f"[!] Warning: Failed to save {CONFIG_FILE}: {e}")
-
-
-def validate_cookie(cookie):
-    """Validate iJudge cookie against submissions endpoint and return user profile info."""
-    if not cookie or not cookie.strip():
-        return {"valid": False, "username": None, "fullname": None, "error": "Empty cookie"}
-
-    url = "https://ijudge.it.kmitl.ac.th/submissions/me"
-    headers = {
-        "User-Agent": DEFAULT_HEADERS["User-Agent"],
-        "Accept": "*/*",
-        "rsc": "1",
-        "Cookie": cookie
-    }
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            body = resp.read().decode("utf-8")
-        m_user = re.search(r"\"username\":\"([^\"]+)\"", body)
-        m_name = re.search(r"\"fullname\":\"([^\"]+)\"", body)
-        if m_user:
-            return {
-                "valid": True,
-                "username": m_user.group(1),
-                "fullname": m_name.group(1) if m_name else "",
-                "error": None
-            }
-        return {"valid": False, "username": None, "fullname": None, "error": "Not authenticated (invalid session)"}
-    except Exception as e:
-        return {"valid": False, "username": None, "fullname": None, "error": str(e)}
 
 
 def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
@@ -264,7 +209,10 @@ def filter_problems(all_problems, args, config):
     exclude_ll = not args.include_learning_log if hasattr(args, "include_learning_log") else config.get("exclude_learning_logs", True)
 
     filtered = []
-    resolved_course = args.course_id
+    # args.course_id is None unless --course-id was passed; fall back to the
+    # configured course so an --ids/--week run does not report "Course None"
+    # and post to an unset course.
+    resolved_course = args.course_id or config.get("course_id", DEFAULT_COURSE_ID)
 
     if args.ids:
         target_ids = set()
