@@ -1,13 +1,10 @@
 """ การตรวจสอบบัตรประชาชน """
 
+
 def main():
     """การตรวจสอบบัตรประชาชน"""
-    national_id = input()
+    # solution code here
 
-    if len(national_id) == 13:
-        print("yes")
-    else:
-        print("no")
 
 if __name__ == "__main__":
     main()

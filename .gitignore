@@ -12,3 +12,9 @@ session.json
 # Kept on disk for debugging the RSC parsers, but 7.2MB of machine-generated
 # HTML that churns on every scrape does not belong in git.
 data/html_cache/
+
+# Read-only worktree of the solutions/* archive branch, used by
+# ihelp/scripts/build_pscp_registry.py to read reference solutions while the
+# working branch keeps empty stubs. Recreate with:
+#   git worktree add .pscp-archive solutions/2026-s1
+.pscp-archive/

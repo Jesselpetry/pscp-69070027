@@ -307,7 +307,7 @@ def extract_string_value(s, key):
     return None
 
 
-def scrape_all(fast=False, only_ids=None):
+def scrape_all(fast=False, only_ids=None, seed_code=False):
     for d in (HTML_CACHE_DIR,
               os.path.dirname(JSON_OUT_PSCP), os.path.dirname(JSON_OUT_IHELP)):
         ensure_dir(d)
@@ -424,8 +424,8 @@ def scrape_all(fast=False, only_ids=None):
             write_text(os.path.join(ll_dir, "problem.md"), problem_md_content)
             main_py_ll = os.path.join(ll_dir, "main.py")
             if not os.path.exists(main_py_ll):
-                write_text(main_py_ll, before_code or stub_solution(p_name))
-            elif before_code:
+                write_text(main_py_ll, (before_code if seed_code else None) or stub_solution(p_name))
+            elif before_code and seed_code:
                 with open(main_py_ll, "r", encoding="utf-8", errors="ignore") as f:
                     if is_placeholder(f.read()):
                         write_text(main_py_ll, before_code)
@@ -464,7 +464,7 @@ def scrape_all(fast=False, only_ids=None):
                 oj_dir_target = os.path.join(oj_root, target_dir_name)
                 write_text(os.path.join(oj_dir_target, "problem.md"), problem_md_content)
                 main_py_target = os.path.join(oj_dir_target, "main.py")
-                if os.path.exists(main_py_target) and before_code:
+                if os.path.exists(main_py_target) and before_code and seed_code:
                     with open(main_py_target, "r", encoding="utf-8", errors="ignore") as f:
                         if is_placeholder(f.read()):
                             write_text(main_py_target, before_code)
@@ -481,7 +481,7 @@ def scrape_all(fast=False, only_ids=None):
                 ensure_dir(oj_dir_target)
                 write_text(os.path.join(oj_dir_target, "problem.md"), problem_md_content)
                 write_text(os.path.join(oj_dir_target, "main.py"),
-                           before_code or stub_solution(p_name))
+                           (before_code if seed_code else None) or stub_solution(p_name))
 
         time.sleep(FETCH_DELAY_SEC)
 
@@ -547,6 +547,15 @@ def main():
         metavar="IDS",
         help="Limit the detail fetch to these ids/ranges, e.g. 3226,3290-3301.",
     )
+    parser.add_argument(
+        "--seed-code",
+        action="store_true",
+        help=(
+            "Seed empty main.py stubs with the code saved on iJudge. Off by "
+            "default: the working branch deliberately keeps empty stubs, and "
+            "the finished solutions live on the solutions/* branch."
+        ),
+    )
     args = parser.parse_args()
 
     set_dry_run(args.dry_run)
@@ -560,7 +569,9 @@ def main():
         parser.error(f"--only could not be parsed: {args.only!r}")
 
     try:
-        return 1 if scrape_all(fast=args.fast, only_ids=only_ids) else 0
+        return 1 if scrape_all(
+            fast=args.fast, only_ids=only_ids, seed_code=args.seed_code
+        ) else 0
     except AuthError as e:
         print(f"[!] {e}", file=sys.stderr)
         return 2

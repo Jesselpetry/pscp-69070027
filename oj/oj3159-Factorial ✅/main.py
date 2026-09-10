@@ -1,12 +1,10 @@
-""" Factorial """
+""" [Recommend] Factorial """
+
 
 def main():
-    """Factorial"""
-    number = int(input())
-    result = 1
-    for multiplier in range(1, number + 1):
-        result = result * multiplier
-    print(result)
+    """[Recommend] Factorial"""
+    # solution code here
+
 
 if __name__ == "__main__":
     main()

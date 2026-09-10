@@ -24,6 +24,7 @@ credential fails with an explanatory error rather than guessing.
 | `python3 scrape_all_oj_problems.py` | Full scrape: HTML cache, detail JSON, `problem.md`, seeded `main.py` |
 | `python3 scrape_all_oj_problems.py --fast` | Summary registry only — one request, no per-problem fetch |
 | `python3 scrape_all_oj_problems.py --only 3290-3301` | Restrict the detail fetch to some ids |
+| `python3 scrape_all_oj_problems.py --seed-code` | Also seed empty stubs from iJudge submissions |
 | `python3 submit_oj.py --ids 3226,3237` | Submit solutions (interactive menu with no arguments) |
 | `python3 sync_oj_status.py` | Rename `oj/` folders to match pass status |
 | `python3 update_readme.py` | Regenerate the repo README from the registries |
@@ -51,6 +52,36 @@ scripts/
 `format_expire_date` were previously copy-pasted across four scripts, so a new
 teaching week meant editing all four consistently or the two repos silently
 disagreed. Add shared behaviour there, not in a second copy.
+
+## Branches
+
+| Branch | Holds |
+|---|---|
+| `feat/...` (working) | empty `main.py` stubs — a clean slate for new problems |
+| `solutions/2026-s1` | the finished solutions, archived |
+
+Solutions marked **Passed** on iJudge are blanked on the working branch so a
+new week starts from a clean template. The full code stays on the archive
+branch, checked out as a gitignored worktree that the registry build reads:
+
+```sh
+git worktree add .pscp-archive solutions/2026-s1   # once, if missing
+```
+
+`build_pscp_registry.py` prefers that worktree automatically, so
+`bun run pscp:build` in ihelp still ships real reference code for all 135
+problems. To browse or restore a solution:
+
+```sh
+git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"
+```
+
+To archive a newly finished problem, commit it on `solutions/2026-s1`, then
+blank it here.
+
+**`--seed-code`**: the scraper does not refill empty stubs from your iJudge
+submissions by default — that would silently undo the blanking. Pass
+`--seed-code` when you deliberately want your submitted code pulled back down.
 
 ## Where solutions live
 
