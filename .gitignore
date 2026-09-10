@@ -13,3 +13,7 @@ session.json
 # HTML that churns on every scrape does not belong in git.
 data/html_cache/
 
+# Worktree of solutions/2026-s1, read by ihelp/scripts/build_pscp_registry.py
+# for reference solutions while main keeps the week 8-9 problems as empty
+# stubs. Recreate with:  git worktree add .pscp-archive solutions/2026-s1
+.pscp-archive/
