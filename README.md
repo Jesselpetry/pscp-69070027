@@ -27,8 +27,8 @@
 ## 📊 Overall Progress Dashboard
 
 - **Total Problems Tracked**: `135`
-- **✅ Solved / Passed**: `63` (46.7%)
-- **🔄 In Progress / Pending**: `72`
+- **✅ Solved / Passed**: `73` (54.1%)
+- **🔄 In Progress / Pending**: `62`
 
 ### 📅 Weekly Progress (นับตั้งแต่สัปดาห์แรกที่เปิดเทอม)
 
@@ -39,7 +39,7 @@
 | **Week 3** | การทำงานแบบมีเงื่อนไขขั้นสูง (Nested Conditionals & Advanced Logic) | 15 | 15 | 0 | **100.0%** |
 | **Week 4** | การทำงานซ้ำแบบ While Loop และตัวแปรสะสม (While Loops & Accumulators) | 15 | 1 | 14 | **6.7%** |
 | **Week 5** | การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing) | 15 | 5 | 10 | **33.3%** |
-| **Week 6** | ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences) | 13 | 3 | 10 | **23.1%** |
+| **Week 6** | ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences) | 13 | 13 | 0 | **100.0%** |
 | **Week 7** | ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam) | 9 | 0 | 9 | **0.0%** |
 | **Week 8** | ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations) | 12 | 0 | 12 | **0.0%** |
 | **Week 9** | ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms) | 15 | 0 | 15 | **0.0%** |
@@ -50,7 +50,7 @@
 | :--- | :---: | :---: | :---: |
 | **🎯 Midterm Mock Exam** | 9 | 0 | 9 |
 | **🌟 Recommended Problems** | 10 | 10 | 0 |
-| **📓 Learning Logs** | 27 | 13 | 14 |
+| **📓 Learning Logs** | 27 | 16 | 11 |
 
 ---
 
@@ -131,9 +131,9 @@ pscp-69070027/
 | **3135** | [LEARNING LOGS] ของขวัญและขโมย | Week 5 | ✅ **Passed** | [`oj3135`](oj3135) | [`problem.md`](oj3135/problem.md) | [`submission.md`](oj3135/submission.md) | [`main.py`](oj3135/main.py) |
 | **3157** | [LEARNING LOGS] เกมสะสมแต้ม | Week 5 | ✅ **Passed** | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | [`submission.md`](oj3157/submission.md) | [`main.py`](oj3157/main.py) |
 | **3160** | [LEARNING LOGS] หาจำนวนเฉพาะ | Week 5 | ✅ **Passed** | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | [`submission.md`](oj3160/submission.md) | [`main.py`](oj3160/main.py) |
-| **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | 🔄 *In Progress* | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | - | [`main.py`](oj3227/main.py) |
-| **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | 🔄 *In Progress* | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | - | [`main.py`](oj3232/main.py) |
-| **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | 🔄 *In Progress* | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | - | [`main.py`](oj3233/main.py) |
+| **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | ✅ **Passed** | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | [`submission.md`](oj3227/submission.md) | [`main.py`](oj3227/main.py) |
+| **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | ✅ **Passed** | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | - | [`main.py`](oj3232/main.py) |
+| **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | ✅ **Passed** | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | - | [`main.py`](oj3233/main.py) |
 | **3293** | [LEARNING LOGS] BigFrame | Week 8 | 🔄 *In Progress* | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
 | **3296** | [LEARNING LOGS] RGB Mixed | Week 8 | 🔄 *In Progress* | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
 | **3299** | [LEARNING LOGS] แปลงดอกไม้ | Week 8 | 🔄 *In Progress* | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
@@ -250,20 +250,20 @@ pscp-69070027/
 
 ### 📅 Week 6: ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences)
 
-> รวม `10` ข้อ (ผ่านแล้ว `3/10`)
+> รวม `10` ข้อ (ผ่านแล้ว `10/10`)
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
 | **3226** | [Recommend] Inflation | ✅ **Passed** | [`oj3226-Inflation ✅`](oj/oj3226-Inflation%20%E2%9C%85) | [`problem.md`](oj/oj3226-Inflation%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3226-Inflation%20%E2%9C%85/main.py) |
-| **3228** | การนับสระ | 🔄 *In Progress* | [`oj3228-Count_Vowels`](oj/oj3228-Count_Vowels) | [`problem.md`](oj/oj3228-Count_Vowels/problem.md) | [`main.py`](oj/oj3228-Count_Vowels/main.py) |
-| **3229** | ระบบคิดคะแนนเกมออนไลน์ | 🔄 *In Progress* | [`oj3229-Online_Game_Scoring`](oj/oj3229-Online_Game_Scoring) | [`problem.md`](oj/oj3229-Online_Game_Scoring/problem.md) | [`main.py`](oj/oj3229-Online_Game_Scoring/main.py) |
-| **3230** | โรงแรมกลางกรุง ไม่มีชั้น 13 | 🔄 *In Progress* | [`oj3230-Hotel_No_13th_Floor`](oj/oj3230-Hotel_No_13th_Floor) | [`problem.md`](oj/oj3230-Hotel_No_13th_Floor/problem.md) | [`main.py`](oj/oj3230-Hotel_No_13th_Floor/main.py) |
-| **3231** | เกมทายลูกเต๋า | 🔄 *In Progress* | [`oj3231-Dice_Guessing_Game`](oj/oj3231-Dice_Guessing_Game) | [`problem.md`](oj/oj3231-Dice_Guessing_Game/problem.md) | [`main.py`](oj/oj3231-Dice_Guessing_Game/main.py) |
-| **3234** | ไฟคริสตมาส | 🔄 *In Progress* | [`oj3234-Christmas_Lights`](oj/oj3234-Christmas_Lights) | [`problem.md`](oj/oj3234-Christmas_Lights/problem.md) | [`main.py`](oj/oj3234-Christmas_Lights/main.py) |
+| **3228** | การนับสระ | ✅ **Passed** | [`oj3228-Count_Vowels ✅`](oj/oj3228-Count_Vowels%20%E2%9C%85) | [`problem.md`](oj/oj3228-Count_Vowels%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3228-Count_Vowels%20%E2%9C%85/main.py) |
+| **3229** | ระบบคิดคะแนนเกมออนไลน์ | ✅ **Passed** | [`oj3229-Online_Game_Scoring ✅`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85) | [`problem.md`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85/main.py) |
+| **3230** | โรงแรมกลางกรุง ไม่มีชั้น 13 | ✅ **Passed** | [`oj3230-Hotel_No_13th_Floor ✅`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85) | [`problem.md`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85/main.py) |
+| **3231** | เกมทายลูกเต๋า | ✅ **Passed** | [`oj3231-Dice_Guessing_Game ✅`](oj/oj3231-Dice_Guessing_Game%20%E2%9C%85) | [`problem.md`](oj/oj3231-Dice_Guessing_Game%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3231-Dice_Guessing_Game%20%E2%9C%85/main.py) |
+| **3234** | ไฟคริสตมาส | ✅ **Passed** | [`oj3234-Christmas_Lights ✅`](oj/oj3234-Christmas_Lights%20%E2%9C%85) | [`problem.md`](oj/oj3234-Christmas_Lights%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3234-Christmas_Lights%20%E2%9C%85/main.py) |
 | **3235** | กระต่ายอ้วน | ✅ **Passed** | [`oj3235-Fat_Rabbit ✅`](oj/oj3235-Fat_Rabbit%20%E2%9C%85) | [`problem.md`](oj/oj3235-Fat_Rabbit%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3235-Fat_Rabbit%20%E2%9C%85/main.py) |
-| **3236** | รหัสแฝดเทค | 🔄 *In Progress* | [`oj3236-Twin_Tech_Code`](oj/oj3236-Twin_Tech_Code) | [`problem.md`](oj/oj3236-Twin_Tech_Code/problem.md) | [`main.py`](oj/oj3236-Twin_Tech_Code/main.py) |
+| **3236** | รหัสแฝดเทค | ✅ **Passed** | [`oj3236-Twin_Tech_Code ✅`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85) | [`problem.md`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85/main.py) |
 | **3237** | [Recommend] สามเหลี่ยม | ✅ **Passed** | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](oj/oj3237-Triangle%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3237-Triangle%20%E2%9C%85/main.py) |
-| **3238** | Elon Musk (X-shape) | 🔄 *In Progress* | [`oj3238-Elon_Musk_X_Shape`](oj/oj3238-Elon_Musk_X_Shape) | [`problem.md`](oj/oj3238-Elon_Musk_X_Shape/problem.md) | [`main.py`](oj/oj3238-Elon_Musk_X_Shape/main.py) |
+| **3238** | Elon Musk (X-shape) | ✅ **Passed** | [`oj3238-Elon_Musk_X_Shape ✅`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85) | [`problem.md`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85/main.py) |
 
 ### 📅 Week 7 / Midterm: ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam)
 

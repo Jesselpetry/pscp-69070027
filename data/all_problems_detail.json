@@ -3454,16 +3454,16 @@
     "name": "[Recommend] Inflation",
     "status": "Passed",
     "difficulty": 1,
-    "passed_count": 126,
-    "attempt_count": 185,
-    "percentage": 68.11,
+    "passed_count": 151,
+    "attempt_count": 195,
+    "percentage": 77.44,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": true,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3226/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3226,
       "cp_course_id": 78,
@@ -3519,8 +3519,8 @@
       }
     ],
     "submission": {
-      "attemped": 185,
-      "passed": 126,
+      "attemped": 195,
+      "passed": 151,
       "status": "PASSED"
     },
     "beforeCode": "\"\"\" Inflation \"\"\"\n\n\ndef main():\n    \"\"\"Inflation\"\"\"\n    price = float(input())\n    years = int(input())\n\n    # เก็บเงินเป็น \"สตางค์\" (จำนวนเต็ม) เพื่อไม่ให้ float ปัดเศษเพี้ยน\n    satang = round(price * 100)\n    for _ in range(years):\n        # ส่วนที่เพิ่มขึ้นแต่ละปี ตัดเศษทิ้งตั้งแต่สตางค์หลักที่ 3\n        satang += satang * 381 // 10000\n\n    # แยกบาทกับสตางค์ด้วยจำนวนเต็ม ไม่แปลงกลับเป็น float\n    # เพราะถ้า k เยอะ ค่าจะใหญ่เกินกว่าที่ float เก็บได้\n    print(f\"{satang // 100}.{satang % 100:02d}\")\n\n\nif __name__ == \"__main__\":\n    main()\n"
@@ -3528,18 +3528,18 @@
   {
     "id": 3227,
     "name": "[LEARNING LOGS] ไพ่ 44 ใบ",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 122,
-    "attempt_count": 127,
-    "percentage": 96.06,
+    "passed_count": 175,
+    "attempt_count": 180,
+    "percentage": 97.22,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3227/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3227,
       "cp_course_id": 78,
@@ -3595,27 +3595,27 @@
       }
     ],
     "submission": {
-      "attemped": 127,
-      "passed": 122,
-      "status": "NOT ATTEMPTED"
+      "attemped": 180,
+      "passed": 175,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" ไพ่ 44 ใบ \"\"\"\n\n\ndef main():\n    \"\"\"ไพ่ 44 ใบ\"\"\"\n    card = input().strip().upper()\n\n    rank = card[:-1]\n    suit = card[-1]\n\n    if rank == \"A\":\n        rank_name = \"ace\"\n    elif rank == \"J\":\n        rank_name = \"jack\"\n    elif rank == \"Q\":\n        rank_name = \"queen\"\n    elif rank == \"K\":\n        rank_name = \"king\"\n    else:\n        rank_name = rank\n\n    if suit == \"D\":\n        suit_name = \"diamonds\"\n    elif suit == \"H\":\n        suit_name = \"hearts\"\n    elif suit == \"S\":\n        suit_name = \"spades\"\n    else:\n        suit_name = \"clubs\"\n\n    print(rank_name, \"of\", suit_name)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3228,
     "name": "การนับสระ",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 0,
-    "passed_count": 189,
-    "attempt_count": 193,
-    "percentage": 97.93,
+    "passed_count": 204,
+    "attempt_count": 207,
+    "percentage": 98.55,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3228/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3228,
       "cp_course_id": 78,
@@ -3671,27 +3671,27 @@
       }
     ],
     "submission": {
-      "attemped": 193,
-      "passed": 189,
-      "status": "NOT ATTEMPTED"
+      "attemped": 207,
+      "passed": 204,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" การนับสระ \"\"\"\n\ndef main():\n    \"\"\"การนับสระ\"\"\"\n    text = input().strip()\n    vowels = [\"a\", \"e\", \"i\", \"o\", \"u\"]\n\n    count = 0\n    for letter in text:\n        if letter in vowels:\n            count = count + 1\n\n    print(count)\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3229,
     "name": "ระบบคิดคะแนนเกมออนไลน์",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 128,
-    "attempt_count": 139,
-    "percentage": 92.09,
+    "passed_count": 175,
+    "attempt_count": 187,
+    "percentage": 93.58,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3229/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3229,
       "cp_course_id": 78,
@@ -3747,27 +3747,27 @@
       }
     ],
     "submission": {
-      "attemped": 139,
-      "passed": 128,
-      "status": "NOT ATTEMPTED"
+      "attemped": 187,
+      "passed": 175,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" ระบบคิดคะแนนเกมออนไลน์ \"\"\"\n\ndef main():\n    \"\"\"ระบบคิดคะแนนเกมออนไลน์\"\"\"\n    base_score = int(input())\n    bonus_score = int(input())\n    days_played = int(input())\n\n    total = base_score + bonus_score\n    if days_played > 3:\n        total = total * 1.5\n    total = int(total)\n\n    if total >= 1500:\n        rank = 5\n    elif total >= 1000:\n        rank = 4\n    elif total >= 500:\n        rank = 3\n    elif total >= 200:\n        rank = 2\n    else:\n        rank = 1\n\n    if rank == 5 and days_played >= 7:\n        special = 99\n    elif rank == 4 and bonus_score > 300:\n        special = 88\n    else:\n        special = 0\n\n    print(total)\n    print(rank)\n    print(special)\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3230,
     "name": "โรงแรมกลางกรุง ไม่มีชั้น 13",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 80,
-    "attempt_count": 95,
-    "percentage": 84.21,
+    "passed_count": 134,
+    "attempt_count": 154,
+    "percentage": 87.01,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3230/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3230,
       "cp_course_id": 78,
@@ -3823,27 +3823,27 @@
       }
     ],
     "submission": {
-      "attemped": 95,
-      "passed": 80,
-      "status": "NOT ATTEMPTED"
+      "attemped": 154,
+      "passed": 134,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" โรงแรมกลางกรุง ไม่มีชั้น 13 \"\"\"\n\n\ndef get_floor(digits):\n    \"\"\"Determine floor number.\"\"\"\n    for idx, d in enumerate(digits):\n        if d > 5:\n            return 14 if idx == 4 else 9 + idx\n    return 13\n\n\ndef get_room_first(secret, digits):\n    \"\"\"Determine first room digit.\"\"\"\n    d1, d2, _, d4, d5 = digits\n    if secret == secret[::-1]:\n        if d1 + d5 > 5:\n            return 1\n        if d2 * d4 > 5:\n            return 2\n        return 0\n\n    if d5 and d1 // d5 > 5:\n        return 1\n    if d2 - d5 > 5:\n        return 2\n    return 0\n\n\ndef get_room_second(digits):\n    \"\"\"Determine second room digit.\"\"\"\n    if sum(digits) > 25:\n        return 1\n    digit_prod = 1\n    for d in digits:\n        digit_prod *= d\n    if digit_prod > 55:\n        return 2\n    return 0\n\n\ndef main():\n    \"\"\"โรงแรมกลางกรุง ไม่มีชั้น 13\"\"\"\n    secret = input().strip()\n    digits = [int(c) for c in secret]\n\n    floor = get_floor(digits)\n    room_first = get_room_first(secret, digits)\n    room_second = get_room_second(digits)\n\n    print(f\"{floor}{room_first}{room_second}\")\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3231,
     "name": "เกมทายลูกเต๋า",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 0,
-    "passed_count": 167,
-    "attempt_count": 170,
-    "percentage": 98.24,
+    "passed_count": 190,
+    "attempt_count": 192,
+    "percentage": 98.96,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3231/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3231,
       "cp_course_id": 78,
@@ -3899,27 +3899,27 @@
       }
     ],
     "submission": {
-      "attemped": 170,
-      "passed": 167,
-      "status": "NOT ATTEMPTED"
+      "attemped": 192,
+      "passed": 190,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" เกมทายลูกเต๋า \"\"\"\n\ndef main():\n    \"\"\"เกมทายลูกเต๋า\"\"\"\n    guess = int(input())\n    result = int(input())\n\n    if guess < 1 or guess > 6 or result < 1 or result > 6:\n        print(\"Invalid\")\n    elif guess == result:\n        print(\"Correct!\")\n    else:\n        print(\"Wrong!\")\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3232,
     "name": "[LEARNING LOGS] กบน้อยกระโดด",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 0,
-    "passed_count": 119,
-    "attempt_count": 122,
-    "percentage": 97.54,
+    "passed_count": 171,
+    "attempt_count": 172,
+    "percentage": 99.42,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3232/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3232,
       "cp_course_id": 78,
@@ -3975,27 +3975,27 @@
       }
     ],
     "submission": {
-      "attemped": 122,
-      "passed": 119,
-      "status": "NOT ATTEMPTED"
+      "attemped": 172,
+      "passed": 172,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" กบน้อยกระโดด \"\"\"\n\n\ndef main():\n    \"\"\"กบน้อยกระโดด\"\"\"\n    first_jump, target = input().split()\n    first_jump = int(first_jump)\n    target = int(target)\n\n    total = 0\n    jumps = 0\n    distance = first_jump\n\n    while distance > 0 and total < target:\n        total = total + distance\n        jumps = jumps + 1\n        distance = distance - 2\n\n    if total >= target:\n        print(jumps)\n    else:\n        print(-1)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3233,
     "name": "[LEARNING LOGS] สลากกินแบ่ง",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 92,
-    "attempt_count": 99,
-    "percentage": 92.93,
+    "passed_count": 161,
+    "attempt_count": 166,
+    "percentage": 96.99,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3233/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3233,
       "cp_course_id": 78,
@@ -4063,27 +4063,27 @@
       }
     ],
     "submission": {
-      "attemped": 99,
-      "passed": 92,
-      "status": "NOT ATTEMPTED"
+      "attemped": 166,
+      "passed": 161,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" สลากกินแบ่ง \"\"\"\n\n\ndef main():\n    \"\"\"สลากกินแบ่ง\"\"\"\n    winning_letter, winning_number = input().split()\n    my_letter, my_number = input().split()\n\n    same_letter = my_letter == winning_letter\n    last_two = my_number[-2:] == winning_number[-2:]\n    last_three = my_number[-3:] == winning_number[-3:]\n\n    if same_letter and my_number == winning_number:\n        prize = 1000000\n    elif my_number == winning_number:\n        prize = 100000\n    elif same_letter and last_three:\n        prize = 2000\n    elif same_letter and last_two:\n        prize = 1000\n    elif last_three:\n        prize = 200\n    elif last_two:\n        prize = 100\n    elif same_letter:\n        prize = 20\n    else:\n        prize = 0\n\n    print(prize)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3234,
     "name": "ไฟคริสตมาส",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 106,
-    "attempt_count": 107,
-    "percentage": 99.07,
+    "passed_count": 164,
+    "attempt_count": 168,
+    "percentage": 97.62,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3234/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3234,
       "cp_course_id": 78,
@@ -4139,27 +4139,27 @@
       }
     ],
     "submission": {
-      "attemped": 107,
-      "passed": 106,
-      "status": "NOT ATTEMPTED"
+      "attemped": 168,
+      "passed": 165,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" ไฟคริสตมาส \"\"\"\n\ndef main():\n    \"\"\"ไฟคริสตมาส\"\"\"\n    first_color, amount = input().split()\n    amount = int(amount)\n\n    colors = [\"Red\", \"Green\", \"Blue\"]\n\n    if first_color == \"R\":\n        start = 0\n    elif first_color == \"G\":\n        start = 1\n    else:\n        start = 2\n\n    lights = []\n    for position in range(amount):\n        lights.append(colors[(start + position) % 3])\n\n    print(\" \".join(lights))\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3235,
     "name": "กระต่ายอ้วน",
     "status": "Passed",
     "difficulty": 0,
-    "passed_count": 176,
-    "attempt_count": 180,
-    "percentage": 97.78,
+    "passed_count": 194,
+    "attempt_count": 198,
+    "percentage": 97.98,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3235/description?problemPage=0",
     "course_page": 0,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3235,
       "cp_course_id": 78,
@@ -4215,8 +4215,8 @@
       }
     ],
     "submission": {
-      "attemped": 180,
-      "passed": 176,
+      "attemped": 198,
+      "passed": 194,
       "status": "PASSED"
     },
     "beforeCode": "\"\"\" กระต่ายอ้วน \"\"\"\n\ndef main():\n    \"\"\"กระต่ายอ้วน\"\"\"\n    n = int(input())\n    rabbits_names = []\n    rabbits_wieght = []\n    for _ in range(n):\n        names,weight = input().split()\n        rabbits_names.append(names)\n        rabbits_wieght.append(int(weight))\n\n    max_val = max(rabbits_wieght)\n    max_index = rabbits_wieght.index(max_val)\n\n    fat_rabbits = 0\n    for i in range(n):\n        if int(rabbits_wieght[i]) > 15:\n            fat_rabbits += 1\n\n    print(fat_rabbits)\n    print(rabbits_names[max_index])\n\nif __name__ == \"__main__\":\n    main()\n"
@@ -4224,18 +4224,18 @@
   {
     "id": 3236,
     "name": "รหัสแฝดเทค",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 0,
-    "passed_count": 161,
-    "attempt_count": 164,
-    "percentage": 98.17,
+    "passed_count": 185,
+    "attempt_count": 189,
+    "percentage": 97.88,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3236/description?problemPage=1",
     "course_page": 1,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3236,
       "cp_course_id": 78,
@@ -4297,27 +4297,27 @@
       }
     ],
     "submission": {
-      "attemped": 164,
-      "passed": 161,
-      "status": "NOT ATTEMPTED"
+      "attemped": 189,
+      "passed": 185,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" รหัสแฝดเทค \"\"\"\n\n\ndef main():\n    \"\"\"รหัสแฝดเทค\"\"\"\n    length = int(input())\n    first_code = input().strip()\n    second_code = input().strip()\n\n    mismatch = 0\n    for position in range(length):\n        if int(first_code[position]) + int(second_code[position]) != 9:\n            mismatch += 1\n\n    if not mismatch:\n        print(\"YES\")\n    else:\n        print(\"NO\", mismatch)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3237,
     "name": "[Recommend] สามเหลี่ยม",
     "status": "Passed",
     "difficulty": 0,
-    "passed_count": 182,
-    "attempt_count": 187,
-    "percentage": 97.33,
+    "passed_count": 193,
+    "attempt_count": 198,
+    "percentage": 97.47,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": true,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3237/description?problemPage=1",
     "course_page": 1,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3237,
       "cp_course_id": 78,
@@ -4379,8 +4379,8 @@
       }
     ],
     "submission": {
-      "attemped": 187,
-      "passed": 182,
+      "attemped": 198,
+      "passed": 193,
       "status": "PASSED"
     },
     "beforeCode": "\"\"\" สามเหลี่ยม \"\"\"\n\n\ndef main():\n    \"\"\"สามเหลี่ยม\"\"\"\n    n = int(input())\n\n    for i in range(1, n + 1):\n        if i in (1, n):\n            # แถวแรกและแถวสุดท้ายเป็นขอบ ทึบทั้งแถว\n            print(\"0\" * i)\n        else:\n            # แถวกลางมีขอบซ้าย-ขวาเป็น 0 ตรงกลางกลวงเป็น 1\n            print(\"0\" + \"1\" * (i - 2) + \"0\")\n\n\nif __name__ == \"__main__\":\n    main()\n"
@@ -4388,18 +4388,18 @@
   {
     "id": 3238,
     "name": "Elon Musk (X-shape)",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 51,
-    "attempt_count": 65,
-    "percentage": 78.46,
+    "passed_count": 102,
+    "attempt_count": 122,
+    "percentage": 83.61,
     "expire_date": "11 September 2026, 00:00",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
-    "week": 6,
     "url": "https://ijudge.it.kmitl.ac.th/problems/3238/description?problemPage=1",
     "course_page": 1,
+    "week": 6,
     "courseProblem": {
       "cp_id": 3238,
       "cp_course_id": 78,
@@ -4455,11 +4455,11 @@
       }
     ],
     "submission": {
-      "attemped": 66,
-      "passed": 51,
-      "status": "NOT ATTEMPTED"
+      "attemped": 122,
+      "passed": 102,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Elon Musk (X-shape) \"\"\"\n\n\ndef main():\n    \"\"\"Elon Musk (X-shape)\"\"\"\n    raw = input().strip().split()\n    size = int(raw[0])\n    symbol = raw[1]\n\n    for row in range(size):\n        line = []\n        for col in range(size):\n            if col in (row, size - 1 - row):\n                if symbol == \"#\":\n                    line.append(\"#\")\n                else:\n                    dist = abs(row - size // 2)\n                    line.append(chr(ord(symbol) + dist))\n            else:\n                line.append(\"-\")\n        print(\"\".join(line))\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3274,

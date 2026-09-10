@@ -1,5 +1,6 @@
 """ ไพ่ 44 ใบ """
 
+
 def main():
     """ไพ่ 44 ใบ"""
     card = input().strip().upper()
@@ -28,6 +29,7 @@ def main():
         suit_name = "clubs"
 
     print(rank_name, "of", suit_name)
+
 
 if __name__ == "__main__":
     main()

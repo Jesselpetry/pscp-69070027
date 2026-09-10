@@ -1,5 +1,6 @@
 """ กบน้อยกระโดด """
 
+
 def main():
     """กบน้อยกระโดด"""
     first_jump, target = input().split()
@@ -19,6 +20,7 @@ def main():
         print(jumps)
     else:
         print(-1)
+
 
 if __name__ == "__main__":
     main()

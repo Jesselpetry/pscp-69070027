@@ -16,10 +16,12 @@ import argparse
 import glob
 import json
 import os
+import random
 import re
 import sys
 import time
 import urllib.request
+from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,11 +36,12 @@ COURSE_84_JSON = os.path.join(PSCP_ROOT, "data", "course_84_problems.json")
 OJ_DIR = os.path.join(PSCP_ROOT, "oj")
 
 DEFAULT_COURSE_ID = 78
+CURRENT_ACTION_ID = "7fb7acaef042f69199bda46c6a7a0f2b05848f3aee"
 DEFAULT_HEADERS = {
     "User-Agent": USER_AGENT,
     "Accept": "text/x-component",
     "Content-Type": "text/plain;charset=UTF-8",
-    "next-action": "7fc32d2dd54d0b8574db835d9b74354be0cac2fbd7",
+    "next-action": CURRENT_ACTION_ID,
     "Origin": "https://ijudge.it.kmitl.ac.th"
 }
 
@@ -334,7 +337,35 @@ def interactive_selection_menu(all_problems, config):
             print("[!] Invalid choice. Please try again.")
 
 
-def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
+def resolve_server_action_id(problem_id, cookie):
+    """Fetch problem page and dynamically extract latest submitCodeToServer action ID."""
+    global CURRENT_ACTION_ID
+    try:
+        url = f"https://ijudge.it.kmitl.ac.th/problems/{problem_id}/description?problemPage=0"
+        headers = {"User-Agent": USER_AGENT, "Cookie": cookie}
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            page_html = resp.read().decode("utf-8", errors="ignore")
+
+        chunks = re.findall(r'\"static/chunks/([^\"]+)\"', page_html)
+        for c in chunks:
+            c_clean = c.replace("\\", "").strip()
+            if "rightpanel" in c_clean or "default-" in c_clean:
+                chunk_url = f"https://ijudge.it.kmitl.ac.th/_next/static/chunks/{c_clean}"
+                creq = urllib.request.Request(chunk_url, headers={"User-Agent": USER_AGENT})
+                with urllib.request.urlopen(creq, timeout=10) as cresp:
+                    js = cresp.read().decode("utf-8", errors="ignore")
+                    m = re.search(r'createServerReference\)\(\"([a-f0-9]+)\",[^,]+,[^,]+,[^,]+,\"submitCodeToServer\"', js)
+                    if m:
+                        CURRENT_ACTION_ID = m.group(1)
+                        DEFAULT_HEADERS["next-action"] = CURRENT_ACTION_ID
+                        return CURRENT_ACTION_ID
+    except Exception:
+        pass
+    return CURRENT_ACTION_ID
+
+
+def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID, retry_action=True):
     """Submit a single problem to iJudge."""
     url = f"https://ijudge.it.kmitl.ac.th/problems/{problem_id}/description?problemPage=0"
     
@@ -348,12 +379,20 @@ def submit_problem(problem_id, code, cookie, course_id=DEFAULT_COURSE_ID):
     }]).encode("utf-8")
 
     headers = dict(DEFAULT_HEADERS)
+    headers["next-action"] = CURRENT_ACTION_ID
     headers["Cookie"] = cookie
     headers["Referer"] = url
 
     req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        body = resp.read().decode("utf-8")
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = resp.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        if e.code == 404 and retry_action:
+            new_id = resolve_server_action_id(problem_id, cookie)
+            if new_id and new_id != headers["next-action"]:
+                return submit_problem(problem_id, code, cookie, course_id=course_id, retry_action=False)
+        raise
 
     m_sub = re.search(r"\"submissionId\":\s*(\d+)", body)
     if m_sub:
@@ -400,6 +439,98 @@ def poll_submission_status(submission_id, cookie, poll_timeout=20.0, poll_interv
     return last_info
 
 
+def parse_delay_val(v, default_unit=None):
+    if v is None:
+        return None
+    v = str(v).strip().lower()
+    m = re.match(r"^([\d\.]+)\s*([a-z]*)$", v)
+    if not m:
+        return None
+    val, unit = float(m.group(1)), m.group(2)
+    unit = unit or default_unit
+    if unit in ("m", "min", "mins", "minute", "minutes"):
+        return val * 60.0
+    elif unit in ("s", "sec", "secs", "second", "seconds"):
+        return val
+    elif unit in ("h", "hr", "hrs", "hour", "hours"):
+        return val * 3600.0
+    elif val <= 15:
+        return val * 60.0
+    else:
+        return val
+
+
+def parse_delay_range_str(s):
+    if not s:
+        return None, None
+    s = s.strip().lower()
+    m = re.match(r"^([\d\.]+)\s*(?:-|to)\s*([\d\.]+)\s*([a-z]*)$", s)
+    if not m:
+        return None, None
+    low, high, unit = float(m.group(1)), float(m.group(2)), m.group(3)
+    unit = unit if unit else ("m" if high <= 15 else "s")
+    return parse_delay_val(f"{low}{unit}"), parse_delay_val(f"{high}{unit}")
+
+
+def format_time_delta(total_seconds):
+    """Format seconds into readable string (e.g. '4m 30s' or '1h 12m 45s')."""
+    total_seconds = max(0, int(total_seconds))
+    hrs, rem = divmod(total_seconds, 3600)
+    mins, secs = divmod(rem, 60)
+    if hrs > 0:
+        return f"{hrs}h {mins:02d}m {secs:02d}s"
+    elif mins > 0:
+        return f"{mins}m {secs:02d}s"
+    return f"{secs}s"
+
+
+def run_countdown(seconds, next_problem_desc, remaining_batch_sec, est_finish_str):
+    """Run an interactive countdown timer with estimated finish time."""
+    end_time = time.time() + seconds
+    try:
+        while True:
+            rem = end_time - time.time()
+            if rem <= 0:
+                break
+            rem_sec = int(rem)
+            rem_m, rem_s = divmod(rem_sec, 60)
+
+            cur_batch_rem = max(0, int(remaining_batch_sec - (seconds - rem)))
+            batch_str = format_time_delta(cur_batch_rem)
+
+            status_line = (
+                f"⏳ [Wait: {rem_m:02d}:{rem_s:02d}] "
+                f"[Batch left: ~{batch_str}] "
+                f"[Est. finish: {est_finish_str}] -> Next: {next_problem_desc}"
+            )
+
+            if sys.stdout.isatty():
+                sys.stdout.write(f"\r\033[K{status_line}")
+                sys.stdout.flush()
+                time.sleep(1.0)
+            else:
+                if rem_sec % 30 == 0 or rem_sec == int(seconds):
+                    sys.stdout.write(f"{status_line}\n")
+                    sys.stdout.flush()
+                time.sleep(1.0)
+
+        if sys.stdout.isatty():
+            sys.stdout.write("\r\033[K")
+            sys.stdout.flush()
+        return True
+    except KeyboardInterrupt:
+        if sys.stdout.isatty():
+            sys.stdout.write("\n")
+            print(f"\n[!] Countdown interrupted for {next_problem_desc}.")
+            ans = input("Options: [S]kip wait and submit now | [Q]uit batch [S/q]: ").strip().lower()
+            if ans == "q":
+                return False
+            print("[*] Skipping wait, proceeding to submit...")
+            return True
+        else:
+            raise
+
+
 def main():
     parser = argparse.ArgumentParser(description="Submit PSCP OJ problems to iJudge with interactive confirmation.")
     parser.add_argument("--expire", "-e", type=str, help="Filter by expire date (e.g. '4 September 2026')")
@@ -415,6 +546,10 @@ def main():
     parser.add_argument("--yes", "-y", action="store_true", help="Skip confirmation prompt and submit immediately")
     parser.add_argument("--dry-run", action="store_true", help="Preview matched problems and files without submitting")
     parser.add_argument("--course-id", type=int, help=f"iJudge Course ID (default: {DEFAULT_COURSE_ID})")
+    parser.add_argument("--delay-range", type=str, help="Random delay range between submissions (e.g. '4-6m', '4-6', '240-360s')")
+    parser.add_argument("--delay-min", type=str, help="Minimum delay between submissions (e.g. '4m', '240s')")
+    parser.add_argument("--delay-max", type=str, help="Maximum delay between submissions (e.g. '6m', '360s')")
+    parser.add_argument("--delay-before-first", action="store_true", help="Apply random delay before the first submission as well")
 
     args = parser.parse_args()
 
@@ -424,6 +559,25 @@ def main():
         prompt_enter_cookie(config)
         return
 
+    # Resolve delay settings
+    delay_min = None
+    delay_max = None
+    if args.delay_range:
+        delay_min, delay_max = parse_delay_range_str(args.delay_range)
+    if args.delay_min:
+        delay_min = parse_delay_val(args.delay_min)
+    if args.delay_max:
+        delay_max = parse_delay_val(args.delay_max)
+
+    if delay_min is not None and delay_max is None:
+        delay_max = delay_min
+    elif delay_max is not None and delay_min is None:
+        delay_min = delay_max
+
+    if delay_min is not None and delay_max is not None:
+        if delay_min > delay_max:
+            delay_min, delay_max = delay_max, delay_min
+
     init_course_id = 84 if args.midterm else (args.course_id or config.get("course_id", DEFAULT_COURSE_ID))
     all_problems = load_all_problems(course_id=init_course_id)
 
@@ -432,6 +586,19 @@ def main():
     if not selected_problems:
         print("[!] No problems matched the specified filters.")
         sys.exit(0)
+
+    # If no delay arguments were given on CLI and running interactively, optionally ask for delay
+    if delay_min is None and not args.yes and not args.dry_run:
+        is_interactive_run = not (args.expire or args.week or args.ids or args.all or args.midterm)
+        if is_interactive_run and sys.stdin.isatty():
+            try:
+                delay_input = input("\nEnter delay range between submissions (e.g. '4-6m' or Enter for none): ").strip()
+                if delay_input:
+                    d_low, d_high = parse_delay_range_str(delay_input)
+                    if d_low is not None:
+                        delay_min, delay_max = d_low, d_high
+            except (KeyboardInterrupt, EOFError):
+                pass
 
     problem_plans = []
     for p in selected_problems:
@@ -460,6 +627,21 @@ def main():
             "lines": lines_count,
             "warnings": warnings
         })
+
+    ready_plans = [p for p in problem_plans if p["file_exists"]]
+    delay_intervals = []
+    total_delay_sec = 0.0
+    total_est_duration = 0.0
+    start_time = datetime.now()
+    finish_time = start_time
+
+    if ready_plans and delay_min is not None and delay_max is not None and delay_max > 0:
+        num_intervals = len(ready_plans) if args.delay_before_first else max(0, len(ready_plans) - 1)
+        delay_intervals = [random.uniform(delay_min, delay_max) for _ in range(num_intervals)]
+        total_delay_sec = sum(delay_intervals)
+        overhead_sec = len(ready_plans) * 4.0
+        total_est_duration = total_delay_sec + overhead_sec
+        finish_time = start_time + timedelta(seconds=total_est_duration)
 
     print("\n" + "=" * 90)
     course_label = "Course 84 (Midterm)" if course_id == 84 else f"Course {course_id} (Regular)"
@@ -490,6 +672,14 @@ def main():
 
     print("-" * 90)
     print(f"Total: {len(problem_plans)} problems | Ready to submit: {ready_count} | Missing: {len(problem_plans) - ready_count}")
+    if delay_intervals:
+        print("-" * 90)
+        print("  Random Delay & Schedule:")
+        print(f"  • Interval Range:    {format_time_delta(delay_min)} - {format_time_delta(delay_max)} (randomized)")
+        print(f"  • Total Intervals:   {len(delay_intervals)}")
+        print(f"  • Total Est. Wait:   ~{format_time_delta(total_delay_sec)}")
+        print(f"  • Current Time:      {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"  • Est. Finished At:  {finish_time.strftime('%Y-%m-%d %H:%M:%S')} (in ~{format_time_delta(total_est_duration)})")
     print("=" * 90)
 
     if args.dry_run:
@@ -512,10 +702,13 @@ def main():
 
     print("\n" + "=" * 90)
     print(f"  Submitting to iJudge ({course_label})...")
+    if delay_intervals:
+        print(f"  Estimated completion: {finish_time.strftime('%Y-%m-%d %H:%M:%S')} (~{format_time_delta(total_est_duration)} total)")
     print("=" * 90)
 
     results_summary = []
     actual_course_id = course_id
+    delay_interval_idx = 0
 
     for idx, plan in enumerate(problem_plans, 1):
         p = plan["problem"]
@@ -526,6 +719,25 @@ def main():
             print(f"[{idx:2d}/{len(problem_plans)}] ❌ OJ {pid:4d} ({name}): Skipped (missing file)")
             results_summary.append({"pid": pid, "name": name, "status": "Skipped", "score": "-", "pep8": "-"})
             continue
+
+        # Check if delay applies before this problem
+        should_delay = False
+        if delay_intervals:
+            if idx == 1 and args.delay_before_first:
+                should_delay = True
+            elif idx > 1 and delay_interval_idx < len(delay_intervals):
+                should_delay = True
+
+        if should_delay:
+            d_sec = delay_intervals[delay_interval_idx]
+            delay_interval_idx += 1
+            cur_batch_rem = max(0, int((finish_time - datetime.now()).total_seconds()))
+            finish_str = finish_time.strftime("%H:%M:%S")
+            print(f"\n[⏳] Delay before submission {idx}/{len(problem_plans)}: {format_time_delta(d_sec)} wait...")
+            cont = run_countdown(d_sec, f"OJ {pid} ({name})", cur_batch_rem, finish_str)
+            if not cont:
+                print("\n[!] Remaining submissions aborted by user.")
+                break
 
         print(f"[{idx:2d}/{len(problem_plans)}] 📤 Submitting OJ {pid:4d} ({name})...", end="", flush=True)
         try:
@@ -570,7 +782,8 @@ def main():
         res = r.get("result", r.get("status", "-"))
         print(f"{idx:<3d} | OJ {r['pid']:<3d} | {r['name']:<30} | #{sub_id:<6} | {icon} {res:<7} | {r.get('score', '-'):<7} | {r.get('pep8', '-'):<6}")
     print("=" * 90)
-    print("Done!")
+    elapsed_total = (datetime.now() - start_time).total_seconds()
+    print(f"Finished at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} (Total elapsed: {format_time_delta(elapsed_total)})")
 
 
 if __name__ == "__main__":

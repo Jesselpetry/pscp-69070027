@@ -1,5 +1,6 @@
 """ รหัสแฝดเทค """
 
+
 def main():
     """รหัสแฝดเทค"""
     length = int(input())
@@ -9,12 +10,13 @@ def main():
     mismatch = 0
     for position in range(length):
         if int(first_code[position]) + int(second_code[position]) != 9:
-            mismatch = mismatch + 1
+            mismatch += 1
 
-    if mismatch == 0:
+    if not mismatch:
         print("YES")
     else:
         print("NO", mismatch)
+
 
 if __name__ == "__main__":
     main()

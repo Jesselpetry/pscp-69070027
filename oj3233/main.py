@@ -1,5 +1,6 @@
 """ สลากกินแบ่ง """
 
+
 def main():
     """สลากกินแบ่ง"""
     winning_letter, winning_number = input().split()
@@ -27,6 +28,7 @@ def main():
         prize = 0
 
     print(prize)
+
 
 if __name__ == "__main__":
     main()
