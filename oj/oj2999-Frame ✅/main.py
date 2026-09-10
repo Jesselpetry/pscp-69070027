@@ -1,10 +1,10 @@
 """ Frame """
 
-
 def main():
     """Frame"""
-    # solution code here
+    text = input("")
+    print("*"*(len(text)+2))
+    print(f"*{text}*")
+    print("*"*(len(text)+2))
 
-
-if __name__ == "__main__":
-    main()
+main()

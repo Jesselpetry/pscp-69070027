@@ -1,10 +1,9 @@
-""" [Recommend] [LEARNING LOGS] สลับตัวอักษร """
-
+""" [LEARNING LOGS] สลับตัวอักษร """
 
 def main():
-    """[Recommend] [LEARNING LOGS] สลับตัวอักษร"""
-    # solution code here
-
+    """[LEARNING LOGS] สลับตัวอักษร"""
+    text = input()
+    print(text[::-1].lower())
 
 if __name__ == "__main__":
     main()

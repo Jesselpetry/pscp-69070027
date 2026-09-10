@@ -1,10 +1,18 @@
-""" [LEARNING LOGS] เกมสะสมแต้ม """
-
+""" เกมสะสมแต้ม """
 
 def main():
-    """[LEARNING LOGS] เกมสะสมแต้ม"""
-    # solution code here
+    """เกมสะสมแต้ม"""
+    rounds = int(input())
+    score = 0
 
+    for _ in range(rounds):
+        command = input().strip()
+        if command == "+":
+            score += 10
+        else:
+            score -= 5
+
+    print(score)
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,10 @@
 """ Gift I """
 
-
 def main():
     """Gift I"""
-    # solution code here
-
+    m = float(input())
+    k = float(input())
+    print(m * 2 - k)
 
 if __name__ == "__main__":
     main()
