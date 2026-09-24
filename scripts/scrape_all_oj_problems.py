@@ -187,11 +187,11 @@ def format_problem_markdown(data):
     title = cp.get("cp_title", prob.get("problem_title", data.get("name", f"OJ {cp_id}"))) if cp else data.get("name", f"OJ {cp_id}")
     timeout = cp.get("cp_timeout", 1) if cp else 1
     memory_limit = cp.get("cp_memory_limit", 32000) if cp else 32000
-    note = prob.get("problem_note", "").strip() if prob else ""
+    note = (prob.get("problem_note") or "").strip() if prob else ""
     
-    desc = clean_text(prob.get("problem_description", "")) if prob else ""
-    input_spec = clean_text(prob.get("problem_input_specification", "")) if prob else ""
-    output_spec = clean_text(prob.get("problem_output_specification", "")) if prob else ""
+    desc = clean_text(prob.get("problem_description") or "") if prob else ""
+    input_spec = clean_text(prob.get("problem_input_specification") or "") if prob else ""
+    output_spec = clean_text(prob.get("problem_output_specification") or "") if prob else ""
     
     md_lines = []
     md_lines.append(f"# OJ {cp_id}: {title}")

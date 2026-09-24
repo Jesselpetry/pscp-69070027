@@ -44,14 +44,10 @@ def fetch(
     timeout: int = 20,
     base_delay: float = 1.0,
 ) -> str:
-    """GET `url`, retrying transient failures with linear backoff.
-
-    Honours Retry-After on 429/503 rather than hammering a university server.
-    """
+    """GET `url`, retrying transient failures with linear backoff."""
     headers = {
         "User-Agent": USER_AGENT,
         "Cookie": cookie,
-        "Connection": "close",
     }
     if rsc:
         headers["RSC"] = "1"
@@ -59,28 +55,30 @@ def fetch(
     last_error: Exception | None = None
     for attempt in range(retries):
         try:
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.HTTPError as e:
-            last_error = e
-            if e.code in (401, 403):
+            import requests
+            resp = requests.get(url, headers=headers, timeout=timeout)
+            if resp.status_code in (401, 403):
                 raise AuthExpired(
-                    f"iJudge rejected the session ({e.code}). The cookie is "
+                    f"iJudge rejected the session ({resp.status_code}). The cookie is "
                     f"probably expired -- refresh IJUDGE_COOKIE or re-login.",
-                    status=e.code,
-                ) from e
-            if e.code not in RETRY_STATUS or attempt == retries - 1:
-                raise HttpError(f"GET {url} failed: HTTP {e.code}", status=e.code) from e
-            delay = _retry_after(e) or base_delay * (attempt + 1)
-            time.sleep(delay)
-        except (urllib.error.URLError, TimeoutError, OSError) as e:
+                    status=resp.status_code,
+                )
+            if resp.status_code in RETRY_STATUS:
+                if attempt == retries - 1:
+                    raise HttpError(f"GET {url} failed: HTTP {resp.status_code}", status=resp.status_code)
+                delay = base_delay * (attempt + 1)
+                time.sleep(delay)
+                continue
+            resp.raise_for_status()
+            return resp.content.decode("utf-8")
+        except AuthExpired:
+            raise
+        except Exception as e:
             last_error = e
             if attempt == retries - 1:
                 raise HttpError(f"GET {url} failed: {e}") from e
             time.sleep(base_delay * (attempt + 1))
 
-    # Unreachable: the loop either returns or raises.
     raise HttpError(f"GET {url} failed after {retries} attempts: {last_error}")
 
 

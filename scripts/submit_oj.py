@@ -59,7 +59,7 @@ MIDTERM_ALIAS_MAP = {
 }
 
 
-def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
+def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None, username=None, password=None):
     """Resolve iJudge session cookie from various potential sources."""
     if cli_cookie and cli_cookie.strip():
         return cli_cookie.strip()
@@ -71,9 +71,41 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None):
         except Exception:
             pass
 
+    # If username and password provided via CLI
+    if username and password:
+        from ijudge.auth import login
+        print(f"[*] Authenticating with iJudge as {username}...", end="", flush=True)
+        token = login(username, password)
+        if token:
+            print(" ✅ Success!")
+            if config is not None:
+                config["cookie"] = token
+                save_config(config)
+            return token
+        else:
+            print(" ❌ Login failed! Check your username and password.")
+            sys.exit(1)
+
     env_cookie = os.environ.get("IJUDGE_COOKIE")
     if env_cookie and env_cookie.strip():
         return env_cookie.strip()
+
+    # If username and password provided via environment
+    env_user = os.environ.get("IJUDGE_USER")
+    env_pass = os.environ.get("IJUDGE_PASS")
+    if env_user and env_pass:
+        from ijudge.auth import login
+        print(f"[*] Authenticating with iJudge as {env_user} (from env)...", end="", flush=True)
+        token = login(env_user, env_pass)
+        if token:
+            print(" ✅ Success!")
+            if config is not None:
+                config["cookie"] = token
+                save_config(config)
+            return token
+        else:
+            print(" ❌ Login failed! Check environment credentials.")
+            sys.exit(1)
 
     if config and config.get("cookie", "").strip():
         return config["cookie"].strip()
@@ -543,6 +575,8 @@ def main():
     parser.add_argument("--cookie", "-c", type=str, help="iJudge session cookie")
     parser.add_argument("--cookie-file", type=str, help="Path to cookie text file")
     parser.add_argument("--set-cookie", action="store_true", help="Interactively enter and save a new iJudge cookie")
+    parser.add_argument("--user", "-u", type=str, help="iJudge username / student ID (e.g. it69070119)")
+    parser.add_argument("--pass", "-p", dest="password", type=str, help="iJudge account password")
     parser.add_argument("--yes", "-y", action="store_true", help="Skip confirmation prompt and submit immediately")
     parser.add_argument("--dry-run", action="store_true", help="Preview matched problems and files without submitting")
     parser.add_argument("--course-id", type=int, help=f"iJudge Course ID (default: {DEFAULT_COURSE_ID})")
@@ -558,6 +592,10 @@ def main():
     if args.set_cookie:
         prompt_enter_cookie(config)
         return
+
+    if args.user and not args.password:
+        import getpass
+        args.password = getpass.getpass(f"iJudge password for {args.user}: ")
 
     # Resolve delay settings
     delay_min = None
@@ -643,9 +681,19 @@ def main():
         total_est_duration = total_delay_sec + overhead_sec
         finish_time = start_time + timedelta(seconds=total_est_duration)
 
+    cookie = find_cookie(args.cookie, args.cookie_file, config, username=args.user, password=args.password)
+    user_display = "No Session"
+    if cookie:
+        auth_info = validate_cookie(cookie)
+        if auth_info["valid"]:
+            user_display = f"{auth_info['username']} ({auth_info['fullname']})"
+        else:
+            user_display = f"⚠️ Invalid session ({auth_info['error']})"
+
     print("\n" + "=" * 90)
     course_label = "Course 84 (Midterm)" if course_id == 84 else f"Course {course_id} (Regular)"
     print(f"  iJudge Submission Batch Preview: {course_label} ({len(problem_plans)} problems)")
+    print(f"  Target Account: {user_display}")
     print("=" * 90)
     print(f"{'#':<3} | {'OJ ID':<6} | {'Problem Name':<30} | {'Status':<10} | {'File / Warnings'}")
     print("-" * 90)
@@ -690,18 +738,18 @@ def main():
         print("[!] No solution files available to submit. Aborting.")
         return
 
-    cookie = find_cookie(args.cookie, args.cookie_file, config)
     if not cookie:
         cookie = prompt_enter_cookie(config)
 
     if not args.yes:
-        confirm = input(f"\nSubmit {ready_count} problem(s) to iJudge ({course_label})? [Y/n]: ").strip().lower()
+        confirm = input(f"\nSubmit {ready_count} problem(s) to iJudge ({course_label}) as {user_display}? [Y/n]: ").strip().lower()
         if confirm not in ("", "y", "yes"):
             print("Submission cancelled.")
             return
 
     print("\n" + "=" * 90)
     print(f"  Submitting to iJudge ({course_label})...")
+    print(f"  Account: {user_display}")
     if delay_intervals:
         print(f"  Estimated completion: {finish_time.strftime('%Y-%m-%d %H:%M:%S')} (~{format_time_delta(total_est_duration)} total)")
     print("=" * 90)
@@ -709,6 +757,7 @@ def main():
     results_summary = []
     actual_course_id = course_id
     delay_interval_idx = 0
+    submitted_count = 0
 
     for idx, plan in enumerate(problem_plans, 1):
         p = plan["problem"]
@@ -723,17 +772,21 @@ def main():
         # Check if delay applies before this problem
         should_delay = False
         if delay_intervals:
-            if idx == 1 and args.delay_before_first:
+            if submitted_count == 0 and args.delay_before_first:
                 should_delay = True
-            elif idx > 1 and delay_interval_idx < len(delay_intervals):
+            elif submitted_count > 0 and delay_interval_idx < len(delay_intervals):
                 should_delay = True
 
         if should_delay:
             d_sec = delay_intervals[delay_interval_idx]
             delay_interval_idx += 1
-            cur_batch_rem = max(0, int((finish_time - datetime.now()).total_seconds()))
-            finish_str = finish_time.strftime("%H:%M:%S")
-            print(f"\n[⏳] Delay before submission {idx}/{len(problem_plans)}: {format_time_delta(d_sec)} wait...")
+            rem_delays = sum(delay_intervals[delay_interval_idx:])
+            rem_overhead = (len(ready_plans) - submitted_count) * 4.0
+            cur_batch_rem = max(0, int(d_sec + rem_delays + rem_overhead))
+            dynamic_finish_time = datetime.now() + timedelta(seconds=cur_batch_rem)
+            finish_str = dynamic_finish_time.strftime("%H:%M:%S")
+
+            print(f"\n[⏳] Delay before submission {submitted_count + 1}/{len(ready_plans)}: {format_time_delta(d_sec)} wait...")
             cont = run_countdown(d_sec, f"OJ {pid} ({name})", cur_batch_rem, finish_str)
             if not cont:
                 print("\n[!] Remaining submissions aborted by user.")
@@ -769,6 +822,7 @@ def main():
             print(f" ❌ Error: {e}")
             results_summary.append({"pid": pid, "name": name, "status": f"Error: {e}", "score": "-", "pep8": "-"})
 
+        submitted_count += 1
         time.sleep(1.0)
 
     print("\n" + "=" * 90)

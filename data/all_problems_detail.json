@@ -5220,18 +5220,18 @@
   {
     "id": 3290,
     "name": "Left Arrow",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 70,
-    "attempt_count": 72,
-    "percentage": 97.22,
+    "passed_count": 186,
+    "attempt_count": 188,
+    "percentage": 98.94,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3290/description?problemPage=10",
+    "course_page": 10,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3290/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3290,
       "cp_course_id": 78,
@@ -5287,27 +5287,27 @@
       }
     ],
     "submission": {
-      "attemped": 72,
-      "passed": 70,
-      "status": "NOT ATTEMPTED"
+      "attemped": 188,
+      "passed": 186,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Left Arrow \"\"\"\n\n\ndef main():\n    \"\"\"Left Arrow\"\"\"\n    k = int(input())\n    n = int(input())\n    mid = n // 2\n    for row in range(n):\n        indent = abs(row - mid)\n        print(\" \" * indent + \"*\" * k)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3291,
     "name": "Right Arrow",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 68,
-    "attempt_count": 68,
+    "passed_count": 183,
+    "attempt_count": 183,
     "percentage": 100.0,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3291/description?problemPage=10",
+    "course_page": 10,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3291/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3291,
       "cp_course_id": 78,
@@ -5363,27 +5363,27 @@
       }
     ],
     "submission": {
-      "attemped": 68,
-      "passed": 68,
-      "status": "NOT ATTEMPTED"
+      "attemped": 183,
+      "passed": 183,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Right Arrow \"\"\"\n\n\ndef main():\n    \"\"\"Right Arrow\"\"\"\n    k = int(input())\n    n = int(input())\n    mid = n // 2\n    for row in range(n):\n        indent = mid - abs(row - mid)\n        print(\" \" * indent + \"*\" * k)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3292,
     "name": "Arrow",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 35,
-    "attempt_count": 45,
-    "percentage": 77.78,
+    "passed_count": 117,
+    "attempt_count": 145,
+    "percentage": 80.69,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3292/description?problemPage=10",
+    "course_page": 10,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3292/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3292,
       "cp_course_id": 78,
@@ -5445,27 +5445,27 @@
       }
     ],
     "submission": {
-      "attemped": 45,
-      "passed": 35,
-      "status": "NOT ATTEMPTED"
+      "attemped": 145,
+      "passed": 117,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Arrow \"\"\"\n\n\ndef main():\n    \"\"\"Arrow\"\"\"\n    dirs = input().strip()\n    n = int(input())\n    arrows = []\n    for d in dirs:\n        lines = []\n        for row in range(2 * n - 1):\n            depth = min(row, 2 * n - 2 - row)\n            stars = n - depth\n            if d == \"R\":\n                lines.append(\" \" * (2 * depth) + \"*\" * stars)\n            else:\n                lines.append(\" \" * (n - 1 - depth) + \"*\" * stars)\n        arrows.append(\"\\n\".join(lines))\n    print(\"\\n\\n\".join(arrows))\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3293,
     "name": "[LEARNING LOGS] BigFrame",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 36,
-    "attempt_count": 42,
-    "percentage": 85.71,
+    "passed_count": 140,
+    "attempt_count": 142,
+    "percentage": 98.59,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3293/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3293/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3293,
       "cp_course_id": 78,
@@ -5521,27 +5521,27 @@
       }
     ],
     "submission": {
-      "attemped": 42,
-      "passed": 36,
-      "status": "NOT ATTEMPTED"
+      "attemped": 142,
+      "passed": 140,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" [LEARNING LOGS] BigFrame \"\"\"\n\n\ndef main():\n    \"\"\"[LEARNING LOGS] BigFrame\"\"\"\n    lines = [input().rstrip() for _ in range(5)]\n    width = max(len(s) for s in lines)\n    border = \"*\" * (width + 4)\n    print(border)\n    for s in lines:\n        print(\"* \" + s.ljust(width) + \" *\")\n    print(border)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3294,
     "name": "Teaching schedule",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 0,
-    "passed_count": 61,
-    "attempt_count": 65,
-    "percentage": 93.85,
+    "passed_count": 177,
+    "attempt_count": 185,
+    "percentage": 95.68,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3294/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3294/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3294,
       "cp_course_id": 78,
@@ -5603,27 +5603,27 @@
       }
     ],
     "submission": {
-      "attemped": 65,
-      "passed": 61,
-      "status": "NOT ATTEMPTED"
+      "attemped": 185,
+      "passed": 177,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Teaching schedule \"\"\"\n\n\ndef main():\n    \"\"\"Teaching schedule\"\"\"\n    n = int(input())\n    a = int(input())\n    total = n * a\n    if not total:\n        print(\"No teaching\")\n        return\n    hours, minutes = divmod(total, 60)\n    parts = []\n    if hours:\n        parts.append(f\"{hours} hours\")\n    if minutes:\n        parts.append(f\"{minutes} minute\")\n    print(\" \".join(parts))\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3295,
     "name": "Electric_Using",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 22,
-    "attempt_count": 34,
-    "percentage": 64.71,
+    "passed_count": 138,
+    "attempt_count": 158,
+    "percentage": 87.34,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3295/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3295/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3295,
       "cp_course_id": 78,
@@ -5644,8 +5644,8 @@
       "cp_is_enable_taro": 0,
       "cp_testcase_visible": 0,
       "release_user_id": 1302,
-      "created_at": "2026-08-28T23:14:38.000Z",
-      "updated_at": "2026-08-28T23:14:38.000Z",
+      "created_at": "2026-09-18T09:55:42.000Z",
+      "updated_at": "2026-09-18T09:55:42.000Z",
       "deleted_at": null
     },
     "problem": {
@@ -5654,12 +5654,12 @@
       "problem_directory_path": "/ejudge/psit/2026",
       "problem_description": "lectric_Using\nจงเขียนโปรแกรมอัตราการคิดค่าไฟของคอนโดมิเนียมแห่งหนึ่ง มีวิธีการคํานวณแบบอัตรา\nก้าวหน้าดังนี้\nหน่วยที่ 1 – 10 หน่วยละ 5 บาท\nหน่วยที่ 11 – 50 หน่วยละ 7 บาท\nหน่วยที่ 51 – 100 หน่วยละ 10 บาท\nหน่วยที่ 101 – 200 หน่วยละ 12 บาท\nหน่วยที่ 201 เป็นต้นไป หน่วยละ 15 บาท\nนอกจากนี้ยังมีส่วนที่ต้องชําระเพิ่มเติมคือ ค่า FT และ VAT โดยคํานวณได้จาก\nFT อัตราคงที่ 0.50 บาทต่อหน่วย\nVAT อัตราร้อยละ 7 บาท คิดจากค่าไฟสุทธิโดยยังไม่รวมค่า FT\nและรวมเป็นค่าไฟทั้งหมดที่ผู้ใช้คอนโดมิเนียมต้องจ่ายในเดือนนั้น ๆ",
       "problem_input_specification": "จํานวนหน่วยที่ใช้ (N) โดย 1 <= N <= 10000",
-      "problem_output_specification": "์: ค่าไฟทั้งหมดที่ผู้ใช้คอนโดมิเนียมต้องจ่าย (ทศนิยม 1 ตําแหน่ง)",
+      "problem_output_specification": "์: ค่าไฟทั้งหมดที่ผู้ใช้คอนโดมิเนียมต้องจ่าย (ทศนิยม 1 ตําแหน่ง) ปัดเศษ 1 ตำแหน่งตามหลักคณิตศาสตร์",
       "problem_level": 1,
       "problem_privacy": "PUBLIC",
       "owner_id": 1302,
       "created_at": "2026-06-22T10:47:30.000Z",
-      "update_at": "2026-08-28T12:50:29.000Z",
+      "update_at": "2026-09-18T09:57:25.000Z",
       "deleted_at": null,
       "problem_note": "ฝึกคำนวณค่าไฟฟ้าแบบขั้นบันได (tiered pricing) หลายช่วงยูนิต ด้วย if-elif-else",
       "problem_reference": ""
@@ -5679,27 +5679,27 @@
       }
     ],
     "submission": {
-      "attemped": 34,
-      "passed": 22,
-      "status": "NOT ATTEMPTED"
+      "attemped": 158,
+      "passed": 138,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" Electric_Using \"\"\"\nfrom decimal import Decimal, ROUND_HALF_UP\n\n\ndef main():\n    \"\"\"Electric_Using\"\"\"\n    n = int(input())\n    tiers = [(10, 5), (40, 7), (50, 10), (100, 12)]\n    energy = Decimal(0)\n    rem = Decimal(n)\n    for width, rate in tiers:\n        used = min(rem, Decimal(width))\n        energy += used * Decimal(rate)\n        rem -= used\n    energy += rem * Decimal(15)\n    vat = energy * Decimal(\"0.07\")\n    ft_cost = Decimal(n) * Decimal(\"0.5\")\n    total = (energy + vat + ft_cost).quantize(\n        Decimal(\"0.1\"), rounding=ROUND_HALF_UP\n    )\n    print(total)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3296,
     "name": "[LEARNING LOGS] RGB Mixed",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 17,
-    "attempt_count": 17,
+    "passed_count": 129,
+    "attempt_count": 129,
     "percentage": 100.0,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3296/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3296/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3296,
       "cp_course_id": 78,
@@ -5728,14 +5728,14 @@
       "problem_id": 6124,
       "problem_title": "RGB Mixed",
       "problem_directory_path": "/ejudge/psit/2026",
-      "problem_description": "RGB Mixed\nให้เขียนโปรแกรม C++ โดยใช้ ฟังก์ชัน เพื่อทํางานดังนี้\n1. เขียนฟังก์ชัน int mixColor(int c1, int c2) สําหรับผสมสี 2 ค่า (0–255) โดยใช้สูตร\nresult = C1+C2\n2\n2. เขียนฟังก์ชัน void mixRGB(int r1, int g1, int b1, int r2, int g2, int b2, int &rMix, int &gMix, int\n&bMix)\n◦ ทําหน้าที่ผสมสี RGB สองสี\n◦ ส่งผลลัพธ์กลับมาทางตัวแปรอ้างอิง (rMix, gMix, bMix)\n. เขียนโปรแกรมหลัก (main) ให้ผู้ใช้ป้อนค่า RGB ของ สีแรก และ สีที่สอง\n◦ แต่ละค่าสีมีค่าระหว่าง 0 <= n <= 255\n◦ แสดงผล RGB ของสีผสมเป็นตัวเลขจํานวน 3 ชุด คั้นด้วยช่องว่าง",
-      "problem_input_specification": "-",
-      "problem_output_specification": "์กลับมาทางตัวแปรอ้างอิง (rMix, gMix, bMix)\n. เขียนโปรแกรมหลัก (main) ให้ผู้ใช้ป้อนค่า RGB ของ สีแรก และ สีที่สอง\n◦ แต่ละค่าสีมีค่าระหว่าง 0 <= n <= 255\n◦ แสดงผล RGB ของสีผสมเป็นตัวเลขจํานวน 3 ชุด คั้นด้วยช่องว่าง\nข้อมูลเข้า: บรรทัดที่ 1 รับค่าตัวเลขสําหรับ R1 G1 B1\nบรรทัดที่ 2 รับค่าตัวเลขสําหรับ R2 G2 B2\nผลลัพธ์:",
+      "problem_description": "[แก้ไขโจทย์]\nในระบบคอมพิวเตอร์ สีสันต่างๆ ที่เราเห็นบนหน้าจอเกิดจากการผสมแสงสีแม่สี 3 สีเข้าด้วยกัน ได้แก่ สีแดง (Red), สีเขียว (Green) และ สีน้ำเงิน (Blue) หรือที่เรียกกันว่าระบบสี RGB โดยค่าความเข้มของแต่ละสีจะถูกแทนด้วยตัวเลขจำนวนเต็มตั้งแต่ 0 (ไม่มีสีนั้นเลย หรือมืดสนิท) ไปจนถึง 255 (สว่างสว่างที่สุด)\n\nเมื่อเราต้องการนำสี 2 สีมาผสมกันเพื่อให้เกิดเป็นสีใหม่ วิธีที่ง่ายที่สุดในทางคณิตศาสตร์คือการหา \"ค่าเฉลี่ย\" ของความเข้มสีแต่ละช่อง (Channel) ดังนั้น ภารกิจของคุณคือการเขียนโปรแกรมเพื่อรับค่าสี RGB ของสีตั้งต้น 2 สี แล้วคำนวณหาค่าสีใหม่ที่เกิดจากการผสมกัน นะจ้ะ\n\n![](https://ijudge.it.kmitl.ac.th:7159/api/file/file/1789667772055_4f68a0.png)\n\n",
+      "problem_input_specification": "บรรทัดที่ 1: ตัวเลข 3 ตัว คั่นด้วยช่องว่าง แทนค่า R, G, B ของสีที่ 1\n\nบรรทัดที่ 2: ตัวเลข 3 ตัว คั่นด้วยช่องว่าง แทนค่า R, G, B ของสีที่ 2",
+      "problem_output_specification": "บรรทัดที่ 1: ตัวเลขผลลัพธ์การผสมสี R, G, B จำนวน 3 ตัว คั่นด้วยช่องว่าง โดยไม่ต้องมีข้อความอื่นปะปน",
       "problem_level": 1,
       "problem_privacy": "PUBLIC",
       "owner_id": 1302,
       "created_at": "2026-06-22T10:47:40.000Z",
-      "update_at": "2026-06-22T10:47:40.000Z",
+      "update_at": "2026-09-18T00:57:53.000Z",
       "deleted_at": null,
       "problem_note": "ฝึกแปลงค่าสี RGB ด้วยสูตรคณิตศาสตร์ (weighted formula) และ clamp ค่า",
       "problem_reference": ""
@@ -5755,27 +5755,27 @@
       }
     ],
     "submission": {
-      "attemped": 17,
-      "passed": 17,
-      "status": "NOT ATTEMPTED"
+      "attemped": 129,
+      "passed": 129,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" [LEARNING LOGS] RGB Mixed \"\"\"\n\n\ndef mix_color(c1, c2):\n    \"\"\"ผสมค่าสีเดียว: เฉลี่ยแบบปัดลง\"\"\"\n    return (c1 + c2) // 2\n\n\ndef main():\n    \"\"\"[LEARNING LOGS] RGB Mixed\"\"\"\n    r1, g1, b1 = map(int, input().split())\n    r2, g2, b2 = map(int, input().split())\n    r = mix_color(r1, r2)\n    g = mix_color(g1, g2)\n    b = mix_color(b1, b2)\n    print(r, g, b)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3297,
     "name": "ตั๋วหนังสุดป่วน",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 19,
-    "attempt_count": 24,
-    "percentage": 79.17,
+    "passed_count": 101,
+    "attempt_count": 118,
+    "percentage": 85.59,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3297/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3297/description?problemPage=2",
-    "course_page": 2,
     "courseProblem": {
       "cp_id": 3297,
       "cp_course_id": 78,
@@ -5806,12 +5806,12 @@
       "problem_directory_path": "/ejudge/psit/2026",
       "problem_description": "ตั๋วหนังสุดป่วน\nภาพยนตร์ฟอร์มยักษ์เรื่องหนึ่งกําลังเข้าฉาย ทําให้มีคนมาต่อคิวซื้อตั๋วจํานวนมากคุณต้องเขียน\nโปรแกรมเพื่อจําลองการจัดการคิวของพนักงานขายตั๋วซึ่งต้องจัดการกับลูกค้าหลากหลายประเภท\nและโปรโมชันสุดวุ่นวาย\nกฎของโรงภาพยนตร์\n1. ภาพยนตร์เรท 15+: ผู้ชมต้องมีอายุ 15 ปีขึ้นไป เท่านั้น\n2. ราคาตั๋ว: ราคาปกติใบละ 150 บาท\n. โปรโมชัน:\n- โปรนักเรียน: อายุ 15-22 ปี ได้รับส่วนลด 20% จากราคาปกติ\nพิเศษ! หากนักเรียนซื้อตั๋ว 2 ใบขึ้นไป จะได้รับคูปองป๊อปคอร์นฟรี 1 ชุด\n- โปรผู้สูงวัย: อายุ 60 ปีขึ้นไป ได้รับส่วนลด 50% จากราคาปกติ\n4. การทํางานของคิว: โปรแกรมจะรับลูกค้ามาเรื่อย ๆ จนกว่าตั๋วจะหมดโรง",
       "problem_input_specification": "- บรรทัดแรก รับจํานวนที่นั่งทั้งหมดในโรงภาพยนตร์\n- ในแต่ละครั้งของการซื้อตั๋วภาพยนต์ประกอบด้วยจํานวนเต็ม 2\nตัวคือ อายุ และ จํานวนตั๋วที่ต้องการ คั่นด้วยช่องว่าง (โปรแกรมจะหยุดเมื่อไม่ได้รับข้อมูลเพิ่ม\nหรือเมื่อตั๋วหมด)",
-      "problem_output_specification": "์: โปรแกรมจะแสดงผลลัพธ์ราคาตั๋วภาพยนต์ที่ต้องชําระ\nอายุไม่ตรงกําหนดเงื่อนไขให้แสดงค่า -1\nที่นั่งไม่พอแสดงค่า -2",
+      "problem_output_specification": "์: โปรแกรมจะแสดงผลลัพธ์ราคาตั๋วภาพยนต์ที่ต้องชําระ\nอายุไม่ตรงกําหนดเงื่อนไขให้แสดงค่า -1\nที่นั่งไม่พอแสดงค่า -2\nกรณีที่อายุไม่ตรงและที่นั่งไม่พอในเวลาเดียวกันให้แสดงค่า -1 ก่อน",
       "problem_level": 1,
       "problem_privacy": "PUBLIC",
       "owner_id": 1302,
       "created_at": "2026-06-22T10:47:58.000Z",
-      "update_at": "2026-06-22T10:47:58.000Z",
+      "update_at": "2026-09-20T15:28:17.000Z",
       "deleted_at": null,
       "problem_note": "ฝึก if-elif-else ซ้อนหลายระดับสำหรับโปรโมชั่นตั๋วหนัง (อายุ, ประเภท)",
       "problem_reference": ""
@@ -5826,32 +5826,32 @@
       {
         "cp_course_id": 78,
         "testcase_type": "EXAMPLE",
-        "testcase_input": "10\n45 5\n25 6",
-        "testcase_output": "750 5\n-2"
+        "testcase_input": "10\n45 5\n25 6\n45 5",
+        "testcase_output": "750 5\n-2\n750 0"
       }
     ],
     "submission": {
-      "attemped": 24,
-      "passed": 19,
-      "status": "NOT ATTEMPTED"
+      "attemped": 118,
+      "passed": 101,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" ตั๋วหนังสุดป่วน \"\"\"\n\n\ndef main():\n    \"\"\"ตั๋วหนังสุดป่วน\"\"\"\n    seats = int(input())\n    while seats > 0:\n        try:\n            line = input().strip()\n        except EOFError:\n            break\n        if not line:\n            continue\n        parts = line.split()\n        if len(parts) < 2:\n            continue\n        age = int(parts[0])\n        want = int(parts[1])\n        if age < 15:\n            print(\"-1\")\n            continue\n        if want > seats:\n            print(\"-2\")\n            continue\n        if 15 <= age <= 22:\n            price = 150 * 0.8\n        elif age >= 60:\n            price = 150 * 0.5\n        else:\n            price = 150\n        seats -= want\n        total = int(price * want)\n        print(f\"{total} {seats}\")\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3298,
     "name": "กระต่ายน้อยรัก BUU",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 2,
-    "passed_count": 13,
-    "attempt_count": 18,
-    "percentage": 72.22,
+    "passed_count": 69,
+    "attempt_count": 83,
+    "percentage": 83.13,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3298/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3298/description?problemPage=3",
-    "course_page": 3,
     "courseProblem": {
       "cp_id": 3298,
       "cp_course_id": 78,
@@ -5907,27 +5907,27 @@
       }
     ],
     "submission": {
-      "attemped": 18,
-      "passed": 13,
-      "status": "NOT ATTEMPTED"
+      "attemped": 83,
+      "passed": 69,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" กระต่ายน้อยรัก BUU \"\"\"\n\n\ndef main():\n    \"\"\"กระต่ายน้อยรัก BUU\"\"\"\n    text = input().strip()\n    upper = text.upper()\n    if \"BUU\" in upper:\n        best = 0\n        for i, ch in enumerate(upper):\n            if ch == \"B\" and upper[i + 1:i + 3] == \"UU\":\n                run = 0\n                for c in upper[i + 1:]:\n                    if c == \"U\":\n                        run += 1\n                    else:\n                        break\n                best = max(best, run)\n        print(\"Yes\", best)\n    elif \"B\" in upper:\n        idx = upper.index(\"B\")\n        print(text[:idx + 1] + \"U\" * (len(text) - idx - 1))\n    else:\n        pattern = (\"BUU\" * (len(text) // 3 + 1))[:len(text)]\n        print(pattern)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3299,
     "name": "[LEARNING LOGS] แปลงดอกไม้",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 9,
-    "attempt_count": 11,
-    "percentage": 81.82,
+    "passed_count": 65,
+    "attempt_count": 69,
+    "percentage": 94.2,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": true,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3299/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3299/description?problemPage=3",
-    "course_page": 3,
     "courseProblem": {
       "cp_id": 3299,
       "cp_course_id": 78,
@@ -5983,27 +5983,27 @@
       }
     ],
     "submission": {
-      "attemped": 11,
-      "passed": 9,
-      "status": "NOT ATTEMPTED"
+      "attemped": 69,
+      "passed": 65,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" [LEARNING LOGS] แปลงดอกไม้ \"\"\"\n\n\ndef main():\n    \"\"\"[LEARNING LOGS] แปลงดอกไม้\"\"\"\n    length, count = map(int, input().split())\n    planted = 0\n    strip = 0\n    while planted < count:\n        strip += 1\n        cells = length * (2 * length * strip - length + 1) // 2\n        planted += cells\n    print(strip)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3300,
     "name": "สมดุลย์ชีวิต",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 13,
-    "attempt_count": 15,
-    "percentage": 86.67,
+    "passed_count": 73,
+    "attempt_count": 82,
+    "percentage": 89.02,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3300/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3300/description?problemPage=3",
-    "course_page": 3,
     "courseProblem": {
       "cp_id": 3300,
       "cp_course_id": 78,
@@ -6059,27 +6059,27 @@
       }
     ],
     "submission": {
-      "attemped": 15,
-      "passed": 13,
-      "status": "NOT ATTEMPTED"
+      "attemped": 82,
+      "passed": 73,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" สมดุลย์ชีวิต \"\"\"\n\n\ndef main():\n    \"\"\"สมดุลย์ชีวิต\"\"\"\n    n = int(input())\n    big = 0\n    count = 0\n    while count < n:\n        for val in input().split():\n            if int(val) > 18:\n                big += 1\n            count += 1\n            if count == n:\n                break\n    small = n - big\n    rest = max(0, (big - 1) - small) if big else 0\n    print(n + rest)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3301,
     "name": "ใส่กล่อง",
-    "status": "Not Passed",
+    "status": "Passed",
     "difficulty": 1,
-    "passed_count": 11,
-    "attempt_count": 11,
-    "percentage": 100.0,
+    "passed_count": 108,
+    "attempt_count": 110,
+    "percentage": 98.18,
     "expire_date": "25 September 2026, 23:59",
     "is_learning_log": false,
     "is_recommended": false,
     "is_midterm": false,
+    "url": "https://ijudge.it.kmitl.ac.th/problems/3301/description?problemPage=11",
+    "course_page": 11,
     "week": 8,
-    "url": "https://ijudge.it.kmitl.ac.th/problems/3301/description?problemPage=3",
-    "course_page": 3,
     "courseProblem": {
       "cp_id": 3301,
       "cp_course_id": 78,
@@ -6108,14 +6108,14 @@
       "problem_id": 6205,
       "problem_title": "ใส่กล่อง",
       "problem_directory_path": "/ejudge/psit/2026",
-      "problem_description": "คุณมีกล่องขนาดกว้าง W ยาว L ในการนำสินค้าที่เป็นกล่องขนาด A x 1 ใส่ในกล่องจะทำดังนี้ คุณจะเริ่มโดยการเรียงสินค้าไปตามแนวยาวไปทีละแถวจนใส่ไม่ได้ ก็จะขึ้นแถวใหม่ทำไปจนครบ W แถว ถ้าเหลือพื้นที่ด้านท้ายกล่อง คุณจะนำสินค้ามาหมุนแล้วเรียงไปทีละแถวอีกครั้งจนกระทั่งทำไม่ได้ เมื่อทำจนครบขั้นตอนอาจจะเหลือพื้นที่ในกล่องบางส่วน พื้นที่ส่วนนี้นับว่าเป็นความสิ้นเปลืองของการนำของใส่กล่อง\n\nตัวอย่างการเรียงสินค้าในกล่องขนาด W = 11, L = 4 และสินค้าขนาด 3 x 1 แสดงด้านล่าง\n\n[ดูรูปประกอบในโจทย์ต้นฉบับ]\n\nสังเกตว่าจะเหลือพื้นที่เท่ากับ 2 ตารางหน่วย\n\nแม้ว่ากล่องใหญ่ของคุณจะมีขนาดที่แน่นอนแล้ว (ขนาด W x L) ในการผลิตสินค้าคุณยังมีทางเลือกว่าจะให้กล่องสินค้าย่อยมีขนาดเท่าใด กล่าวคือคุณสามารถเลือกค่า A ให้ขนาดกล่องสินค้า A x 1 โดยความยาวกล่องจะมีค่าเป็นจำนวนเต็มได้ระหว่าง M หน่วยจนถึง N หน่วย (นั่นคือ M <= A <= N)\n\nให้คุณเขียนโปรแกรมเพื่อคำนวณว่าเมื่อเลือกค่า A ที่ดีที่สุดแล้ว จะเหลือพื้นที่น้อยที่สุดกี่ตารางหน่วย",
+      "problem_description": "คุณมีกล่องขนาดกว้าง W ยาว L ในการนำสินค้าที่เป็นกล่องขนาด A x 1 ใส่ในกล่องจะทำดังนี้ คุณจะเริ่มโดยการเรียงสินค้าไปตามแนวยาวไปทีละแถวจนใส่ไม่ได้ ก็จะขึ้นแถวใหม่ทำไปจนครบ W แถว ถ้าเหลือพื้นที่ด้านท้ายกล่อง คุณจะนำสินค้ามาหมุนแล้วเรียงไปทีละแถวอีกครั้งจนกระทั่งทำไม่ได้ เมื่อทำจนครบขั้นตอนอาจจะเหลือพื้นที่ในกล่องบางส่วน พื้นที่ส่วนนี้นับว่าเป็นความสิ้นเปลืองของการนำของใส่กล่อง\n\nตัวอย่างการเรียงสินค้าในกล่องขนาด W = 11, L = 4 และสินค้าขนาด 3 x 1 แสดงด้านล่าง\n\n![](https://ijudge.it.kmitl.ac.th:7159/api/file/file/1789050146489_d98c4f.png)\n\n\nสังเกตว่าจะเหลือพื้นที่เท่ากับ 2 ตารางหน่วย\n\nแม้ว่ากล่องใหญ่ของคุณจะมีขนาดที่แน่นอนแล้ว (ขนาด W x L) ในการผลิตสินค้าคุณยังมีทางเลือกว่าจะให้กล่องสินค้าย่อยมีขนาดเท่าใด กล่าวคือคุณสามารถเลือกค่า A ให้ขนาดกล่องสินค้า A x 1 โดยความยาวกล่องจะมีค่าเป็นจำนวนเต็มได้ระหว่าง M หน่วยจนถึง N หน่วย (นั่นคือ M <= A <= N)\n\nให้คุณเขียนโปรแกรมเพื่อคำนวณว่าเมื่อเลือกค่า A ที่ดีที่สุดแล้ว จะเหลือพื้นที่น้อยที่สุดกี่ตารางหน่วย",
       "problem_input_specification": "ข้อมูลนำเข้ามีบรรทัดเดียว ระบุจำนวนเต็มสี่จำนวน W L M และ N (1 <= W <= 1,000,000,000; 1 <= L <= 1,000,000,000; 1 <= M <= N <= 30,000) มีข้อมูลทดสอบ 50% ที่ W/M <= 300 และ L/M <= 300",
       "problem_output_specification": "มีหนึ่งบรรทัดระบุพื้นที่เหลือที่น้อยที่สุด เมื่อเลือกขนาดกล่องสินค้า A ให้ดีที่สุดในระหว่างค่า M ถึง N",
       "problem_level": 1,
       "problem_privacy": "PUBLIC",
       "owner_id": 1302,
       "created_at": "2026-06-22T10:50:23.000Z",
-      "update_at": "2026-06-22T10:50:23.000Z",
+      "update_at": "2026-09-10T21:22:32.000Z",
       "deleted_at": null,
       "problem_note": "ฝึกคิดสูตรการแบ่งสินค้าลงกล่อง 2D ใช้ // และ % คำนวณแถวและคอลัมน์",
       "problem_reference": ""
@@ -6141,11 +6141,11 @@
       }
     ],
     "submission": {
-      "attemped": 11,
-      "passed": 11,
-      "status": "NOT ATTEMPTED"
+      "attemped": 110,
+      "passed": 108,
+      "status": "PASSED"
     },
-    "beforeCode": null
+    "beforeCode": "\"\"\" ใส่กล่อง \"\"\"\n\n\ndef main():\n    \"\"\"ใส่กล่อง\"\"\"\n    w, l, m, n = map(int, input().split())\n    box = w * l\n    best = box\n    for a in range(m, n + 1):\n        phase1 = (l // a) * w * a\n        phase2 = (w // a) * (l % a) * a\n        waste = box - phase1 - phase2\n        best = min(best, waste)\n    print(best)\n\n\nif __name__ == \"__main__\":\n    main()\n"
   },
   {
     "id": 3349,

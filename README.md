@@ -27,8 +27,8 @@
 ## 📊 Overall Progress Dashboard
 
 - **Total Problems Tracked**: `135`
-- **✅ Solved / Passed**: `73` (54.1%)
-- **🔄 In Progress / Pending**: `62`
+- **✅ Solved / Passed**: `85` (63.0%)
+- **🔄 In Progress / Pending**: `50`
 
 ### 📅 Weekly Progress (นับตั้งแต่สัปดาห์แรกที่เปิดเทอม)
 
@@ -41,7 +41,7 @@
 | **Week 5** | การทำงานซ้ำแบบ For Loop และลูปซ้อนลูป (For Loops & Geometry Drawing) | 15 | 5 | 10 | **33.3%** |
 | **Week 6** | ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences) | 13 | 13 | 0 | **100.0%** |
 | **Week 7** | ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam) | 9 | 0 | 9 | **0.0%** |
-| **Week 8** | ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations) | 12 | 0 | 12 | **0.0%** |
+| **Week 8** | ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations) | 12 | 12 | 0 | **100.0%** |
 | **Week 9** | ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms) | 15 | 0 | 15 | **0.0%** |
 
 ### 🏷️ Category Breakdown
@@ -50,7 +50,7 @@
 | :--- | :---: | :---: | :---: |
 | **🎯 Midterm Mock Exam** | 9 | 0 | 9 |
 | **🌟 Recommended Problems** | 10 | 10 | 0 |
-| **📓 Learning Logs** | 27 | 16 | 11 |
+| **📓 Learning Logs** | 27 | 19 | 8 |
 
 ---
 
@@ -132,11 +132,11 @@ pscp-69070027/
 | **3157** | [LEARNING LOGS] เกมสะสมแต้ม | Week 5 | ✅ **Passed** | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | [`submission.md`](oj3157/submission.md) | [`main.py`](oj3157/main.py) |
 | **3160** | [LEARNING LOGS] หาจำนวนเฉพาะ | Week 5 | ✅ **Passed** | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | [`submission.md`](oj3160/submission.md) | [`main.py`](oj3160/main.py) |
 | **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | ✅ **Passed** | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | [`submission.md`](oj3227/submission.md) | [`main.py`](oj3227/main.py) |
-| **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | ✅ **Passed** | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | - | [`main.py`](oj3232/main.py) |
-| **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | ✅ **Passed** | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | - | [`main.py`](oj3233/main.py) |
-| **3293** | [LEARNING LOGS] BigFrame | Week 8 | 🔄 *In Progress* | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
-| **3296** | [LEARNING LOGS] RGB Mixed | Week 8 | 🔄 *In Progress* | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
-| **3299** | [LEARNING LOGS] แปลงดอกไม้ | Week 8 | 🔄 *In Progress* | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
+| **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | ✅ **Passed** | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | [`submission.md`](oj3232/submission.md) | [`main.py`](oj3232/main.py) |
+| **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | ✅ **Passed** | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | [`submission.md`](oj3233/submission.md) | [`main.py`](oj3233/main.py) |
+| **3293** | [LEARNING LOGS] BigFrame | Week 8 | ✅ **Passed** | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
+| **3296** | [LEARNING LOGS] RGB Mixed | Week 8 | ✅ **Passed** | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
+| **3299** | [LEARNING LOGS] แปลงดอกไม้ | Week 8 | ✅ **Passed** | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
 | **3355** | [LEARNING LOGS] Shorten | Week 9 | 🔄 *In Progress* | [`oj3355`](oj3355) | [`problem.md`](oj3355/problem.md) | - | [`main.py`](oj3355/main.py) |
 | **3357** | [LEARNING LOGS] Giraffe | Week 9 | 🔄 *In Progress* | [`oj3357`](oj3357) | [`problem.md`](oj3357/problem.md) | - | [`main.py`](oj3357/main.py) |
 | **3360** | [LEARNING LOGS] หั่นขนมปัง | Week 9 | 🔄 *In Progress* | [`oj3360`](oj3360) | [`problem.md`](oj3360/problem.md) | - | [`main.py`](oj3360/main.py) |
@@ -283,19 +283,19 @@ pscp-69070027/
 
 ### 📅 Week 8: ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations)
 
-> รวม `9` ข้อ (ผ่านแล้ว `0/9`)
+> รวม `9` ข้อ (ผ่านแล้ว `9/9`)
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **3290** | Left Arrow | 🔄 *In Progress* | [`oj3290-Left_Arrow`](oj/oj3290-Left_Arrow) | [`problem.md`](oj/oj3290-Left_Arrow/problem.md) | [`main.py`](oj/oj3290-Left_Arrow/main.py) |
-| **3291** | Right Arrow | 🔄 *In Progress* | [`oj3291-Right_Arrow`](oj/oj3291-Right_Arrow) | [`problem.md`](oj/oj3291-Right_Arrow/problem.md) | [`main.py`](oj/oj3291-Right_Arrow/main.py) |
-| **3292** | Arrow | 🔄 *In Progress* | [`oj3292-Arrow`](oj/oj3292-Arrow) | [`problem.md`](oj/oj3292-Arrow/problem.md) | [`main.py`](oj/oj3292-Arrow/main.py) |
-| **3294** | Teaching schedule | 🔄 *In Progress* | [`oj3294-Teaching_schedule`](oj/oj3294-Teaching_schedule) | [`problem.md`](oj/oj3294-Teaching_schedule/problem.md) | [`main.py`](oj/oj3294-Teaching_schedule/main.py) |
-| **3295** | Electric_Using | 🔄 *In Progress* | [`oj3295-Electric_Using`](oj/oj3295-Electric_Using) | [`problem.md`](oj/oj3295-Electric_Using/problem.md) | [`main.py`](oj/oj3295-Electric_Using/main.py) |
-| **3297** | ตั๋วหนังสุดป่วน | 🔄 *In Progress* | [`oj3297-Movie_Ticket_Trouble`](oj/oj3297-Movie_Ticket_Trouble) | [`problem.md`](oj/oj3297-Movie_Ticket_Trouble/problem.md) | [`main.py`](oj/oj3297-Movie_Ticket_Trouble/main.py) |
-| **3298** | กระต่ายน้อยรัก BUU | 🔄 *In Progress* | [`oj3298-Little_Rabbit_Loves_BUU`](oj/oj3298-Little_Rabbit_Loves_BUU) | [`problem.md`](oj/oj3298-Little_Rabbit_Loves_BUU/problem.md) | [`main.py`](oj/oj3298-Little_Rabbit_Loves_BUU/main.py) |
-| **3300** | สมดุลย์ชีวิต | 🔄 *In Progress* | [`oj3300-Life_Balance`](oj/oj3300-Life_Balance) | [`problem.md`](oj/oj3300-Life_Balance/problem.md) | [`main.py`](oj/oj3300-Life_Balance/main.py) |
-| **3301** | ใส่กล่อง | 🔄 *In Progress* | [`oj3301-Put_In_Box`](oj/oj3301-Put_In_Box) | [`problem.md`](oj/oj3301-Put_In_Box/problem.md) | [`main.py`](oj/oj3301-Put_In_Box/main.py) |
+| **3290** | Left Arrow | ✅ **Passed** | [`oj3290-Left_Arrow ✅`](oj/oj3290-Left_Arrow%20%E2%9C%85) | [`problem.md`](oj/oj3290-Left_Arrow%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3290-Left_Arrow%20%E2%9C%85/main.py) |
+| **3291** | Right Arrow | ✅ **Passed** | [`oj3291-Right_Arrow ✅`](oj/oj3291-Right_Arrow%20%E2%9C%85) | [`problem.md`](oj/oj3291-Right_Arrow%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3291-Right_Arrow%20%E2%9C%85/main.py) |
+| **3292** | Arrow | ✅ **Passed** | [`oj3292-Arrow ✅`](oj/oj3292-Arrow%20%E2%9C%85) | [`problem.md`](oj/oj3292-Arrow%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3292-Arrow%20%E2%9C%85/main.py) |
+| **3294** | Teaching schedule | ✅ **Passed** | [`oj3294-Teaching_schedule ✅`](oj/oj3294-Teaching_schedule%20%E2%9C%85) | [`problem.md`](oj/oj3294-Teaching_schedule%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3294-Teaching_schedule%20%E2%9C%85/main.py) |
+| **3295** | Electric_Using | ✅ **Passed** | [`oj3295-Electric_Using ✅`](oj/oj3295-Electric_Using%20%E2%9C%85) | [`problem.md`](oj/oj3295-Electric_Using%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3295-Electric_Using%20%E2%9C%85/main.py) |
+| **3297** | ตั๋วหนังสุดป่วน | ✅ **Passed** | [`oj3297-Movie_Ticket_Trouble ✅`](oj/oj3297-Movie_Ticket_Trouble%20%E2%9C%85) | [`problem.md`](oj/oj3297-Movie_Ticket_Trouble%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3297-Movie_Ticket_Trouble%20%E2%9C%85/main.py) |
+| **3298** | กระต่ายน้อยรัก BUU | ✅ **Passed** | [`oj3298-Little_Rabbit_Loves_BUU ✅`](oj/oj3298-Little_Rabbit_Loves_BUU%20%E2%9C%85) | [`problem.md`](oj/oj3298-Little_Rabbit_Loves_BUU%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3298-Little_Rabbit_Loves_BUU%20%E2%9C%85/main.py) |
+| **3300** | สมดุลย์ชีวิต | ✅ **Passed** | [`oj3300-Life_Balance ✅`](oj/oj3300-Life_Balance%20%E2%9C%85) | [`problem.md`](oj/oj3300-Life_Balance%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3300-Life_Balance%20%E2%9C%85/main.py) |
+| **3301** | ใส่กล่อง | ✅ **Passed** | [`oj3301-Put_In_Box ✅`](oj/oj3301-Put_In_Box%20%E2%9C%85) | [`problem.md`](oj/oj3301-Put_In_Box%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3301-Put_In_Box%20%E2%9C%85/main.py) |
 
 ### 📅 Week 9: ลิสต์ขั้นสูงและการประยุกต์ใช้งาน (Advanced Lists & Applied Algorithms)
 
