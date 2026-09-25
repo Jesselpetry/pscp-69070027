@@ -1,30 +1,26 @@
-""" Castle """
+""" พอด """
+
 
 def main():
-    """Castle"""
-    n = int(input())
-
-    if n == 1:
-        print(0)
-        return
-
-    # หาระดับชั้น (r)
-    r = int(n ** 0.5)
-    if r * r < n:
-        r += 1
-
-    # หาว่าห้อง N เป็นห้องลำดับที่ c ของชั้นที่ r
-    first_in_row = (r - 1) ** 2 + 1
-    c = n - first_in_row + 1
-
-    # ถ้า c เป็นเลขคี่ (สามเหลี่ยมชี้ขึ้น)
-    if c % 2 == 1:
-        ans = 2 * (r - 1)
-    # ถ้า c เป็นเลขคู่ (สามเหลี่ยมชี้ลง)
+    """พอด"""
+    first_line = input().split()
+    if len(first_line) >= 2:
+        n, k = int(first_line[0]), int(first_line[1])
     else:
-        ans = 2 * (r - 1) - 1
+        n = int(first_line[0])
+        k = int(input().strip())
 
-    print(ans)
+    counts = [0] * (k + 1)
+    for _ in range(n):
+        line = input().strip()
+        while not line:
+            line = input().strip()
+        counts[int(line)] += 1
+
+    min_passengers = min(counts[1:k + 1])
+    remaining = n - (min_passengers * k)
+    print(remaining)
+
 
 if __name__ == "__main__":
     main()

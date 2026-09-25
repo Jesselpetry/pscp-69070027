@@ -1,31 +1,23 @@
 """ RealThaiPlus """
 
-import sys
 
 def main():
     """RealThaiPlus"""
-    data = sys.stdin.read().split()
-    position = 0
-
-    wallet = int(data[position])
-    position = position + 1
-    days = int(data[position])
-    position = position + 1
+    wallet = int(input().strip())
+    days = int(input().strip())
 
     monthly_left = 1000
     bought_count = 0
     government_total = 0
 
     for _ in range(days):
-        items = int(data[position])
-        position = position + 1
+        items = int(input().strip())
         daily_left = 200
 
         for _ in range(items):
-            price = int(data[position])
-            position = position + 1
+            price = int(input().strip())
 
-            my_part = int(price * 40 // 100)
+            my_part = (price * 40) // 100
             government_help = price - my_part
 
             if government_help > daily_left:
@@ -45,6 +37,7 @@ def main():
     print(bought_count)
     print(wallet)
     print(government_total)
+
 
 if __name__ == "__main__":
     main()

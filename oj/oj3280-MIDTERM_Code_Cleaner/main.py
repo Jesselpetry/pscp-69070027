@@ -1,10 +1,9 @@
 """ CODE CLEANER """
 
-import sys
 
 def main():
     """CODE CLEANER"""
-    text = sys.stdin.readline().rstrip("\n")
+    text = input()
 
     letter_count = 0
     digit_count = 0
@@ -23,12 +22,13 @@ def main():
 
     code = code.strip("-")
 
-    if code == "":
+    if not code:
         code = "NONE"
 
     print("CODE =", code)
     print("LETTERS =", letter_count)
     print("DIGITS =", digit_count)
+
 
 if __name__ == "__main__":
     main()

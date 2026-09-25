@@ -1,8 +1,12 @@
 """ คำนวณค่าแท็กซี่เบื้องต้น """
 
+
 def main():
     """คำนวณค่าแท็กซี่เบื้องต้น"""
     distance = int(input())
+    if distance <= 0:
+        print(0)
+        return
 
     fare = 35
     if distance > 1:
@@ -12,6 +16,7 @@ def main():
             fare = fare + 9 * 5 + (distance - 10) * 8
 
     print(fare)
+
 
 if __name__ == "__main__":
     main()

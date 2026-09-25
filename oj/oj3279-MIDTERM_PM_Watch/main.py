@@ -1,11 +1,9 @@
 """ PM WATCH """
 
-import sys
 
 def main():
     """PM WATCH"""
-    data = sys.stdin.read().split()
-    days = int(data[0])
+    days = int(input().strip())
 
     over_count = 0
     peak = 0
@@ -15,16 +13,16 @@ def main():
     current_start = 0
 
     for day in range(1, days + 1):
-        dust = int(data[day])
+        dust = int(input().strip())
 
         if day == 1 or dust > peak:
             peak = dust
 
         if dust > 50:
-            over_count = over_count + 1
-            if current_streak == 0:
+            over_count += 1
+            if not current_streak:
                 current_start = day
-            current_streak = current_streak + 1
+            current_streak += 1
             if current_streak >= best_streak:
                 best_streak = current_streak
                 best_start = current_start
@@ -35,6 +33,7 @@ def main():
     print("PEAK =", peak)
     print("STREAK =", best_streak)
     print("START =", best_start)
+
 
 if __name__ == "__main__":
     main()

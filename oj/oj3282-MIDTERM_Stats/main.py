@@ -1,5 +1,6 @@
 """ Stats """
 
+
 def main():
     """Stats"""
     amount = int(input())
@@ -11,7 +12,7 @@ def main():
     for index in range(amount):
         number = int(input())
         total = total + number
-        if index == 0:
+        if not index:
             smallest = number
             largest = number
         elif number < smallest:
@@ -24,6 +25,7 @@ def main():
     print(f"MIN: {smallest:.3f}")
     print(f"MAX: {largest:.3f}")
     print(f"AVG: {average:.3f}")
+
 
 if __name__ == "__main__":
     main()

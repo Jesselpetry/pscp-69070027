@@ -1,46 +1,31 @@
 """ ชานมไข่มุก """
 
+PEARL_CAL = {"H": 5, "O": 3, "J": 2}
+TEA_CAL = {
+    "R": {1: 12, 2: 18, 3: 25},
+    "T": {1: 15, 2: 20, 3: 30},
+    "M": {1: 10, 2: 15, 3: 20},
+}
+
+
 def main():
     """ชานมไข่มุก"""
-    pearl_type, pearl_gram = input().split()
-    pearl_gram = int(pearl_gram)
+    pearl_type, pearl_gram_str = input().split()
+    pearl_gram = float(pearl_gram_str)
 
-    tea_type, sweet_level, tea_volume = input().split()
-    sweet_level = int(sweet_level)
-    tea_volume = int(tea_volume)
+    tea_type, sweet_level_str, tea_volume_str = input().split()
+    sweet_level = int(sweet_level_str)
+    tea_volume = float(tea_volume_str)
 
-    if pearl_type == "H":
-        pearl_calorie = 5
-    elif pearl_type == "O":
-        pearl_calorie = 3
+    p_cal = PEARL_CAL[pearl_type]
+    t_cal = TEA_CAL[tea_type][sweet_level]
+
+    total = p_cal * pearl_gram + t_cal * tea_volume
+    if total.is_integer():
+        print(int(total))
     else:
-        pearl_calorie = 2
+        print(total)
 
-    if tea_type == "R":
-        if sweet_level == 1:
-            tea_calorie = 12
-        elif sweet_level == 2:
-            tea_calorie = 18
-        else:
-            tea_calorie = 25
-    elif tea_type == "T":
-        if sweet_level == 1:
-            tea_calorie = 15
-        elif sweet_level == 2:
-            tea_calorie = 20
-        else:
-            tea_calorie = 30
-    else:
-        if sweet_level == 1:
-            tea_calorie = 10
-        elif sweet_level == 2:
-            tea_calorie = 15
-        else:
-            tea_calorie = 20
-
-    total = pearl_calorie * pearl_gram + tea_calorie * tea_volume
-
-    print(total)
 
 if __name__ == "__main__":
     main()
