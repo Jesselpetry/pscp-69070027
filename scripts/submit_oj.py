@@ -241,7 +241,10 @@ def lint_check_code(code):
 
 def filter_problems(all_problems, args, config):
     """Filter problems based on CLI arguments or interactive choices."""
-    exclude_ll = not args.include_learning_log if hasattr(args, "include_learning_log") else config.get("exclude_learning_logs", True)
+    if hasattr(args, "include_learning_log") and args.include_learning_log:
+        exclude_ll = False
+    else:
+        exclude_ll = config.get("exclude_learning_logs", True)
 
     filtered = []
     # args.course_id is None unless --course-id was passed; fall back to the
@@ -280,6 +283,8 @@ def filter_problems(all_problems, args, config):
         filtered, chosen_course = interactive_selection_menu(all_problems, config)
         if chosen_course:
             resolved_course = chosen_course
+        if config.pop("_temp_include_ll", False):
+            exclude_ll = False
 
     if exclude_ll:
         filtered = [p for p in filtered if not p.get("is_learning_log", False) and "Learning Log" not in p.get("name", "")]
@@ -323,11 +328,13 @@ def interactive_selection_menu(all_problems, config):
             ll_count = sum(1 for p in expire_groups[d] if p.get("is_learning_log"))
             print(f"  [{idx:2d}] Expire: {d:<26} ({count} problems, {ll_count} Learning Logs)")
         
+        ll_status = "EXCLUDED" if config.get("exclude_learning_logs", True) else "INCLUDED"
         print("\nSpecial Options:")
         print(f"  [ M] Midterm Exam (Course 84: 9 problems)")
         print(f"  [ W] Filter by Week (e.g. Week 1, 2, 3)")
         print(f"  [ I] Enter Specific Problem IDs / Ranges (e.g. 3155-3167, 3129)")
         print(f"  [ A] All Problems (Course 78, {len(all_problems)} total)")
+        print(f"  [ L] Toggle Learning Logs (Currently: {ll_status})")
         print(f"  [ C] Enter / Update iJudge Cookie")
         print(f"  [ Q] Quit")
         print("-" * 70)
@@ -341,13 +348,26 @@ def interactive_selection_menu(all_problems, config):
             prompt_enter_cookie(config)
             continue
 
+        if choice.lower() == "l":
+            new_val = not config.get("exclude_learning_logs", True)
+            config["exclude_learning_logs"] = new_val
+            save_config(config)
+            print(f"[*] Learning logs are now {'EXCLUDED' if new_val else 'INCLUDED'} by default.")
+            continue
+
         if choice.lower() == "m":
             m_probs = load_all_problems(course_id=84)
             return m_probs, 84
 
         if choice.isdigit() and 1 <= int(choice) <= len(sorted_dates):
             selected_date = sorted_dates[int(choice) - 1]
-            return expire_groups[selected_date], 78
+            probs = expire_groups[selected_date]
+            ll_count = sum(1 for p in probs if p.get("is_learning_log"))
+            if ll_count > 0 and config.get("exclude_learning_logs", True):
+                incl = input(f"This batch contains {ll_count} Learning Log(s). Include them? [y/N]: ").strip().lower()
+                if incl in ("y", "yes"):
+                    config["_temp_include_ll"] = True
+            return probs, 78
         elif choice.lower() == "w":
             weeks_str = input("Enter week numbers separated by comma (e.g. 1, 2, 5): ").strip()
             weeks = {int(w.strip()) for w in weeks_str.split(",") if w.strip().isdigit()}
