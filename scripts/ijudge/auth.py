@@ -109,20 +109,29 @@ def validate_cookie(cookie: str) -> dict[str, Any]:
     if not cookie or not cookie.strip():
         return {"valid": False, "username": None, "fullname": None, "error": "Empty cookie"}
 
-    req = urllib.request.Request(
-        f"{BASE_URL}/submissions/me",
-        headers={
-            "User-Agent": USER_AGENT,
-            "Accept": "*/*",
-            "rsc": "1",
-            "Cookie": cookie,
-        },
-    )
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            body = resp.read().decode("utf-8")
-    except Exception as e:
-        return {"valid": False, "username": None, "fullname": None, "error": str(e)}
+        import requests
+        resp = requests.get(
+            f"{BASE_URL}/submissions/me/overview",
+            headers={"User-Agent": USER_AGENT, "Cookie": cookie, "RSC": "1"},
+            timeout=10,
+        )
+        body = resp.content.decode("utf-8")
+    except Exception:
+        try:
+            req = urllib.request.Request(
+                f"{BASE_URL}/submissions/me/overview",
+                headers={
+                    "User-Agent": USER_AGENT,
+                    "Accept": "*/*",
+                    "rsc": "1",
+                    "Cookie": cookie,
+                },
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                body = resp.read().decode("utf-8")
+        except Exception as e:
+            return {"valid": False, "username": None, "fullname": None, "error": str(e)}
 
     m_user = re.search(r"\"username\":\"([^\"]+)\"", body)
     m_name = re.search(r"\"fullname\":\"([^\"]+)\"", body)
