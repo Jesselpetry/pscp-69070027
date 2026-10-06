@@ -1,190 +1,146 @@
-# CONTRIBUTE.md — วิธีตั้งค่าโฟลเดอร์โจทย์ใหม่
+# CONTRIBUTE.md — วิธีเพิ่มและทำโจทย์ใน repo นี้
 
-คู่มือนี้อธิบายขั้นตอนการสร้างโฟลเดอร์โจทย์ใหม่ในรูปแบบที่สม่ำเสมอทั้ง repo
+repo นี้มี 2 branch ที่ทำหน้าที่ต่างกัน:
+
+| Branch | อยู่ที่ | มีอะไร |
+|---|---|---|
+| `main` | root ของ repo | โฟลเดอร์โจทย์ (`problem.md` + `main.py`), Learning Log, `recommended/`, README |
+| `OP` | worktree `.op/` (gitignored บน main) | scripts, ข้อมูลโจทย์ (JSON), คลังโค้ดที่ทำเสร็จ (`solutions/`) |
+
+เขียนโค้ดบน `main` เท่านั้น ส่วนเครื่องมือทั้งหมดรันจาก `.op/`
+
+---
+
+## ⚙️ ตั้งค่าครั้งแรก
+
+```bash
+git worktree add .op OP                          # เอา branch OP มาไว้ที่ .op/
+export IJUDGE_COOKIE='access_token=...'          # cookie จาก browser — เฉพาะคำสั่งที่ต่อ iJudge
+python3 .op/scripts/pscp.py                      # ดูคำสั่งทั้งหมด
+```
+
+วิธีหา cookie และตัวเลือกอื่นอยู่ใน `.op/scripts/README.md`
 
 ---
 
 ## 📌 รูปแบบชื่อโฟลเดอร์
 
-ทุกโฟลเดอร์โจทย์ต้องสร้างอยู่ภายใต้โฟลเดอร์ `oj/` โดยใช้รูปแบบดังนี้:
+| ประเภท | โฟลเดอร์ | ตัวอย่าง |
+|---|---|---|
+| โจทย์ปกติ / Midterm / Mini Exam | `oj/oj<id>-<Problem_Name>/` | `oj/oj3019-Safe_Password/` |
+| โจทย์ที่ผ่านแล้ว | ต่อท้าย ` ✅` | `oj/oj3019-Safe_Password ✅/` |
+| Learning Log | `oj<id>/` ที่ root (ไม่ใส่ ✅) | `oj2996/` |
 
-```
-oj/oj<problem-id>-<Problem_Name>/
-```
-
-**ตัวอย่าง:**
-
-| โฟลเดอร์ | ความหมาย |
-|---|---|
-| `oj/oj3019-Safe_Password/` | โจทย์ OJ หมายเลข 3019 ชื่อ Safe Password |
-| `oj/oj2999-Frame/` | โจทย์ OJ หมายเลข 2999 ชื่อ Frame |
-
-หากโจทย์เป็น Learning Log ให้วางโฟลเดอร์ไว้ที่ root ในรูปแบบนี้:
-
-```
-oj<problem-id>/
-```
-
-**ตัวอย่าง:**
-
-```
-oj2996/
-```
-
-หลังจาก OJ ผ่าน (Pass) ให้เพิ่ม ` ✅` ต่อท้ายชื่อโฟลเดอร์:
-
-```
-oj/oj3019-Safe_Password ✅/
-```
+ชื่อ `<Problem_Name>` ของโจทย์ชื่อภาษาไทยตั้งไว้ใน `.op/data/course.json` (`folder_names`)
 
 ---
 
-## 🗂️ โครงสร้างไฟล์ในโฟลเดอร์โจทย์
-
-### โจทย์ปกติ (ไม่ใช่ Learning Log)
+## 🗂️ ไฟล์ในโฟลเดอร์โจทย์
 
 ```
 oj/oj<id>-<Name>/
-└── main.py          # โค้ด Python หลัก
+├── problem.md       # สร้างจาก JSON — ห้ามแก้มือ (แก้แล้วจะโดนเขียนทับ)
+└── main.py          # โค้ดของเรา — script สร้าง stub ให้ครั้งเดียว ไม่เขียนทับ
+
+oj<id>/                          # Learning Log
+├── problem.md
+├── main.py
+├── submission.md                # เขียนเอง! ห้ามให้ AI เขียน
+└── ai_reflection.md             # เฉพาะเมื่อใช้ AI — เขียนเอง
 ```
 
-### โจทย์ Learning Log
-
-```
-oj<id>/
-├── main.py                    # โค้ด Python หลัก
-├── SUBMISSION_TEMPLATE.th.md  # Template บันทึกการแก้โจทย์ (ภาษาไทย)
-├── submission.md              # บันทึกการแก้โจทย์ของตนเอง (เขียนเอง!)
-└── ai_reflection.md           # reflection การใช้ AI (เฉพาะเมื่อใช้ AI)
-```
-
-> **หมายเหตุ:** `SUBMISSION_TEMPLATE.th.md` และ `submission.md` ใช้เฉพาะกับโจทย์ **Learning Log** เท่านั้น ไม่ต้องสร้างสำหรับโจทย์ปกติ
-
----
-
-## 🚀 ขั้นตอนการตั้งค่าโฟลเดอร์โจทย์ใหม่
-
-### ขั้นที่ 1 — สร้างโฟลเดอร์
-
-**โจทย์ปกติ:**
-
-```bash
-mkdir -p "oj/oj<id>-<Problem_Name>"
-```
-
-**โจทย์ Learning Log:**
-
-```bash
-mkdir -p "oj<id>"
-```
-
-### ขั้นที่ 2 — สร้างไฟล์ `main.py`
-
-สร้างไฟล์ `main.py` ด้วยโครงสร้างมาตรฐานนี้:
+`main.py` มาตรฐาน:
 
 ```python
 """ Problem Name """
 
+
 def main():
     """Problem Name"""
-    # เขียนโค้ดที่นี่
+    # solution code here
+
 
 if __name__ == "__main__":
     main()
 ```
 
-**กฎสำคัญ:**
-- บรรทัดบนสุดต้องเป็น module-level docstring ชื่อโจทย์
-- โค้ดทั้งหมดต้องอยู่ใน `def main()`
-- ต้องมี docstring ชื่อโจทย์ภายใน `main()` ด้วย
-- ต้องปิดท้ายด้วย `if __name__ == "__main__": main()`
+- บรรทัดแรกเป็น module docstring ชื่อโจทย์
+- โค้ดทั้งหมดอยู่ใน `def main()` ที่มี docstring
+- ปิดท้ายด้วย `if __name__ == "__main__": main()`
 
-### ขั้นที่ 3 — คัดลอก Template (เฉพาะ Learning Log เท่านั้น)
+---
 
-สำหรับโจทย์ Learning Log ให้คัดลอก `SUBMISSION_TEMPLATE.th.md` เข้าโฟลเดอร์:
+## 🚀 ทำโจทย์ใหม่
+
+### 1. ดึงโจทย์
+
+```bash
+python3 .op/scripts/pscp.py scrape --only 3586-3598   # ดึงจาก iJudge → JSON → problem.md + main.py stub
+python3 .op/scripts/pscp.py render                    # (ไม่ต่อเน็ต) สร้างไฟล์ใหม่จาก JSON ที่มีอยู่
+```
+
+Learning Log: คัดลอก template มาเขียน `submission.md` เอง
 
 ```bash
 cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj<id>/SUBMISSION_TEMPLATE.th.md"
 ```
 
-ตัวอย่าง:
+### 2. เขียนและทดสอบ
 
 ```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj2996/SUBMISSION_TEMPLATE.th.md"
+python3 "oj/oj<id>-<Name>/main.py"          # รันเองใน VS Code
+python3 .op/scripts/pscp.py test <id>       # รันกับ sample ทางการจาก iJudge
 ```
 
-จากนั้นให้กรอก `submission.md` (เขียนเอง) และ `ai_reflection.md` (ถ้าใช้ AI) ตาม template
-
-### ขั้นที่ 4 — อัปเดต `README.md`
-
-เพิ่มโจทย์ใหม่ในตาราง **Problem Index** ใน [README.md](README.md):
-
-```markdown
-| <id> | <Problem Name> | 🔄 In Progress |
-```
-
-เมื่อผ่าน OJ แล้ว ให้เปลี่ยนเป็น:
-
-```markdown
-| <id> | <Problem Name> | ✅ Pass |
-```
-
-และเปลี่ยนชื่อโฟลเดอร์เพิ่ม ` ✅`:
+### 3. หลังผ่าน OJ
 
 ```bash
-git mv "oj/oj<id>-<Problem_Name>" "oj/oj<id>-<Problem_Name> ✅"
+python3 .op/scripts/pscp.py scrape --fast   # อัปเดตสถานะจาก iJudge
+python3 .op/scripts/pscp.py status          # เติม/ลบ ✅ ท้ายชื่อโฟลเดอร์ตามสถานะ
+python3 .op/scripts/pscp.py archive         # เก็บโค้ดที่เสร็จแล้วเข้า .op/solutions/
+python3 .op/scripts/pscp.py readme          # สร้าง README ใหม่ (ห้ามแก้ README มือ)
+python3 .op/scripts/pscp.py doctor          # ตรวจว่าไม่มีอะไรหลุด
+```
+
+แล้ว commit แยกกันทั้ง 2 branch:
+
+```bash
+git add -A && git commit -m "feat(oj): ..."              # main
+git -C .op add -A && git -C .op commit -m "chore: ..."   # OP
 ```
 
 ---
 
-## 📋 Checklist โจทย์ใหม่
+## 📋 Checklist
 
 ### โจทย์ปกติ
 
 ```text
-[ ] สร้างโฟลเดอร์ oj/oj<id>-<Name>/
-[ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
-[ ] เพิ่มโจทย์ใน README.md ตาราง Problem Index
-[ ] ทดสอบโค้ดใน VS Code ก่อนส่ง OJ
-[ ] หลัง Pass: เปลี่ยนชื่อโฟลเดอร์เพิ่ม ✅ และอัปเดต README
+[ ] มีโฟลเดอร์ oj/oj<id>-<Name>/ พร้อม problem.md + main.py (scrape/render สร้างให้)
+[ ] เขียน main.py ตามโครงสร้าง def main() + docstring + if __name__ guard
+[ ] ทดสอบใน VS Code และ pscp.py test <id>
+[ ] หลัง Pass: scrape --fast → status → archive → readme
 ```
 
 ### โจทย์ Learning Log
 
 ```text
-[ ] สร้างโฟลเดอร์ oj<id>/
-[ ] สร้าง main.py ด้วยโครงสร้าง def main() + docstring + if __name__ guard
-[ ] คัดลอก SUBMISSION_TEMPLATE.th.md เข้าโฟลเดอร์
-[ ] กรอก submission.md ด้วยตนเอง
-[ ] กรอก ai_reflection.md (ถ้าใช้ AI)
-[ ] เพิ่มโจทย์ใน README.md ตาราง Learning Logs
-[ ] ทดสอบโค้ดใน VS Code ก่อนส่ง OJ
-[ ] หลัง Pass: เปลี่ยนชื่อโฟลเดอร์เพิ่ม ✅ และอัปเดต README
+[ ] มีโฟลเดอร์ oj<id>/ พร้อม problem.md + main.py
+[ ] คัดลอก SUBMISSION_TEMPLATE.th.md แล้วเขียน submission.md เอง
+[ ] เขียน ai_reflection.md เอง (ถ้าใช้ AI)
+[ ] ทดสอบใน VS Code และ pscp.py test <id>
+[ ] หลัง Pass: scrape --fast → archive → readme
 ```
 
 ---
 
-## 🧪 วิธีทดสอบโค้ดใน VS Code
+## 🗒️ สรุป
 
-รันโค้ดด้วยคำสั่ง:
-
-```bash
-python "oj/oj<id>-<Problem_Name>/main.py"
-```
-
-หรือบน macOS อาจใช้:
-
-```bash
-python3 "oj/oj<id>-<Problem_Name>/main.py"
-```
-
----
-
-## 🗒️ สรุปรูปแบบมาตรฐาน
-
-| ไฟล์                        | จำเป็น                             | หมายเหตุ                   |
-| ----------------------------| :----------------------------------:| ---------------------------|
-| `main.py`                   | ✅ ทุกโฟลเดอร์                    | โค้ดหลัก                   |
-| `SUBMISSION_TEMPLATE.th.md` | เฉพาะ Learning Log                 | template สำหรับกรอก        |
-| `submission.md`             | เฉพาะ Learning Log                 | เขียนเอง ห้ามให้ AI เขียน  |
-| `ai_reflection.md`          | เฉพาะเมื่อใช้ AI กับ Learning Log  | เขียนเอง ห้ามให้ AI เขียน  |
+| ไฟล์ | ใครเขียน | หมายเหตุ |
+|---|---|---|
+| `problem.md` | script | generate จาก `.op/data/all_problems_detail.json` |
+| `main.py` | เรา | script สร้าง stub ครั้งเดียว |
+| `submission.md` | เรา | เฉพาะ Learning Log — ห้ามให้ AI เขียน |
+| `ai_reflection.md` | เรา | เฉพาะ Learning Log ที่ใช้ AI — ห้ามให้ AI เขียน |
+| `README.md` | script | `pscp.py readme` |
+| `recommended/` | เรา | script ไม่แตะ |

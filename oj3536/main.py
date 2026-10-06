@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] isPrime_large """
+""" isPrime_large """
 
 
 def main():
-    """[LEARNING LOGS] isPrime_large"""
+    """isPrime_large"""
     # solution code here
 
 

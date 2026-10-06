@@ -63,34 +63,35 @@
 ## 📁 Repository Structure
 
 ```
-pscp-69070027/
-├── oj/                          # โจทย์ปกติ + Midterm + Mini Exam (186 โฟลเดอร์): oj<id>-<Name>/ → problem.md, main.py
-├── oj<id>/                      # Learning Log (36 โฟลเดอร์): main.py, problem.md, submission.md
-├── recommended/                 # สำเนาโจทย์แนะนำ (10 ข้อ) + สรุป ce-kmitl
-├── oj_problems.json             # registry สรุป: id, week, status, flags
-├── data/
-│   ├── all_problems_detail.json # registry ละเอียด: โจทย์, sample, limits
-│   ├── course_84_problems.json  # โจทย์ Midterm (course 84)
-│   └── html_cache/              # HTML ดิบ 221 หน้า (gitignored)
-├── scripts/                     # scrape / submit / sync / สร้าง README
-├── docs/PLAN.md                 # แผนจัดระเบียบ repo
-└── AI-Guidelines-PSCP/          # แนวทางการใช้ AI ของรายวิชา
+pscp-69070027/           # branch main — โจทย์ + โค้ดของตัวเอง
+├── oj/                  # โจทย์ปกติ + Midterm + Mini Exam (186 โฟลเดอร์): oj<id>-<Name>/ → problem.md, main.py (ลงท้าย ✅ = ผ่านแล้ว)
+├── oj<id>/              # Learning Log (36 โฟลเดอร์): main.py, problem.md, submission.md (+ ai_reflection.md)
+├── recommended/         # สรุปโจทย์แนะนำที่เขียนเอง (10 ข้อ) + สรุป ce-kmitl
+├── AI-Guidelines-PSCP/  # แนวทางการใช้ AI ของรายวิชา
+├── public/              # รูปประกอบ README
+├── README.md            # generated โดย update_readme.py — ห้ามแก้มือ
+├── CONTRIBUTE.md        # วิธีเพิ่มโจทย์และส่งงาน
+└── .op/                 # worktree ของ branch OP (gitignored บน main)
+    ├── scripts/         # 9 scripts + ijudge/ (shared package)
+    ├── data/            # course.json, oj_problems.json (222 ข้อ), all_problems_detail.json (221 ข้อ), html_cache/ (gitignored)
+    ├── solutions/       # เฉลยครบ 134 ข้อ: oj<id>/main.py
+    └── docs/            # PLAN.md
 ```
 
 ---
 
 ## 🌿 Branches
 
-| Branch | บทบาท | Commit ล่าสุด | นำอีก branch | ยังไม่ push |
+| Branch | บทบาท | Commit ล่าสุด | นำ / ตาม อีก branch | ยังไม่ push |
 | :--- | :--- | :--- | :---: | :---: |
-| `main` | Workspace: `problem.md` + `main.py` (โจทย์ใหม่เป็น stub) + scripts + data | `b8a77ea` · 2026-09-25 | 13 | 0 |
-| `solutions/2026-s1` | คลังโค้ดที่ทำเสร็จแล้ว — checkout เป็น worktree `.pscp-archive/` (gitignored) | `2f54a0d` · 2026-09-24 | 1 | 1 |
+| `main` | โจทย์ + โค้ดของตัวเอง | `afca3ab` · 2026-10-06 | 1 / 3 | 3 |
+| `OP` | scripts + data + เฉลยครบใน `solutions/` | `540a538` · 2026-10-07 | 3 / 1 | - |
 
-> ⚠️ สอง branch แยกทางกัน (diverged) — ต้องรวมโค้ดก่อนใช้ `solutions/2026-s1` เป็นต้นฉบับ ดูขั้นตอนใน [`docs/PLAN.md`](docs/PLAN.md)
+> `solutions/2026-s1` เป็น branch เก่า — ถูกแทนที่ด้วย `OP` (`solutions/`) แล้ว ลบได้เมื่อตรวจว่าโค้ดครบ
 
 ```bash
-git worktree add .pscp-archive solutions/2026-s1   # ครั้งเดียว ถ้ายังไม่มี
-git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโค้ดใน archive
+git worktree add .op OP              # ครั้งเดียว ถ้ายังไม่มี
+python3 .op/scripts/pscp.py readme   # รัน script จาก root ของ repo
 ```
 
 ---
@@ -101,15 +102,15 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Status | Problem Folder | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **3274** | [ MIDTERM ] Triangle | 🔄 *In Progress* | [`oj3274-MIDTERM_Triangle`](oj/oj3274-MIDTERM_Triangle) | [`problem.md`](oj/oj3274-MIDTERM_Triangle/problem.md) | [`main.py`](oj/oj3274-MIDTERM_Triangle/main.py) |
-| **3275** | [ MIDTERM ] PIZZA TIME | 🔄 *In Progress* | [`oj3275-MIDTERM_Pizza_Time`](oj/oj3275-MIDTERM_Pizza_Time) | [`problem.md`](oj/oj3275-MIDTERM_Pizza_Time/problem.md) | [`main.py`](oj/oj3275-MIDTERM_Pizza_Time/main.py) |
-| **3276** | [ MIDTERM ] FakeThaiPlus | 🔄 *In Progress* | [`oj3276-MIDTERM_FakeThaiPlus`](oj/oj3276-MIDTERM_FakeThaiPlus) | [`problem.md`](oj/oj3276-MIDTERM_FakeThaiPlus/problem.md) | [`main.py`](oj/oj3276-MIDTERM_FakeThaiPlus/main.py) |
-| **3277** | [ MIDTERM ] RealThaiPlus | 🔄 *In Progress* | [`oj3277-MIDTERM_RealThaiPlus`](oj/oj3277-MIDTERM_RealThaiPlus) | [`problem.md`](oj/oj3277-MIDTERM_RealThaiPlus/problem.md) | [`main.py`](oj/oj3277-MIDTERM_RealThaiPlus/main.py) |
-| **3278** | [ MIDTERM ] Units | 🔄 *In Progress* | [`oj3278-MIDTERM_Units`](oj/oj3278-MIDTERM_Units) | [`problem.md`](oj/oj3278-MIDTERM_Units/problem.md) | [`main.py`](oj/oj3278-MIDTERM_Units/main.py) |
-| **3279** | [ MIDTERM ] PM WATCH | 🔄 *In Progress* | [`oj3279-MIDTERM_PM_Watch`](oj/oj3279-MIDTERM_PM_Watch) | [`problem.md`](oj/oj3279-MIDTERM_PM_Watch/problem.md) | [`main.py`](oj/oj3279-MIDTERM_PM_Watch/main.py) |
-| **3280** | [ MIDTERM ] CODE CLEANER | 🔄 *In Progress* | [`oj3280-MIDTERM_Code_Cleaner`](oj/oj3280-MIDTERM_Code_Cleaner) | [`problem.md`](oj/oj3280-MIDTERM_Code_Cleaner/problem.md) | [`main.py`](oj/oj3280-MIDTERM_Code_Cleaner/main.py) |
-| **3281** | [ MIDTERM ] ijudge-itkmitl | 🔄 *In Progress* | [`oj3281-MIDTERM_ijudge-itkmitl`](oj/oj3281-MIDTERM_ijudge-itkmitl) | [`problem.md`](oj/oj3281-MIDTERM_ijudge-itkmitl/problem.md) | [`main.py`](oj/oj3281-MIDTERM_ijudge-itkmitl/main.py) |
-| **3282** | [ MIDTERM ] Stats | 🔄 *In Progress* | [`oj3282-MIDTERM_Stats`](oj/oj3282-MIDTERM_Stats) | [`problem.md`](oj/oj3282-MIDTERM_Stats/problem.md) | [`main.py`](oj/oj3282-MIDTERM_Stats/main.py) |
+| **3274** | Triangle | 🔄 *In Progress* | [`oj3274-MIDTERM_Triangle`](oj/oj3274-MIDTERM_Triangle) | [`problem.md`](oj/oj3274-MIDTERM_Triangle/problem.md) | [`main.py`](oj/oj3274-MIDTERM_Triangle/main.py) |
+| **3275** | PIZZA TIME | 🔄 *In Progress* | [`oj3275-MIDTERM_Pizza_Time`](oj/oj3275-MIDTERM_Pizza_Time) | [`problem.md`](oj/oj3275-MIDTERM_Pizza_Time/problem.md) | [`main.py`](oj/oj3275-MIDTERM_Pizza_Time/main.py) |
+| **3276** | FakeThaiPlus | 🔄 *In Progress* | [`oj3276-MIDTERM_FakeThaiPlus`](oj/oj3276-MIDTERM_FakeThaiPlus) | [`problem.md`](oj/oj3276-MIDTERM_FakeThaiPlus/problem.md) | [`main.py`](oj/oj3276-MIDTERM_FakeThaiPlus/main.py) |
+| **3277** | RealThaiPlus | 🔄 *In Progress* | [`oj3277-MIDTERM_RealThaiPlus`](oj/oj3277-MIDTERM_RealThaiPlus) | [`problem.md`](oj/oj3277-MIDTERM_RealThaiPlus/problem.md) | [`main.py`](oj/oj3277-MIDTERM_RealThaiPlus/main.py) |
+| **3278** | Units | 🔄 *In Progress* | [`oj3278-MIDTERM_Units`](oj/oj3278-MIDTERM_Units) | [`problem.md`](oj/oj3278-MIDTERM_Units/problem.md) | [`main.py`](oj/oj3278-MIDTERM_Units/main.py) |
+| **3279** | PM WATCH | 🔄 *In Progress* | [`oj3279-MIDTERM_PM_Watch`](oj/oj3279-MIDTERM_PM_Watch) | [`problem.md`](oj/oj3279-MIDTERM_PM_Watch/problem.md) | [`main.py`](oj/oj3279-MIDTERM_PM_Watch/main.py) |
+| **3280** | CODE CLEANER | 🔄 *In Progress* | [`oj3280-MIDTERM_Code_Cleaner`](oj/oj3280-MIDTERM_Code_Cleaner) | [`problem.md`](oj/oj3280-MIDTERM_Code_Cleaner/problem.md) | [`main.py`](oj/oj3280-MIDTERM_Code_Cleaner/main.py) |
+| **3281** | ijudge-itkmitl | 🔄 *In Progress* | [`oj3281-MIDTERM_ijudge-itkmitl`](oj/oj3281-MIDTERM_ijudge-itkmitl) | [`problem.md`](oj/oj3281-MIDTERM_ijudge-itkmitl/problem.md) | [`main.py`](oj/oj3281-MIDTERM_ijudge-itkmitl/main.py) |
+| **3282** | Stats | 🔄 *In Progress* | [`oj3282-MIDTERM_Stats`](oj/oj3282-MIDTERM_Stats) | [`problem.md`](oj/oj3282-MIDTERM_Stats/problem.md) | [`main.py`](oj/oj3282-MIDTERM_Stats/main.py) |
 
 ---
 
@@ -119,16 +120,16 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Week | Status | Recommended Folder | Standard Folder | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :---: | :--- | :--- | :---: | :---: |
-| **2996** | [Recommend] [LEARNING LOGS] สลับตัวอักษร | Week 2 | ✅ **Passed** | [`oj2996-Swap_Characters`](recommended/oj2996-Swap_Characters) | [`oj2996`](oj2996) | [`problem.md`](recommended/oj2996-Swap_Characters/problem.md) | [`main.py`](recommended/oj2996-Swap_Characters/main.py) |
-| **2997** | [Recommend] Elo | Week 2 | ✅ **Passed** | [`oj2997-Elo`](recommended/oj2997-Elo) | [`oj2997-Elo ✅`](oj/oj2997-Elo%20%E2%9C%85) | [`problem.md`](recommended/oj2997-Elo/problem.md) | [`main.py`](recommended/oj2997-Elo/main.py) |
-| **2998** | [Recommend] EuclideanDistance2D | Week 2 | ✅ **Passed** | [`oj2998-EuclideanDistance2D`](recommended/oj2998-EuclideanDistance2D) | [`oj2998-EuclideanDistance2D ✅`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85) | [`problem.md`](recommended/oj2998-EuclideanDistance2D/problem.md) | [`main.py`](recommended/oj2998-EuclideanDistance2D/main.py) |
-| **3019** | [Recommend] Safe Password | Week 2 | ✅ **Passed** | [`oj3019-Safe_Password`](recommended/oj3019-Safe_Password) | [`oj3019-Safe_Password ✅`](oj/oj3019-Safe_Password%20%E2%9C%85) | [`problem.md`](recommended/oj3019-Safe_Password/problem.md) | [`main.py`](recommended/oj3019-Safe_Password/main.py) |
-| **3020** | [Recommend] Coke | Week 2 | ✅ **Passed** | [`oj3020-Coke`](recommended/oj3020-Coke) | [`oj3020-Coke ✅`](oj/oj3020-Coke%20%E2%9C%85) | [`problem.md`](recommended/oj3020-Coke/problem.md) | [`main.py`](recommended/oj3020-Coke/main.py) |
-| **3022** | [Recommend] [LEARNING LOGS] Temperature | Week 2 | ✅ **Passed** | [`oj3022-Temperature`](recommended/oj3022-Temperature) | [`oj3022`](oj3022) | [`problem.md`](recommended/oj3022-Temperature/problem.md) | [`main.py`](recommended/oj3022-Temperature/main.py) |
-| **3159** | [Recommend] Factorial | Week 5 | ✅ **Passed** | [`oj3159-Factorial`](recommended/oj3159-Factorial) | [`oj3159-Factorial ✅`](oj/oj3159-Factorial%20%E2%9C%85) | [`problem.md`](recommended/oj3159-Factorial/problem.md) | [`main.py`](recommended/oj3159-Factorial/main.py) |
-| **3167** | [Recommend] FizzBuzz | Week 5 | ✅ **Passed** | [`oj3167-FizzBuzz`](recommended/oj3167-FizzBuzz) | [`oj3167-FizzBuzz ✅`](oj/oj3167-FizzBuzz%20%E2%9C%85) | [`problem.md`](recommended/oj3167-FizzBuzz/problem.md) | [`main.py`](recommended/oj3167-FizzBuzz/main.py) |
-| **3226** | [Recommend] Inflation | Week 6 | ✅ **Passed** | [`oj3226-Inflation`](recommended/oj3226-Inflation) | [`oj3226-Inflation ✅`](oj/oj3226-Inflation%20%E2%9C%85) | [`problem.md`](recommended/oj3226-Inflation/problem.md) | [`main.py`](recommended/oj3226-Inflation/main.py) |
-| **3237** | [Recommend] สามเหลี่ยม | Week 6 | ✅ **Passed** | [`oj3237-Triangle`](recommended/oj3237-Triangle) | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](recommended/oj3237-Triangle/problem.md) | [`main.py`](recommended/oj3237-Triangle/main.py) |
+| **2996** | สลับตัวอักษร | Week 2 | ✅ **Passed** | [`oj2996-Swap_Characters`](recommended/oj2996-Swap_Characters) | [`oj2996`](oj2996) | [`problem.md`](recommended/oj2996-Swap_Characters/problem.md) | [`main.py`](recommended/oj2996-Swap_Characters/main.py) |
+| **2997** | Elo | Week 2 | ✅ **Passed** | [`oj2997-Elo`](recommended/oj2997-Elo) | [`oj2997-Elo ✅`](oj/oj2997-Elo%20%E2%9C%85) | [`problem.md`](recommended/oj2997-Elo/problem.md) | [`main.py`](recommended/oj2997-Elo/main.py) |
+| **2998** | EuclideanDistance2D | Week 2 | ✅ **Passed** | [`oj2998-EuclideanDistance2D`](recommended/oj2998-EuclideanDistance2D) | [`oj2998-EuclideanDistance2D ✅`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85) | [`problem.md`](recommended/oj2998-EuclideanDistance2D/problem.md) | [`main.py`](recommended/oj2998-EuclideanDistance2D/main.py) |
+| **3019** | Safe Password | Week 2 | ✅ **Passed** | [`oj3019-Safe_Password`](recommended/oj3019-Safe_Password) | [`oj3019-Safe_Password ✅`](oj/oj3019-Safe_Password%20%E2%9C%85) | [`problem.md`](recommended/oj3019-Safe_Password/problem.md) | [`main.py`](recommended/oj3019-Safe_Password/main.py) |
+| **3020** | Coke | Week 2 | ✅ **Passed** | [`oj3020-Coke`](recommended/oj3020-Coke) | [`oj3020-Coke ✅`](oj/oj3020-Coke%20%E2%9C%85) | [`problem.md`](recommended/oj3020-Coke/problem.md) | [`main.py`](recommended/oj3020-Coke/main.py) |
+| **3022** | Temperature | Week 2 | ✅ **Passed** | [`oj3022-Temperature`](recommended/oj3022-Temperature) | [`oj3022`](oj3022) | [`problem.md`](recommended/oj3022-Temperature/problem.md) | [`main.py`](recommended/oj3022-Temperature/main.py) |
+| **3159** | Factorial | Week 5 | ✅ **Passed** | [`oj3159-Factorial`](recommended/oj3159-Factorial) | [`oj3159-Factorial ✅`](oj/oj3159-Factorial%20%E2%9C%85) | [`problem.md`](recommended/oj3159-Factorial/problem.md) | [`main.py`](recommended/oj3159-Factorial/main.py) |
+| **3167** | FizzBuzz | Week 5 | ✅ **Passed** | [`oj3167-FizzBuzz`](recommended/oj3167-FizzBuzz) | [`oj3167-FizzBuzz ✅`](oj/oj3167-FizzBuzz%20%E2%9C%85) | [`problem.md`](recommended/oj3167-FizzBuzz/problem.md) | [`main.py`](recommended/oj3167-FizzBuzz/main.py) |
+| **3226** | Inflation | Week 6 | ✅ **Passed** | [`oj3226-Inflation`](recommended/oj3226-Inflation) | [`oj3226-Inflation ✅`](oj/oj3226-Inflation%20%E2%9C%85) | [`problem.md`](recommended/oj3226-Inflation/problem.md) | [`main.py`](recommended/oj3226-Inflation/main.py) |
+| **3237** | สามเหลี่ยม | Week 6 | ✅ **Passed** | [`oj3237-Triangle`](recommended/oj3237-Triangle) | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](recommended/oj3237-Triangle/problem.md) | [`main.py`](recommended/oj3237-Triangle/main.py) |
 
 ---
 
@@ -138,42 +139,42 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Week | Status | Learning Log Folder | Problem Spec | Submission Doc | Code |
 | :---: | :--- | :---: | :---: | :--- | :---: | :---: | :---: |
-| **2996** | [Recommend] [LEARNING LOGS] สลับตัวอักษร | Week 2 | ✅ **Passed** | [`oj2996`](oj2996) | [`problem.md`](oj2996/problem.md) | [`submission.md`](oj2996/submission.md) | [`main.py`](oj2996/main.py) |
-| **3011** | [LEARNING LOGS] Colors | Week 1 | ✅ **Passed** | [`oj3011`](oj3011) | [`problem.md`](oj3011/problem.md) | [`submission.md`](oj3011/submission.md) | [`main.py`](oj3011/main.py) |
-| **3017** | [LEARNING LOGS] Bill | Week 1 | ✅ **Passed** | [`oj3017`](oj3017) | [`problem.md`](oj3017/problem.md) | [`submission.md`](oj3017/submission.md) | [`main.py`](oj3017/main.py) |
-| **3022** | [Recommend] [LEARNING LOGS] Temperature | Week 2 | ✅ **Passed** | [`oj3022`](oj3022) | [`problem.md`](oj3022/problem.md) | [`submission.md`](oj3022/submission.md) | [`main.py`](oj3022/main.py) |
-| **3024** | [LEARNING LOGS] SurprisingVote | Week 2 | ✅ **Passed** | [`oj3024`](oj3024) | [`problem.md`](oj3024/problem.md) | [`submission.md`](oj3024/submission.md) | [`main.py`](oj3024/main.py) |
-| **3025** | [LEARNING LOGS] Season | Week 2 | ✅ **Passed** | [`oj3025`](oj3025) | [`problem.md`](oj3025/problem.md) | [`submission.md`](oj3025/submission.md) | [`main.py`](oj3025/main.py) |
-| **3031** | [LEARNING LOGS] Ink | Week 2 | ✅ **Passed** | [`oj3031`](oj3031) | [`problem.md`](oj3031/problem.md) | - | [`main.py`](oj3031/main.py) |
-| **3036** | [LEARNING LOGS] ปราสาท | Week 2 | ✅ **Passed** | [`oj3036`](oj3036) | [`problem.md`](oj3036/problem.md) | - | [`main.py`](oj3036/main.py) |
-| **3042** | [LEARNING LOGS] หาร 10 | Week 2 | ✅ **Passed** | [`oj3042`](oj3042) | [`problem.md`](oj3042/problem.md) | [`submission.md`](oj3042/submission.md) | [`main.py`](oj3042/main.py) |
-| **3058** | [LEARNING LOGS] BrickBridge | Week 3 | ✅ **Passed** | [`oj3058`](oj3058) | [`problem.md`](oj3058/problem.md) | [`submission.md`](oj3058/submission.md) | [`main.py`](oj3058/main.py) |
-| **3071** | [LEARNING LOGS] จำนวนในช่วง [A,B] ที่หารด้วย d เหลือเศษ r | Week 3 | ✅ **Passed** | [`oj3071`](oj3071) | [`problem.md`](oj3071/problem.md) | [`submission.md`](oj3071/submission.md) | [`main.py`](oj3071/main.py) |
-| **3072** | [LEARNING LOGS] A-E-I-O-U | Week 3 | ✅ **Passed** | [`oj3072`](oj3072) | [`problem.md`](oj3072/problem.md) | [`submission.md`](oj3072/submission.md) | [`main.py`](oj3072/main.py) |
-| **3110** | [LEARNING LOGS] สงคราม...ส่งด่วน | Week 4 | 🔄 *In Progress* | [`oj3110`](oj3110) | [`problem.md`](oj3110/problem.md) | - | [`main.py`](oj3110/main.py) |
-| **3111** | [LEARNING LOGS] สหกรณ์โรงเรียน | Week 4 | 🔄 *In Progress* | [`oj3111`](oj3111) | [`problem.md`](oj3111/problem.md) | - | [`main.py`](oj3111/main.py) |
-| **3115** | [LEARNING LOGS] Arcade of Time: Store Check | Week 4 | 🔄 *In Progress* | [`oj3115`](oj3115) | [`problem.md`](oj3115/problem.md) | - | [`main.py`](oj3115/main.py) |
-| **3135** | [LEARNING LOGS] ของขวัญและขโมย | Week 5 | ✅ **Passed** | [`oj3135`](oj3135) | [`problem.md`](oj3135/problem.md) | [`submission.md`](oj3135/submission.md) | [`main.py`](oj3135/main.py) |
-| **3157** | [LEARNING LOGS] เกมสะสมแต้ม | Week 5 | ✅ **Passed** | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | [`submission.md`](oj3157/submission.md) | [`main.py`](oj3157/main.py) |
-| **3160** | [LEARNING LOGS] หาจำนวนเฉพาะ | Week 5 | ✅ **Passed** | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | [`submission.md`](oj3160/submission.md) | [`main.py`](oj3160/main.py) |
-| **3227** | [LEARNING LOGS] ไพ่ 44 ใบ | Week 6 | ✅ **Passed** | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | [`submission.md`](oj3227/submission.md) | [`main.py`](oj3227/main.py) |
-| **3232** | [LEARNING LOGS] กบน้อยกระโดด | Week 6 | ✅ **Passed** | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | [`submission.md`](oj3232/submission.md) | [`main.py`](oj3232/main.py) |
-| **3233** | [LEARNING LOGS] สลากกินแบ่ง | Week 6 | ✅ **Passed** | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | [`submission.md`](oj3233/submission.md) | [`main.py`](oj3233/main.py) |
-| **3293** | [LEARNING LOGS] BigFrame | Week 8 | ✅ **Passed** | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
-| **3296** | [LEARNING LOGS] RGB Mixed | Week 8 | ✅ **Passed** | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
-| **3299** | [LEARNING LOGS] แปลงดอกไม้ | Week 8 | ✅ **Passed** | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
-| **3355** | [LEARNING LOGS] Shorten | Week 9 | 🔄 *In Progress* | [`oj3355`](oj3355) | [`problem.md`](oj3355/problem.md) | - | [`main.py`](oj3355/main.py) |
-| **3357** | [LEARNING LOGS] Giraffe | Week 9 | 🔄 *In Progress* | [`oj3357`](oj3357) | [`problem.md`](oj3357/problem.md) | - | [`main.py`](oj3357/main.py) |
-| **3360** | [LEARNING LOGS] หั่นขนมปัง | Week 9 | 🔄 *In Progress* | [`oj3360`](oj3360) | [`problem.md`](oj3360/problem.md) | - | [`main.py`](oj3360/main.py) |
-| **3381** | [LEARNING LOGS] Point Sorting | Week 10 | 🔄 *In Progress* | [`oj3381`](oj3381) | [`problem.md`](oj3381/problem.md) | - | [`main.py`](oj3381/main.py) |
-| **3386** | [LEARNING LOGS] Duplicate I | Week 10 | 🔄 *In Progress* | [`oj3386`](oj3386) | [`problem.md`](oj3386/problem.md) | - | [`main.py`](oj3386/main.py) |
-| **3394** | [LEARNING LOGS] ส่งต่อ | Week 10 | 🔄 *In Progress* | [`oj3394`](oj3394) | [`problem.md`](oj3394/problem.md) | - | [`main.py`](oj3394/main.py) |
-| **3476** | [LEARNING LOGS] CuteCat CuteFox | Week 11 | 🔄 *In Progress* | [`oj3476`](oj3476) | [`problem.md`](oj3476/problem.md) | - | [`main.py`](oj3476/main.py) |
-| **3477** | [LEARNING LOGS] Pad Thai | Week 11 | 🔄 *In Progress* | [`oj3477`](oj3477) | [`problem.md`](oj3477/problem.md) | - | [`main.py`](oj3477/main.py) |
-| **3484** | [LEARNING LOGS] หุ่นยนต์เคาะเสียงกระเบื้อง | Week 11 | 🔄 *In Progress* | [`oj3484`](oj3484) | [`problem.md`](oj3484/problem.md) | - | [`main.py`](oj3484/main.py) |
-| **3536** | [LEARNING LOGS] isPrime_large | Week 12 | 🔄 *In Progress* | [`oj3536`](oj3536) | [`problem.md`](oj3536/problem.md) | - | [`main.py`](oj3536/main.py) |
-| **3537** | [LEARNING LOGS] Impostor | Week 12 | 🔄 *In Progress* | [`oj3537`](oj3537) | [`problem.md`](oj3537/problem.md) | - | [`main.py`](oj3537/main.py) |
-| **3538** | [LEARNING LOGS] B - Fully pair? | Week 12 | 🔄 *In Progress* | [`oj3538`](oj3538) | [`problem.md`](oj3538/problem.md) | - | [`main.py`](oj3538/main.py) |
+| **2996** | สลับตัวอักษร | Week 2 | ✅ **Passed** | [`oj2996`](oj2996) | [`problem.md`](oj2996/problem.md) | [`submission.md`](oj2996/submission.md) | [`main.py`](oj2996/main.py) |
+| **3011** | Colors | Week 1 | ✅ **Passed** | [`oj3011`](oj3011) | [`problem.md`](oj3011/problem.md) | [`submission.md`](oj3011/submission.md) | [`main.py`](oj3011/main.py) |
+| **3017** | Bill | Week 1 | ✅ **Passed** | [`oj3017`](oj3017) | [`problem.md`](oj3017/problem.md) | [`submission.md`](oj3017/submission.md) | [`main.py`](oj3017/main.py) |
+| **3022** | Temperature | Week 2 | ✅ **Passed** | [`oj3022`](oj3022) | [`problem.md`](oj3022/problem.md) | [`submission.md`](oj3022/submission.md) | [`main.py`](oj3022/main.py) |
+| **3024** | SurprisingVote | Week 2 | ✅ **Passed** | [`oj3024`](oj3024) | [`problem.md`](oj3024/problem.md) | [`submission.md`](oj3024/submission.md) | [`main.py`](oj3024/main.py) |
+| **3025** | Season | Week 2 | ✅ **Passed** | [`oj3025`](oj3025) | [`problem.md`](oj3025/problem.md) | [`submission.md`](oj3025/submission.md) | [`main.py`](oj3025/main.py) |
+| **3031** | Ink | Week 2 | ✅ **Passed** | [`oj3031`](oj3031) | [`problem.md`](oj3031/problem.md) | - | [`main.py`](oj3031/main.py) |
+| **3036** | ปราสาท | Week 2 | ✅ **Passed** | [`oj3036`](oj3036) | [`problem.md`](oj3036/problem.md) | - | [`main.py`](oj3036/main.py) |
+| **3042** | หาร 10 | Week 2 | ✅ **Passed** | [`oj3042`](oj3042) | [`problem.md`](oj3042/problem.md) | [`submission.md`](oj3042/submission.md) | [`main.py`](oj3042/main.py) |
+| **3058** | BrickBridge | Week 3 | ✅ **Passed** | [`oj3058`](oj3058) | [`problem.md`](oj3058/problem.md) | [`submission.md`](oj3058/submission.md) | [`main.py`](oj3058/main.py) |
+| **3071** | จำนวนในช่วง ที่หารด้วย d เหลือเศษ r | Week 3 | ✅ **Passed** | [`oj3071`](oj3071) | [`problem.md`](oj3071/problem.md) | [`submission.md`](oj3071/submission.md) | [`main.py`](oj3071/main.py) |
+| **3072** | A-E-I-O-U | Week 3 | ✅ **Passed** | [`oj3072`](oj3072) | [`problem.md`](oj3072/problem.md) | [`submission.md`](oj3072/submission.md) | [`main.py`](oj3072/main.py) |
+| **3110** | สงคราม...ส่งด่วน | Week 4 | 🔄 *In Progress* | [`oj3110`](oj3110) | [`problem.md`](oj3110/problem.md) | - | [`main.py`](oj3110/main.py) |
+| **3111** | สหกรณ์โรงเรียน | Week 4 | 🔄 *In Progress* | [`oj3111`](oj3111) | [`problem.md`](oj3111/problem.md) | - | [`main.py`](oj3111/main.py) |
+| **3115** | Arcade of Time: Store Check | Week 4 | 🔄 *In Progress* | [`oj3115`](oj3115) | [`problem.md`](oj3115/problem.md) | - | [`main.py`](oj3115/main.py) |
+| **3135** | ของขวัญและขโมย | Week 5 | ✅ **Passed** | [`oj3135`](oj3135) | [`problem.md`](oj3135/problem.md) | [`submission.md`](oj3135/submission.md) | [`main.py`](oj3135/main.py) |
+| **3157** | เกมสะสมแต้ม | Week 5 | ✅ **Passed** | [`oj3157`](oj3157) | [`problem.md`](oj3157/problem.md) | [`submission.md`](oj3157/submission.md) | [`main.py`](oj3157/main.py) |
+| **3160** | หาจำนวนเฉพาะ | Week 5 | ✅ **Passed** | [`oj3160`](oj3160) | [`problem.md`](oj3160/problem.md) | [`submission.md`](oj3160/submission.md) | [`main.py`](oj3160/main.py) |
+| **3227** | ไพ่ 44 ใบ | Week 6 | ✅ **Passed** | [`oj3227`](oj3227) | [`problem.md`](oj3227/problem.md) | [`submission.md`](oj3227/submission.md) | [`main.py`](oj3227/main.py) |
+| **3232** | กบน้อยกระโดด | Week 6 | ✅ **Passed** | [`oj3232`](oj3232) | [`problem.md`](oj3232/problem.md) | [`submission.md`](oj3232/submission.md) | [`main.py`](oj3232/main.py) |
+| **3233** | สลากกินแบ่ง | Week 6 | ✅ **Passed** | [`oj3233`](oj3233) | [`problem.md`](oj3233/problem.md) | [`submission.md`](oj3233/submission.md) | [`main.py`](oj3233/main.py) |
+| **3293** | BigFrame | Week 8 | ✅ **Passed** | [`oj3293`](oj3293) | [`problem.md`](oj3293/problem.md) | - | [`main.py`](oj3293/main.py) |
+| **3296** | RGB Mixed | Week 8 | ✅ **Passed** | [`oj3296`](oj3296) | [`problem.md`](oj3296/problem.md) | - | [`main.py`](oj3296/main.py) |
+| **3299** | แปลงดอกไม้ | Week 8 | ✅ **Passed** | [`oj3299`](oj3299) | [`problem.md`](oj3299/problem.md) | - | [`main.py`](oj3299/main.py) |
+| **3355** | Shorten | Week 9 | 🔄 *In Progress* | [`oj3355`](oj3355) | [`problem.md`](oj3355/problem.md) | - | [`main.py`](oj3355/main.py) |
+| **3357** | Giraffe | Week 9 | 🔄 *In Progress* | [`oj3357`](oj3357) | [`problem.md`](oj3357/problem.md) | - | [`main.py`](oj3357/main.py) |
+| **3360** | หั่นขนมปัง | Week 9 | 🔄 *In Progress* | [`oj3360`](oj3360) | [`problem.md`](oj3360/problem.md) | - | [`main.py`](oj3360/main.py) |
+| **3381** | Point Sorting | Week 10 | 🔄 *In Progress* | [`oj3381`](oj3381) | [`problem.md`](oj3381/problem.md) | - | [`main.py`](oj3381/main.py) |
+| **3386** | Duplicate I | Week 10 | 🔄 *In Progress* | [`oj3386`](oj3386) | [`problem.md`](oj3386/problem.md) | - | [`main.py`](oj3386/main.py) |
+| **3394** | ส่งต่อ | Week 10 | 🔄 *In Progress* | [`oj3394`](oj3394) | [`problem.md`](oj3394/problem.md) | - | [`main.py`](oj3394/main.py) |
+| **3476** | CuteCat CuteFox | Week 11 | 🔄 *In Progress* | [`oj3476`](oj3476) | [`problem.md`](oj3476/problem.md) | - | [`main.py`](oj3476/main.py) |
+| **3477** | Pad Thai | Week 11 | 🔄 *In Progress* | [`oj3477`](oj3477) | [`problem.md`](oj3477/problem.md) | - | [`main.py`](oj3477/main.py) |
+| **3484** | หุ่นยนต์เคาะเสียงกระเบื้อง | Week 11 | 🔄 *In Progress* | [`oj3484`](oj3484) | [`problem.md`](oj3484/problem.md) | - | [`main.py`](oj3484/main.py) |
+| **3536** | isPrime_large | Week 12 | 🔄 *In Progress* | [`oj3536`](oj3536) | [`problem.md`](oj3536/problem.md) | - | [`main.py`](oj3536/main.py) |
+| **3537** | Impostor | Week 12 | 🔄 *In Progress* | [`oj3537`](oj3537) | [`problem.md`](oj3537/problem.md) | - | [`main.py`](oj3537/main.py) |
+| **3538** | B - Fully pair? | Week 12 | 🔄 *In Progress* | [`oj3538`](oj3538) | [`problem.md`](oj3538/problem.md) | - | [`main.py`](oj3538/main.py) |
 
 ---
 
@@ -205,12 +206,12 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **2997** | [Recommend] Elo | ✅ **Passed** | [`oj2997-Elo ✅`](oj/oj2997-Elo%20%E2%9C%85) | [`problem.md`](oj/oj2997-Elo%20%E2%9C%85/problem.md) | [`main.py`](oj/oj2997-Elo%20%E2%9C%85/main.py) |
-| **2998** | [Recommend] EuclideanDistance2D | ✅ **Passed** | [`oj2998-EuclideanDistance2D ✅`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85) | [`problem.md`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85/problem.md) | [`main.py`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85/main.py) |
+| **2997** | Elo | ✅ **Passed** | [`oj2997-Elo ✅`](oj/oj2997-Elo%20%E2%9C%85) | [`problem.md`](oj/oj2997-Elo%20%E2%9C%85/problem.md) | [`main.py`](oj/oj2997-Elo%20%E2%9C%85/main.py) |
+| **2998** | EuclideanDistance2D | ✅ **Passed** | [`oj2998-EuclideanDistance2D ✅`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85) | [`problem.md`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85/problem.md) | [`main.py`](oj/oj2998-EuclideanDistance2D%20%E2%9C%85/main.py) |
 | **3014** | Milk | ✅ **Passed** | [`oj3014-Milk ✅`](oj/oj3014-Milk%20%E2%9C%85) | [`problem.md`](oj/oj3014-Milk%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3014-Milk%20%E2%9C%85/main.py) |
 | **3018** | RectangleArea | ✅ **Passed** | [`oj3018-RectangleArea ✅`](oj/oj3018-RectangleArea%20%E2%9C%85) | [`problem.md`](oj/oj3018-RectangleArea%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3018-RectangleArea%20%E2%9C%85/main.py) |
-| **3019** | [Recommend] Safe Password | ✅ **Passed** | [`oj3019-Safe_Password ✅`](oj/oj3019-Safe_Password%20%E2%9C%85) | [`problem.md`](oj/oj3019-Safe_Password%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3019-Safe_Password%20%E2%9C%85/main.py) |
-| **3020** | [Recommend] Coke | ✅ **Passed** | [`oj3020-Coke ✅`](oj/oj3020-Coke%20%E2%9C%85) | [`problem.md`](oj/oj3020-Coke%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3020-Coke%20%E2%9C%85/main.py) |
+| **3019** | Safe Password | ✅ **Passed** | [`oj3019-Safe_Password ✅`](oj/oj3019-Safe_Password%20%E2%9C%85) | [`problem.md`](oj/oj3019-Safe_Password%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3019-Safe_Password%20%E2%9C%85/main.py) |
+| **3020** | Coke | ✅ **Passed** | [`oj3020-Coke ✅`](oj/oj3020-Coke%20%E2%9C%85) | [`problem.md`](oj/oj3020-Coke%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3020-Coke%20%E2%9C%85/main.py) |
 | **3021** | OverlapCircle | ✅ **Passed** | [`oj3021-OverlapCircle ✅`](oj/oj3021-OverlapCircle%20%E2%9C%85) | [`problem.md`](oj/oj3021-OverlapCircle%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3021-OverlapCircle%20%E2%9C%85/main.py) |
 | **3023** | Calculator | ✅ **Passed** | [`oj3023-Calculator ✅`](oj/oj3023-Calculator%20%E2%9C%85) | [`problem.md`](oj/oj3023-Calculator%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3023-Calculator%20%E2%9C%85/main.py) |
 | **3027** | กระต่ายน้อยล้อมรั้วลวดหนาม | ✅ **Passed** | [`oj3027-Carrot_Farm_Fence ✅`](oj/oj3027-Carrot_Farm_Fence%20%E2%9C%85) | [`problem.md`](oj/oj3027-Carrot_Farm_Fence%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3027-Carrot_Farm_Fence%20%E2%9C%85/main.py) |
@@ -273,14 +274,14 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 | **3155** | ลูกน้ำ | ✅ **Passed** | [`oj3155-Looknam ✅`](oj/oj3155-Looknam%20%E2%9C%85) | [`problem.md`](oj/oj3155-Looknam%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3155-Looknam%20%E2%9C%85/main.py) |
 | **3156** | Conan | ✅ **Passed** | [`oj3156-Conan ✅`](oj/oj3156-Conan%20%E2%9C%85) | [`problem.md`](oj/oj3156-Conan%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3156-Conan%20%E2%9C%85/main.py) |
 | **3158** | ผลรวมกำลัง 2 | ✅ **Passed** | [`oj3158-Sum_Of_Squares ✅`](oj/oj3158-Sum_Of_Squares%20%E2%9C%85) | [`problem.md`](oj/oj3158-Sum_Of_Squares%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3158-Sum_Of_Squares%20%E2%9C%85/main.py) |
-| **3159** | [Recommend] Factorial | ✅ **Passed** | [`oj3159-Factorial ✅`](oj/oj3159-Factorial%20%E2%9C%85) | [`problem.md`](oj/oj3159-Factorial%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3159-Factorial%20%E2%9C%85/main.py) |
+| **3159** | Factorial | ✅ **Passed** | [`oj3159-Factorial ✅`](oj/oj3159-Factorial%20%E2%9C%85) | [`problem.md`](oj/oj3159-Factorial%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3159-Factorial%20%E2%9C%85/main.py) |
 | **3161** | พิมพ์สัญลักษณ์ | ✅ **Passed** | [`oj3161-Print_Symbol ✅`](oj/oj3161-Print_Symbol%20%E2%9C%85) | [`problem.md`](oj/oj3161-Print_Symbol%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3161-Print_Symbol%20%E2%9C%85/main.py) |
 | **3162** | ตารางสูตรคูณ | ✅ **Passed** | [`oj3162-Multiplication_Table ✅`](oj/oj3162-Multiplication_Table%20%E2%9C%85) | [`problem.md`](oj/oj3162-Multiplication_Table%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3162-Multiplication_Table%20%E2%9C%85/main.py) |
 | **3163** | สินค้าส่งออก | ✅ **Passed** | [`oj3163-Export_Products ✅`](oj/oj3163-Export_Products%20%E2%9C%85) | [`problem.md`](oj/oj3163-Export_Products%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3163-Export_Products%20%E2%9C%85/main.py) |
 | **3164** | ผลรวมของค่าที่มากกว่า | ✅ **Passed** | [`oj3164-Sum_Of_Greater_Values ✅`](oj/oj3164-Sum_Of_Greater_Values%20%E2%9C%85) | [`problem.md`](oj/oj3164-Sum_Of_Greater_Values%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3164-Sum_Of_Greater_Values%20%E2%9C%85/main.py) |
 | **3165** | เดินเล่นในงานเทศกาล | ✅ **Passed** | [`oj3165-Festival_Walk ✅`](oj/oj3165-Festival_Walk%20%E2%9C%85) | [`problem.md`](oj/oj3165-Festival_Walk%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3165-Festival_Walk%20%E2%9C%85/main.py) |
 | **3166** | ผ่านหรือไม่ ค่าเฉลี่ยรายวิชา | ✅ **Passed** | [`oj3166-Course_Average_Pass_Fail ✅`](oj/oj3166-Course_Average_Pass_Fail%20%E2%9C%85) | [`problem.md`](oj/oj3166-Course_Average_Pass_Fail%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3166-Course_Average_Pass_Fail%20%E2%9C%85/main.py) |
-| **3167** | [Recommend] FizzBuzz | ✅ **Passed** | [`oj3167-FizzBuzz ✅`](oj/oj3167-FizzBuzz%20%E2%9C%85) | [`problem.md`](oj/oj3167-FizzBuzz%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3167-FizzBuzz%20%E2%9C%85/main.py) |
+| **3167** | FizzBuzz | ✅ **Passed** | [`oj3167-FizzBuzz ✅`](oj/oj3167-FizzBuzz%20%E2%9C%85) | [`problem.md`](oj/oj3167-FizzBuzz%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3167-FizzBuzz%20%E2%9C%85/main.py) |
 
 ### 📅 Week 6: ลูปขั้นสูง สตริง และลำดับอนุกรม (Advanced Loops, Strings & Sequences)
 
@@ -288,7 +289,7 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **3226** | [Recommend] Inflation | ✅ **Passed** | [`oj3226-Inflation ✅`](oj/oj3226-Inflation%20%E2%9C%85) | [`problem.md`](oj/oj3226-Inflation%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3226-Inflation%20%E2%9C%85/main.py) |
+| **3226** | Inflation | ✅ **Passed** | [`oj3226-Inflation ✅`](oj/oj3226-Inflation%20%E2%9C%85) | [`problem.md`](oj/oj3226-Inflation%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3226-Inflation%20%E2%9C%85/main.py) |
 | **3228** | การนับสระ | ✅ **Passed** | [`oj3228-Count_Vowels ✅`](oj/oj3228-Count_Vowels%20%E2%9C%85) | [`problem.md`](oj/oj3228-Count_Vowels%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3228-Count_Vowels%20%E2%9C%85/main.py) |
 | **3229** | ระบบคิดคะแนนเกมออนไลน์ | ✅ **Passed** | [`oj3229-Online_Game_Scoring ✅`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85) | [`problem.md`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3229-Online_Game_Scoring%20%E2%9C%85/main.py) |
 | **3230** | โรงแรมกลางกรุง ไม่มีชั้น 13 | ✅ **Passed** | [`oj3230-Hotel_No_13th_Floor ✅`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85) | [`problem.md`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3230-Hotel_No_13th_Floor%20%E2%9C%85/main.py) |
@@ -296,7 +297,7 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 | **3234** | ไฟคริสตมาส | ✅ **Passed** | [`oj3234-Christmas_Lights ✅`](oj/oj3234-Christmas_Lights%20%E2%9C%85) | [`problem.md`](oj/oj3234-Christmas_Lights%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3234-Christmas_Lights%20%E2%9C%85/main.py) |
 | **3235** | กระต่ายอ้วน | ✅ **Passed** | [`oj3235-Fat_Rabbit ✅`](oj/oj3235-Fat_Rabbit%20%E2%9C%85) | [`problem.md`](oj/oj3235-Fat_Rabbit%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3235-Fat_Rabbit%20%E2%9C%85/main.py) |
 | **3236** | รหัสแฝดเทค | ✅ **Passed** | [`oj3236-Twin_Tech_Code ✅`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85) | [`problem.md`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3236-Twin_Tech_Code%20%E2%9C%85/main.py) |
-| **3237** | [Recommend] สามเหลี่ยม | ✅ **Passed** | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](oj/oj3237-Triangle%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3237-Triangle%20%E2%9C%85/main.py) |
+| **3237** | สามเหลี่ยม | ✅ **Passed** | [`oj3237-Triangle ✅`](oj/oj3237-Triangle%20%E2%9C%85) | [`problem.md`](oj/oj3237-Triangle%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3237-Triangle%20%E2%9C%85/main.py) |
 | **3238** | Elon Musk (X-shape) | ✅ **Passed** | [`oj3238-Elon_Musk_X_Shape ✅`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85) | [`problem.md`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3238-Elon_Musk_X_Shape%20%E2%9C%85/main.py) |
 
 ### 📅 Week 7 / Midterm: ชุดข้อสอบจำลองกลางภาค (Midterm Mock Exam)
@@ -305,15 +306,15 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **3274** | [ MIDTERM ] Triangle | 🔄 *In Progress* | [`oj3274-MIDTERM_Triangle`](oj/oj3274-MIDTERM_Triangle) | [`problem.md`](oj/oj3274-MIDTERM_Triangle/problem.md) | [`main.py`](oj/oj3274-MIDTERM_Triangle/main.py) |
-| **3275** | [ MIDTERM ] PIZZA TIME | 🔄 *In Progress* | [`oj3275-MIDTERM_Pizza_Time`](oj/oj3275-MIDTERM_Pizza_Time) | [`problem.md`](oj/oj3275-MIDTERM_Pizza_Time/problem.md) | [`main.py`](oj/oj3275-MIDTERM_Pizza_Time/main.py) |
-| **3276** | [ MIDTERM ] FakeThaiPlus | 🔄 *In Progress* | [`oj3276-MIDTERM_FakeThaiPlus`](oj/oj3276-MIDTERM_FakeThaiPlus) | [`problem.md`](oj/oj3276-MIDTERM_FakeThaiPlus/problem.md) | [`main.py`](oj/oj3276-MIDTERM_FakeThaiPlus/main.py) |
-| **3277** | [ MIDTERM ] RealThaiPlus | 🔄 *In Progress* | [`oj3277-MIDTERM_RealThaiPlus`](oj/oj3277-MIDTERM_RealThaiPlus) | [`problem.md`](oj/oj3277-MIDTERM_RealThaiPlus/problem.md) | [`main.py`](oj/oj3277-MIDTERM_RealThaiPlus/main.py) |
-| **3278** | [ MIDTERM ] Units | 🔄 *In Progress* | [`oj3278-MIDTERM_Units`](oj/oj3278-MIDTERM_Units) | [`problem.md`](oj/oj3278-MIDTERM_Units/problem.md) | [`main.py`](oj/oj3278-MIDTERM_Units/main.py) |
-| **3279** | [ MIDTERM ] PM WATCH | 🔄 *In Progress* | [`oj3279-MIDTERM_PM_Watch`](oj/oj3279-MIDTERM_PM_Watch) | [`problem.md`](oj/oj3279-MIDTERM_PM_Watch/problem.md) | [`main.py`](oj/oj3279-MIDTERM_PM_Watch/main.py) |
-| **3280** | [ MIDTERM ] CODE CLEANER | 🔄 *In Progress* | [`oj3280-MIDTERM_Code_Cleaner`](oj/oj3280-MIDTERM_Code_Cleaner) | [`problem.md`](oj/oj3280-MIDTERM_Code_Cleaner/problem.md) | [`main.py`](oj/oj3280-MIDTERM_Code_Cleaner/main.py) |
-| **3281** | [ MIDTERM ] ijudge-itkmitl | 🔄 *In Progress* | [`oj3281-MIDTERM_ijudge-itkmitl`](oj/oj3281-MIDTERM_ijudge-itkmitl) | [`problem.md`](oj/oj3281-MIDTERM_ijudge-itkmitl/problem.md) | [`main.py`](oj/oj3281-MIDTERM_ijudge-itkmitl/main.py) |
-| **3282** | [ MIDTERM ] Stats | 🔄 *In Progress* | [`oj3282-MIDTERM_Stats`](oj/oj3282-MIDTERM_Stats) | [`problem.md`](oj/oj3282-MIDTERM_Stats/problem.md) | [`main.py`](oj/oj3282-MIDTERM_Stats/main.py) |
+| **3274** | Triangle | 🔄 *In Progress* | [`oj3274-MIDTERM_Triangle`](oj/oj3274-MIDTERM_Triangle) | [`problem.md`](oj/oj3274-MIDTERM_Triangle/problem.md) | [`main.py`](oj/oj3274-MIDTERM_Triangle/main.py) |
+| **3275** | PIZZA TIME | 🔄 *In Progress* | [`oj3275-MIDTERM_Pizza_Time`](oj/oj3275-MIDTERM_Pizza_Time) | [`problem.md`](oj/oj3275-MIDTERM_Pizza_Time/problem.md) | [`main.py`](oj/oj3275-MIDTERM_Pizza_Time/main.py) |
+| **3276** | FakeThaiPlus | 🔄 *In Progress* | [`oj3276-MIDTERM_FakeThaiPlus`](oj/oj3276-MIDTERM_FakeThaiPlus) | [`problem.md`](oj/oj3276-MIDTERM_FakeThaiPlus/problem.md) | [`main.py`](oj/oj3276-MIDTERM_FakeThaiPlus/main.py) |
+| **3277** | RealThaiPlus | 🔄 *In Progress* | [`oj3277-MIDTERM_RealThaiPlus`](oj/oj3277-MIDTERM_RealThaiPlus) | [`problem.md`](oj/oj3277-MIDTERM_RealThaiPlus/problem.md) | [`main.py`](oj/oj3277-MIDTERM_RealThaiPlus/main.py) |
+| **3278** | Units | 🔄 *In Progress* | [`oj3278-MIDTERM_Units`](oj/oj3278-MIDTERM_Units) | [`problem.md`](oj/oj3278-MIDTERM_Units/problem.md) | [`main.py`](oj/oj3278-MIDTERM_Units/main.py) |
+| **3279** | PM WATCH | 🔄 *In Progress* | [`oj3279-MIDTERM_PM_Watch`](oj/oj3279-MIDTERM_PM_Watch) | [`problem.md`](oj/oj3279-MIDTERM_PM_Watch/problem.md) | [`main.py`](oj/oj3279-MIDTERM_PM_Watch/main.py) |
+| **3280** | CODE CLEANER | 🔄 *In Progress* | [`oj3280-MIDTERM_Code_Cleaner`](oj/oj3280-MIDTERM_Code_Cleaner) | [`problem.md`](oj/oj3280-MIDTERM_Code_Cleaner/problem.md) | [`main.py`](oj/oj3280-MIDTERM_Code_Cleaner/main.py) |
+| **3281** | ijudge-itkmitl | 🔄 *In Progress* | [`oj3281-MIDTERM_ijudge-itkmitl`](oj/oj3281-MIDTERM_ijudge-itkmitl) | [`problem.md`](oj/oj3281-MIDTERM_ijudge-itkmitl/problem.md) | [`main.py`](oj/oj3281-MIDTERM_ijudge-itkmitl/main.py) |
+| **3282** | Stats | 🔄 *In Progress* | [`oj3282-MIDTERM_Stats`](oj/oj3282-MIDTERM_Stats) | [`problem.md`](oj/oj3282-MIDTERM_Stats/problem.md) | [`main.py`](oj/oj3282-MIDTERM_Stats/main.py) |
 
 ### 📅 Week 8: ลิสต์และการประมวลผลสตริงขั้นสูง (Lists & Advanced Sequence Operations)
 
@@ -360,7 +361,7 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 | **3383** | Difference | 🔄 *In Progress* | [`oj3383-Difference`](oj/oj3383-Difference) | [`problem.md`](oj/oj3383-Difference/problem.md) | [`main.py`](oj/oj3383-Difference/main.py) |
 | **3384** | PickThem | 🔄 *In Progress* | [`oj3384-PickThem`](oj/oj3384-PickThem) | [`problem.md`](oj/oj3384-PickThem/problem.md) | [`main.py`](oj/oj3384-PickThem/main.py) |
 | **3385** | BusStop I | 🔄 *In Progress* | [`oj3385-BusStop_I`](oj/oj3385-BusStop_I) | [`problem.md`](oj/oj3385-BusStop_I/problem.md) | [`main.py`](oj/oj3385-BusStop_I/main.py) |
-| **3387** | Tuple's Sad life  | 🔄 *In Progress* | [`oj3387-Tuples_Sad_life`](oj/oj3387-Tuples_Sad_life) | [`problem.md`](oj/oj3387-Tuples_Sad_life/problem.md) | [`main.py`](oj/oj3387-Tuples_Sad_life/main.py) |
+| **3387** | Tuple's Sad life | 🔄 *In Progress* | [`oj3387-Tuples_Sad_life`](oj/oj3387-Tuples_Sad_life) | [`problem.md`](oj/oj3387-Tuples_Sad_life/problem.md) | [`main.py`](oj/oj3387-Tuples_Sad_life/main.py) |
 | **3388** | 113 | 🔄 *In Progress* | [`oj3388-113`](oj/oj3388-113) | [`problem.md`](oj/oj3388-113/problem.md) | [`main.py`](oj/oj3388-113/main.py) |
 | **3389** | Smart Trash Collector | 🔄 *In Progress* | [`oj3389-Smart_Trash_Collector`](oj/oj3389-Smart_Trash_Collector) | [`problem.md`](oj/oj3389-Smart_Trash_Collector/problem.md) | [`main.py`](oj/oj3389-Smart_Trash_Collector/main.py) |
 | **3390** | Array 2D ตรวจสอบ | 🔄 *In Progress* | [`oj3390-Array_2D_Check`](oj/oj3390-Array_2D_Check) | [`problem.md`](oj/oj3390-Array_2D_Check/problem.md) | [`main.py`](oj/oj3390-Array_2D_Check/main.py) |
@@ -436,58 +437,69 @@ git show solutions/2026-s1:"oj/oj2981-Sawasdee_Name ✅/main.py"   # ดูโ�
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
-| **3489** | [MINI EXAM] Divide3Or5 | 🔄 *In Progress* | [`oj3489-MINI_EXAM_Divide3Or5`](oj/oj3489-MINI_EXAM_Divide3Or5) | [`problem.md`](oj/oj3489-MINI_EXAM_Divide3Or5/problem.md) | [`main.py`](oj/oj3489-MINI_EXAM_Divide3Or5/main.py) |
-| **3490** | [MINI EXAM] Virus I | 🔄 *In Progress* | [`oj3490-MINI_EXAM_Virus_I`](oj/oj3490-MINI_EXAM_Virus_I) | [`problem.md`](oj/oj3490-MINI_EXAM_Virus_I/problem.md) | [`main.py`](oj/oj3490-MINI_EXAM_Virus_I/main.py) |
-| **3491** | [MINI EXAM] RunGame | 🔄 *In Progress* | [`oj3491-MINI_EXAM_RunGame`](oj/oj3491-MINI_EXAM_RunGame) | [`problem.md`](oj/oj3491-MINI_EXAM_RunGame/problem.md) | [`main.py`](oj/oj3491-MINI_EXAM_RunGame/main.py) |
-| **3492** | [MINI EXAM] Longer | 🔄 *In Progress* | [`oj3492-MINI_EXAM_Longer`](oj/oj3492-MINI_EXAM_Longer) | [`problem.md`](oj/oj3492-MINI_EXAM_Longer/problem.md) | [`main.py`](oj/oj3492-MINI_EXAM_Longer/main.py) |
-| **3494** | [MINI EXAM] Nearer | 🔄 *In Progress* | [`oj3494-MINI_EXAM_Nearer`](oj/oj3494-MINI_EXAM_Nearer) | [`problem.md`](oj/oj3494-MINI_EXAM_Nearer/problem.md) | [`main.py`](oj/oj3494-MINI_EXAM_Nearer/main.py) |
-| **3495** | [MINI EXAM] Squid Game 3 - Tug-of-War | 🔄 *In Progress* | [`oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War) | [`problem.md`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War/problem.md) | [`main.py`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War/main.py) |
-| **3496** | [MINI EXAM] A+B Upgrade | 🔄 *In Progress* | [`oj3496-MINI_EXAM_AB_Upgrade`](oj/oj3496-MINI_EXAM_AB_Upgrade) | [`problem.md`](oj/oj3496-MINI_EXAM_AB_Upgrade/problem.md) | [`main.py`](oj/oj3496-MINI_EXAM_AB_Upgrade/main.py) |
-| **3497** | [MINI EXAM] Count All  Vowel | 🔄 *In Progress* | [`oj3497-MINI_EXAM_Count_All_Vowel`](oj/oj3497-MINI_EXAM_Count_All_Vowel) | [`problem.md`](oj/oj3497-MINI_EXAM_Count_All_Vowel/problem.md) | [`main.py`](oj/oj3497-MINI_EXAM_Count_All_Vowel/main.py) |
-| **3499** | [MINI EXAM] Noodle | 🔄 *In Progress* | [`oj3499-MINI_EXAM_Noodle`](oj/oj3499-MINI_EXAM_Noodle) | [`problem.md`](oj/oj3499-MINI_EXAM_Noodle/problem.md) | [`main.py`](oj/oj3499-MINI_EXAM_Noodle/main.py) |
-| **3500** | [MINI EXAM] Sairahat | 🔄 *In Progress* | [`oj3500-MINI_EXAM_Sairahat`](oj/oj3500-MINI_EXAM_Sairahat) | [`problem.md`](oj/oj3500-MINI_EXAM_Sairahat/problem.md) | [`main.py`](oj/oj3500-MINI_EXAM_Sairahat/main.py) |
-| **3501** | [MINI EXAM] GG-EZ | 🔄 *In Progress* | [`oj3501-MINI_EXAM_GG-EZ`](oj/oj3501-MINI_EXAM_GG-EZ) | [`problem.md`](oj/oj3501-MINI_EXAM_GG-EZ/problem.md) | [`main.py`](oj/oj3501-MINI_EXAM_GG-EZ/main.py) |
-| **3502** | [MINI EXAM] Calendar | 🔄 *In Progress* | [`oj3502-MINI_EXAM_Calendar`](oj/oj3502-MINI_EXAM_Calendar) | [`problem.md`](oj/oj3502-MINI_EXAM_Calendar/problem.md) | [`main.py`](oj/oj3502-MINI_EXAM_Calendar/main.py) |
-| **3504** | [MINI EXAM] Hamming | 🔄 *In Progress* | [`oj3504-MINI_EXAM_Hamming`](oj/oj3504-MINI_EXAM_Hamming) | [`problem.md`](oj/oj3504-MINI_EXAM_Hamming/problem.md) | [`main.py`](oj/oj3504-MINI_EXAM_Hamming/main.py) |
-| **3505** | [MINI EXAM] PickNum | 🔄 *In Progress* | [`oj3505-MINI_EXAM_PickNum`](oj/oj3505-MINI_EXAM_PickNum) | [`problem.md`](oj/oj3505-MINI_EXAM_PickNum/problem.md) | [`main.py`](oj/oj3505-MINI_EXAM_PickNum/main.py) |
-| **3506** | [MINI EXAM] WordSequence I | 🔄 *In Progress* | [`oj3506-MINI_EXAM_WordSequence_I`](oj/oj3506-MINI_EXAM_WordSequence_I) | [`problem.md`](oj/oj3506-MINI_EXAM_WordSequence_I/problem.md) | [`main.py`](oj/oj3506-MINI_EXAM_WordSequence_I/main.py) |
-| **3507** | [MINI EXAM] Divide3Or5 | 🔄 *In Progress* | [`oj3507-MINI_EXAM_Divide3Or5`](oj/oj3507-MINI_EXAM_Divide3Or5) | [`problem.md`](oj/oj3507-MINI_EXAM_Divide3Or5/problem.md) | [`main.py`](oj/oj3507-MINI_EXAM_Divide3Or5/main.py) |
-| **3508** | [MINI EXAM] Virus I | 🔄 *In Progress* | [`oj3508-MINI_EXAM_Virus_I`](oj/oj3508-MINI_EXAM_Virus_I) | [`problem.md`](oj/oj3508-MINI_EXAM_Virus_I/problem.md) | [`main.py`](oj/oj3508-MINI_EXAM_Virus_I/main.py) |
-| **3509** | [MINI EXAM] Longer | 🔄 *In Progress* | [`oj3509-MINI_EXAM_Longer`](oj/oj3509-MINI_EXAM_Longer) | [`problem.md`](oj/oj3509-MINI_EXAM_Longer/problem.md) | [`main.py`](oj/oj3509-MINI_EXAM_Longer/main.py) |
-| **3510** | [MINI EXAM] Professor | 🔄 *In Progress* | [`oj3510-MINI_EXAM_Professor`](oj/oj3510-MINI_EXAM_Professor) | [`problem.md`](oj/oj3510-MINI_EXAM_Professor/problem.md) | [`main.py`](oj/oj3510-MINI_EXAM_Professor/main.py) |
-| **3511** | [MINI EXAM] Rain | 🔄 *In Progress* | [`oj3511-MINI_EXAM_Rain`](oj/oj3511-MINI_EXAM_Rain) | [`problem.md`](oj/oj3511-MINI_EXAM_Rain/problem.md) | [`main.py`](oj/oj3511-MINI_EXAM_Rain/main.py) |
-| **3546** | [ MINI EXAM ] Dart | 🔄 *In Progress* | [`oj3546-MINI_EXAM_Dart`](oj/oj3546-MINI_EXAM_Dart) | [`problem.md`](oj/oj3546-MINI_EXAM_Dart/problem.md) | [`main.py`](oj/oj3546-MINI_EXAM_Dart/main.py) |
-| **3547** | [ MINI EXAM ] Cat in the Bag | 🔄 *In Progress* | [`oj3547-MINI_EXAM_Cat_in_the_Bag`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag) | [`problem.md`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag/problem.md) | [`main.py`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag/main.py) |
-| **3548** | [ MINI EXAM ] Item checker | 🔄 *In Progress* | [`oj3548-MINI_EXAM_Item_checker`](oj/oj3548-MINI_EXAM_Item_checker) | [`problem.md`](oj/oj3548-MINI_EXAM_Item_checker/problem.md) | [`main.py`](oj/oj3548-MINI_EXAM_Item_checker/main.py) |
-| **3549** | [ MINI EXAM ] Book shelf | 🔄 *In Progress* | [`oj3549-MINI_EXAM_Book_shelf`](oj/oj3549-MINI_EXAM_Book_shelf) | [`problem.md`](oj/oj3549-MINI_EXAM_Book_shelf/problem.md) | [`main.py`](oj/oj3549-MINI_EXAM_Book_shelf/main.py) |
-| **3550** | [ MINI EXAM ] Sorry | 🔄 *In Progress* | [`oj3550-MINI_EXAM_Sorry`](oj/oj3550-MINI_EXAM_Sorry) | [`problem.md`](oj/oj3550-MINI_EXAM_Sorry/problem.md) | [`main.py`](oj/oj3550-MINI_EXAM_Sorry/main.py) |
-| **3551** | [ MINI EXAM ] Adventurer's Backpack | 🔄 *In Progress* | [`oj3551-MINI_EXAM_Adventurers_Backpack`](oj/oj3551-MINI_EXAM_Adventurers_Backpack) | [`problem.md`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/problem.md) | [`main.py`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/main.py) |
+| **3489** | Divide3Or5 | 🔄 *In Progress* | [`oj3489-MINI_EXAM_Divide3Or5`](oj/oj3489-MINI_EXAM_Divide3Or5) | [`problem.md`](oj/oj3489-MINI_EXAM_Divide3Or5/problem.md) | [`main.py`](oj/oj3489-MINI_EXAM_Divide3Or5/main.py) |
+| **3490** | Virus I | 🔄 *In Progress* | [`oj3490-MINI_EXAM_Virus_I`](oj/oj3490-MINI_EXAM_Virus_I) | [`problem.md`](oj/oj3490-MINI_EXAM_Virus_I/problem.md) | [`main.py`](oj/oj3490-MINI_EXAM_Virus_I/main.py) |
+| **3491** | RunGame | 🔄 *In Progress* | [`oj3491-MINI_EXAM_RunGame`](oj/oj3491-MINI_EXAM_RunGame) | [`problem.md`](oj/oj3491-MINI_EXAM_RunGame/problem.md) | [`main.py`](oj/oj3491-MINI_EXAM_RunGame/main.py) |
+| **3492** | Longer | 🔄 *In Progress* | [`oj3492-MINI_EXAM_Longer`](oj/oj3492-MINI_EXAM_Longer) | [`problem.md`](oj/oj3492-MINI_EXAM_Longer/problem.md) | [`main.py`](oj/oj3492-MINI_EXAM_Longer/main.py) |
+| **3494** | Nearer | 🔄 *In Progress* | [`oj3494-MINI_EXAM_Nearer`](oj/oj3494-MINI_EXAM_Nearer) | [`problem.md`](oj/oj3494-MINI_EXAM_Nearer/problem.md) | [`main.py`](oj/oj3494-MINI_EXAM_Nearer/main.py) |
+| **3495** | Squid Game 3 - Tug-of-War | 🔄 *In Progress* | [`oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War) | [`problem.md`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War/problem.md) | [`main.py`](oj/oj3495-MINI_EXAM_Squid_Game_3_-_Tug-of-War/main.py) |
+| **3496** | A+B Upgrade | 🔄 *In Progress* | [`oj3496-MINI_EXAM_AB_Upgrade`](oj/oj3496-MINI_EXAM_AB_Upgrade) | [`problem.md`](oj/oj3496-MINI_EXAM_AB_Upgrade/problem.md) | [`main.py`](oj/oj3496-MINI_EXAM_AB_Upgrade/main.py) |
+| **3497** | Count All Vowel | 🔄 *In Progress* | [`oj3497-MINI_EXAM_Count_All_Vowel`](oj/oj3497-MINI_EXAM_Count_All_Vowel) | [`problem.md`](oj/oj3497-MINI_EXAM_Count_All_Vowel/problem.md) | [`main.py`](oj/oj3497-MINI_EXAM_Count_All_Vowel/main.py) |
+| **3499** | Noodle | 🔄 *In Progress* | [`oj3499-MINI_EXAM_Noodle`](oj/oj3499-MINI_EXAM_Noodle) | [`problem.md`](oj/oj3499-MINI_EXAM_Noodle/problem.md) | [`main.py`](oj/oj3499-MINI_EXAM_Noodle/main.py) |
+| **3500** | Sairahat | 🔄 *In Progress* | [`oj3500-MINI_EXAM_Sairahat`](oj/oj3500-MINI_EXAM_Sairahat) | [`problem.md`](oj/oj3500-MINI_EXAM_Sairahat/problem.md) | [`main.py`](oj/oj3500-MINI_EXAM_Sairahat/main.py) |
+| **3501** | GG-EZ | 🔄 *In Progress* | [`oj3501-MINI_EXAM_GG-EZ`](oj/oj3501-MINI_EXAM_GG-EZ) | [`problem.md`](oj/oj3501-MINI_EXAM_GG-EZ/problem.md) | [`main.py`](oj/oj3501-MINI_EXAM_GG-EZ/main.py) |
+| **3502** | Calendar | 🔄 *In Progress* | [`oj3502-MINI_EXAM_Calendar`](oj/oj3502-MINI_EXAM_Calendar) | [`problem.md`](oj/oj3502-MINI_EXAM_Calendar/problem.md) | [`main.py`](oj/oj3502-MINI_EXAM_Calendar/main.py) |
+| **3504** | Hamming | 🔄 *In Progress* | [`oj3504-MINI_EXAM_Hamming`](oj/oj3504-MINI_EXAM_Hamming) | [`problem.md`](oj/oj3504-MINI_EXAM_Hamming/problem.md) | [`main.py`](oj/oj3504-MINI_EXAM_Hamming/main.py) |
+| **3505** | PickNum | 🔄 *In Progress* | [`oj3505-MINI_EXAM_PickNum`](oj/oj3505-MINI_EXAM_PickNum) | [`problem.md`](oj/oj3505-MINI_EXAM_PickNum/problem.md) | [`main.py`](oj/oj3505-MINI_EXAM_PickNum/main.py) |
+| **3506** | WordSequence I | 🔄 *In Progress* | [`oj3506-MINI_EXAM_WordSequence_I`](oj/oj3506-MINI_EXAM_WordSequence_I) | [`problem.md`](oj/oj3506-MINI_EXAM_WordSequence_I/problem.md) | [`main.py`](oj/oj3506-MINI_EXAM_WordSequence_I/main.py) |
+| **3507** | Divide3Or5 | 🔄 *In Progress* | [`oj3507-MINI_EXAM_Divide3Or5`](oj/oj3507-MINI_EXAM_Divide3Or5) | [`problem.md`](oj/oj3507-MINI_EXAM_Divide3Or5/problem.md) | [`main.py`](oj/oj3507-MINI_EXAM_Divide3Or5/main.py) |
+| **3508** | Virus I | 🔄 *In Progress* | [`oj3508-MINI_EXAM_Virus_I`](oj/oj3508-MINI_EXAM_Virus_I) | [`problem.md`](oj/oj3508-MINI_EXAM_Virus_I/problem.md) | [`main.py`](oj/oj3508-MINI_EXAM_Virus_I/main.py) |
+| **3509** | Longer | 🔄 *In Progress* | [`oj3509-MINI_EXAM_Longer`](oj/oj3509-MINI_EXAM_Longer) | [`problem.md`](oj/oj3509-MINI_EXAM_Longer/problem.md) | [`main.py`](oj/oj3509-MINI_EXAM_Longer/main.py) |
+| **3510** | Professor | 🔄 *In Progress* | [`oj3510-MINI_EXAM_Professor`](oj/oj3510-MINI_EXAM_Professor) | [`problem.md`](oj/oj3510-MINI_EXAM_Professor/problem.md) | [`main.py`](oj/oj3510-MINI_EXAM_Professor/main.py) |
+| **3511** | Rain | 🔄 *In Progress* | [`oj3511-MINI_EXAM_Rain`](oj/oj3511-MINI_EXAM_Rain) | [`problem.md`](oj/oj3511-MINI_EXAM_Rain/problem.md) | [`main.py`](oj/oj3511-MINI_EXAM_Rain/main.py) |
+| **3546** | Dart | 🔄 *In Progress* | [`oj3546-MINI_EXAM_Dart`](oj/oj3546-MINI_EXAM_Dart) | [`problem.md`](oj/oj3546-MINI_EXAM_Dart/problem.md) | [`main.py`](oj/oj3546-MINI_EXAM_Dart/main.py) |
+| **3547** | Cat in the Bag | 🔄 *In Progress* | [`oj3547-MINI_EXAM_Cat_in_the_Bag`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag) | [`problem.md`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag/problem.md) | [`main.py`](oj/oj3547-MINI_EXAM_Cat_in_the_Bag/main.py) |
+| **3548** | Item checker | 🔄 *In Progress* | [`oj3548-MINI_EXAM_Item_checker`](oj/oj3548-MINI_EXAM_Item_checker) | [`problem.md`](oj/oj3548-MINI_EXAM_Item_checker/problem.md) | [`main.py`](oj/oj3548-MINI_EXAM_Item_checker/main.py) |
+| **3549** | Book shelf | 🔄 *In Progress* | [`oj3549-MINI_EXAM_Book_shelf`](oj/oj3549-MINI_EXAM_Book_shelf) | [`problem.md`](oj/oj3549-MINI_EXAM_Book_shelf/problem.md) | [`main.py`](oj/oj3549-MINI_EXAM_Book_shelf/main.py) |
+| **3550** | Sorry | 🔄 *In Progress* | [`oj3550-MINI_EXAM_Sorry`](oj/oj3550-MINI_EXAM_Sorry) | [`problem.md`](oj/oj3550-MINI_EXAM_Sorry/problem.md) | [`main.py`](oj/oj3550-MINI_EXAM_Sorry/main.py) |
+| **3551** | Adventurer's Backpack | 🔄 *In Progress* | [`oj3551-MINI_EXAM_Adventurers_Backpack`](oj/oj3551-MINI_EXAM_Adventurers_Backpack) | [`problem.md`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/problem.md) | [`main.py`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/main.py) |
 
 ---
 
 ## 🛠️ Data & Automation Scripts
 
-- [`oj_problems.json`](oj_problems.json) — Summary registry (222 problems): id, week, status, pass stats, deadline, and category flags.
-- [`data/all_problems_detail.json`](data/all_problems_detail.json) — Detail registry: problem statements, input/output specifications, time/memory limits, and sample testcases.
-- `data/html_cache/` — Raw HTML snapshots of 221 problem pages, kept locally for debugging the scraper (gitignored).
-- [`scripts/scrape_all_oj_problems.py`](scripts/scrape_all_oj_problems.py) — iJudge scraper: registries, `problem.md`, and `main.py` stubs, with a React Server Component (RSC) stream resolver.
-- [`scripts/submit_oj.py`](scripts/submit_oj.py) — Submission CLI with session-cookie management and result polling.
-- [`scripts/sync_oj_status.py`](scripts/sync_oj_status.py) — Renames `oj/` folders to match the pass status (✅ suffix).
-- [`scripts/update_readme.py`](scripts/update_readme.py) — Generates this README.md. Edit the script, not the README: manual edits are overwritten.
-- [`scripts/README.md`](scripts/README.md) — Setup, credentials, and every command option.
+ไฟล์ทั้งหมดในหัวข้อนี้อยู่บน branch `OP` (worktree `.op/`) ไม่ใช่ `main`
+
+- [`data/course.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/course.json) — Course config: week windows (release dates), week titles, category tags, folder names, midterm map. Adding a week = one entry here.
+- [`data/oj_problems.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/oj_problems.json) — Summary registry (222 problems): id, week, status, pass stats, deadline, release date, and category flags.
+- [`data/all_problems_detail.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/all_problems_detail.json) — Detail registry (221 problems): problem statements, input/output specifications, time/memory limits, and sample testcases.
+- [`solutions/`](https://github.com/Jesselpetry/pscp-69070027/tree/OP/solutions) — Archived reference code (134 problems): `solutions/oj<id>/main.py`.
+- [`scripts/pscp.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/pscp.py) — Single entry point: `python3 .op/scripts/pscp.py <command>` runs every script below.
+- [`scripts/scrape_all_oj_problems.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/scrape_all_oj_problems.py) — iJudge scraper: summary + detail registries, with a React Server Component (RSC) stream resolver.
+- [`scripts/render_problems.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/render_problems.py) — Registry → `problem.md` for every problem + `main.py` stubs for new ones (offline, idempotent).
+- [`scripts/update_readme.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/update_readme.py) — Generates this README.md (only the README). Edit the script, not the README: manual edits are overwritten.
+- [`scripts/sync_oj_status.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/sync_oj_status.py) — Renames `oj/` folders to match the pass status (` ✅` suffix).
+- [`scripts/check_repo.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/check_repo.py) — Read-only consistency check (`doctor`): registry ↔ folders, weeks, Learning Logs, archived solutions.
+- [`scripts/archive_solutions.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/archive_solutions.py) — Copies solved `main.py` files from main into `solutions/` on the OP branch.
+- [`scripts/run_samples.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/run_samples.py) — Runs a problem's `main.py` against the official sample testcases.
+- [`scripts/submit_oj.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/submit_oj.py) — Submission CLI with session-cookie management and result polling.
+- [`scripts/README.md`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/README.md) — Setup, credentials, and every command option.
 
 ### 🔁 Weekly Workflow
 
 ```bash
-python3 scripts/scrape_all_oj_problems.py --fast          # refresh the problem list and status
-python3 scripts/scrape_all_oj_problems.py --only <ids>    # new problems -> problem.md + main.py stub
-python3 "oj/oj<id>-<Name>/main.py"                        # solve and test in VS Code
-python3 scripts/update_readme.py                          # regenerate this README
+python3 .op/scripts/pscp.py scrape --fast         # refresh the problem list and status
+python3 .op/scripts/pscp.py scrape --only <ids>   # fetch details of new problems
+python3 .op/scripts/pscp.py render                # problem.md + main.py stubs on main
+python3 .op/scripts/pscp.py test <id>             # run main.py against the official samples
+python3 .op/scripts/pscp.py archive               # copy solved main.py into solutions/ (OP)
+python3 .op/scripts/pscp.py readme                # regenerate this README
+python3 .op/scripts/pscp.py doctor                # check that nothing is out of sync
 ```
 
 ### 🗺️ Roadmap
 
-แผนจัดระเบียบ repo — registry เดียวเป็น JSON, เลิก ✅ ในชื่อโฟลเดอร์, แยกหน้าที่ branch, รวม scripts เป็น CLI เดียว — อยู่ที่ [`docs/PLAN.md`](docs/PLAN.md)
+แผนจัดระเบียบ repo และขั้นตอนแต่ละ phase อยู่ที่ [`docs/PLAN.md`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/docs/PLAN.md) บน branch `OP`
 
 ---
 
@@ -498,9 +510,11 @@ All Python solutions follow strict PEP-8 standards with docstrings:
 ```python
 """ Problem Name """
 
+
 def main():
     """Problem Name"""
     # solution code here
+
 
 if __name__ == "__main__":
     main()

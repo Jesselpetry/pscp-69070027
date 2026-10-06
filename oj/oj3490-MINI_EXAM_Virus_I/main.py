@@ -1,8 +1,8 @@
-""" [MINI EXAM] Virus I """
+""" Virus I """
 
 
 def main():
-    """[MINI EXAM] Virus I"""
+    """Virus I"""
     # solution code here
 
 

@@ -1,8 +1,8 @@
-""" [ MINI EXAM ] Book shelf """
+""" Book shelf """
 
 
 def main():
-    """[ MINI EXAM ] Book shelf"""
+    """Book shelf"""
     # solution code here
 
 

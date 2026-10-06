@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] หั่นขนมปัง """
+""" หั่นขนมปัง """
 
 
 def main():
-    """[LEARNING LOGS] หั่นขนมปัง"""
+    """หั่นขนมปัง"""
     # solution code here
 
 

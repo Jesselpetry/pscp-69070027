@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Point Sorting """
+""" Point Sorting """
 
 
 def main():
-    """[LEARNING LOGS] Point Sorting"""
+    """Point Sorting"""
     # solution code here
 
 

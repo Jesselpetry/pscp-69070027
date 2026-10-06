@@ -1,8 +1,8 @@
-""" [MINI EXAM] WordSequence I """
+""" WordSequence I """
 
 
 def main():
-    """[MINI EXAM] WordSequence I"""
+    """WordSequence I"""
     # solution code here
 
 

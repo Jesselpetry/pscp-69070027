@@ -1,8 +1,8 @@
-""" [ MINI EXAM ] Adventurer's Backpack """
+""" Adventurer's Backpack """
 
 
 def main():
-    """[ MINI EXAM ] Adventurer's Backpack"""
+    """Adventurer's Backpack"""
     # solution code here
 
 

@@ -1,8 +1,8 @@
-""" [MINI EXAM] Count All  Vowel """
+""" Count All Vowel """
 
 
 def main():
-    """[MINI EXAM] Count All  Vowel"""
+    """Count All Vowel"""
     # solution code here
 
 

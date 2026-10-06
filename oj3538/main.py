@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] B - Fully pair? """
+""" B - Fully pair? """
 
 
 def main():
-    """[LEARNING LOGS] B - Fully pair?"""
+    """B - Fully pair?"""
     # solution code here
 
 

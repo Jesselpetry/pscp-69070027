@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Duplicate I """
+""" Duplicate I """
 
 
 def main():
-    """[LEARNING LOGS] Duplicate I"""
+    """Duplicate I"""
     # solution code here
 
 

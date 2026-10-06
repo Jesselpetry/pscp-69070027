@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Pad Thai """
+""" Pad Thai """
 
 
 def main():
-    """[LEARNING LOGS] Pad Thai"""
+    """Pad Thai"""
     # solution code here
 
 

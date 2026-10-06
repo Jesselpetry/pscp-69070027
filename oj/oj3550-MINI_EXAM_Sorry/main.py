@@ -1,8 +1,8 @@
-""" [ MINI EXAM ] Sorry """
+""" Sorry """
 
 
 def main():
-    """[ MINI EXAM ] Sorry"""
+    """Sorry"""
     # solution code here
 
 

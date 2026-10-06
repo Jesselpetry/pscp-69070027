@@ -1,8 +1,8 @@
-""" [ MINI EXAM ] Dart """
+""" Dart """
 
 
 def main():
-    """[ MINI EXAM ] Dart"""
+    """Dart"""
     # solution code here
 
 

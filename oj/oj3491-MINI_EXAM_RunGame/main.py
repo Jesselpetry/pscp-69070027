@@ -1,8 +1,8 @@
-""" [MINI EXAM] RunGame """
+""" RunGame """
 
 
 def main():
-    """[MINI EXAM] RunGame"""
+    """RunGame"""
     # solution code here
 
 

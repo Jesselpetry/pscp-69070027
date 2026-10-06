@@ -1,8 +1,8 @@
-""" [MINI EXAM] Noodle """
+""" Noodle """
 
 
 def main():
-    """[MINI EXAM] Noodle"""
+    """Noodle"""
     # solution code here
 
 

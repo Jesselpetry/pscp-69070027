@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Impostor """
+""" Impostor """
 
 
 def main():
-    """[LEARNING LOGS] Impostor"""
+    """Impostor"""
     # solution code here
 
 

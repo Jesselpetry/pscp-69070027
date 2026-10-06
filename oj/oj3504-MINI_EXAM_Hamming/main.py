@@ -1,8 +1,8 @@
-""" [MINI EXAM] Hamming """
+""" Hamming """
 
 
 def main():
-    """[MINI EXAM] Hamming"""
+    """Hamming"""
     # solution code here
 
 

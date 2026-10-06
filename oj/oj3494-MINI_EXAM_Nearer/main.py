@@ -1,8 +1,8 @@
-""" [MINI EXAM] Nearer """
+""" Nearer """
 
 
 def main():
-    """[MINI EXAM] Nearer"""
+    """Nearer"""
     # solution code here
 
 

@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Giraffe """
+""" Giraffe """
 
 
 def main():
-    """[LEARNING LOGS] Giraffe"""
+    """Giraffe"""
     # solution code here
 
 

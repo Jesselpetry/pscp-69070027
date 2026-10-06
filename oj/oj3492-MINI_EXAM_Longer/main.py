@@ -1,8 +1,8 @@
-""" [MINI EXAM] Longer """
+""" Longer """
 
 
 def main():
-    """[MINI EXAM] Longer"""
+    """Longer"""
     # solution code here
 
 

@@ -1,8 +1,8 @@
-""" [MINI EXAM] A+B Upgrade """
+""" A+B Upgrade """
 
 
 def main():
-    """[MINI EXAM] A+B Upgrade"""
+    """A+B Upgrade"""
     # solution code here
 
 

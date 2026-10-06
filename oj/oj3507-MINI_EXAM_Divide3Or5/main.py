@@ -1,8 +1,8 @@
-""" [MINI EXAM] Divide3Or5 """
+""" Divide3Or5 """
 
 
 def main():
-    """[MINI EXAM] Divide3Or5"""
+    """Divide3Or5"""
     # solution code here
 
 

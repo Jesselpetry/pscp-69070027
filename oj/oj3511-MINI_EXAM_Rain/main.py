@@ -1,8 +1,8 @@
-""" [MINI EXAM] Rain """
+""" Rain """
 
 
 def main():
-    """[MINI EXAM] Rain"""
+    """Rain"""
     # solution code here
 
 

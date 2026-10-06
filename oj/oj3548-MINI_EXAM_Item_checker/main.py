@@ -1,8 +1,8 @@
-""" [ MINI EXAM ] Item checker """
+""" Item checker """
 
 
 def main():
-    """[ MINI EXAM ] Item checker"""
+    """Item checker"""
     # solution code here
 
 

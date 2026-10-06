@@ -1,8 +1,8 @@
-""" [MINI EXAM] GG-EZ """
+""" GG-EZ """
 
 
 def main():
-    """[MINI EXAM] GG-EZ"""
+    """GG-EZ"""
     # solution code here
 
 

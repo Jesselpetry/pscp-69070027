@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] CuteCat CuteFox """
+""" CuteCat CuteFox """
 
 
 def main():
-    """[LEARNING LOGS] CuteCat CuteFox"""
+    """CuteCat CuteFox"""
     # solution code here
 
 

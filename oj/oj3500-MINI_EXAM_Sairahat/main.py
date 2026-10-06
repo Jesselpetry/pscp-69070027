@@ -1,8 +1,8 @@
-""" [MINI EXAM] Sairahat """
+""" Sairahat """
 
 
 def main():
-    """[MINI EXAM] Sairahat"""
+    """Sairahat"""
     # solution code here
 
 

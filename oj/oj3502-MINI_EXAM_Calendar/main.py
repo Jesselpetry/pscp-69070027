@@ -1,8 +1,8 @@
-""" [MINI EXAM] Calendar """
+""" Calendar """
 
 
 def main():
-    """[MINI EXAM] Calendar"""
+    """Calendar"""
     # solution code here
 
 

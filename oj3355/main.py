@@ -1,8 +1,8 @@
-""" [LEARNING LOGS] Shorten """
+""" Shorten """
 
 
 def main():
-    """[LEARNING LOGS] Shorten"""
+    """Shorten"""
     # solution code here
 
 
