@@ -4,329 +4,653 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="pscp-token" content="__PSCP_TOKEN__">
-<title>PSCP Dashboard</title>
+<title>PSCP · iJudge</title>
 <style>
 :root {
-  --bg: #f6f7f9; --panel: #ffffff; --ink: #1d2330; --muted: #667085; --line: #e3e6ec;
-  --accent: #2f6fde; --accent-soft: #e6eefc; --ok: #1f9d55; --ok-soft: #e3f5eb;
-  --warn: #b7791f; --warn-soft: #fbf0dc; --bad: #c53030; --bad-soft: #fbe5e5;
-  --code: #0f172a; --code-ink: #e2e8f0; --radius: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Thai", "Sukhumvit Set", sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1218; --panel: #171b23; --ink: #e6e8ee; --muted: #98a2b3; --line: #2a303c;
-    --accent: #6c9cf0; --accent-soft: #1d2a42; --ok: #4cc287; --ok-soft: #15291f;
-    --warn: #e2b04a; --warn-soft: #2d2412; --bad: #f07878; --bad-soft: #321818;
-    --code: #0b0e13; --code-ink: #d6dbe4;
-  }
+  --pink: #db2777; --pink-strong: #be185d; --pink-soft: #fdf2f8; --pink-line: #fbcfe8;
+  --bg: #fafafa; --panel: #ffffff; --ink: #111827; --muted: #6b7280; --faint: #9ca3af;
+  --line: #ececf0; --hover: #f9fafb;
+  --ok: #16a34a; --ok-soft: #f0fdf4; --warn: #b45309; --warn-soft: #fffbeb;
+  --bad: #dc2626; --bad-soft: #fef2f2; --info: #2563eb; --info-soft: #eff6ff;
+  --code: #1f2937; --code-ink: #f3f4f6;
+  --radius: 14px; --shadow: 0 1px 2px rgba(17,24,39,.04), 0 1px 3px rgba(17,24,39,.06);
+  font-family: "IBM Plex Sans Thai", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5; }
-header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--line);
-  display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap; }
-header h1 { font-size: 16px; margin: 0; }
-nav { display: flex; gap: 4px; flex-wrap: wrap; }
-nav button { background: none; border: 0; padding: 7px 12px; border-radius: 8px; color: var(--muted);
-  font: inherit; cursor: pointer; }
-nav button.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+[hidden] { display: none !important; }
+a { color: var(--pink); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; background: #f3f4f6; padding: 1px 5px; border-radius: 5px; }
+
+/* ---------- buttons & inputs ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: inherit; font-weight: 500;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 8px 14px; border-radius: 10px;
+  cursor: pointer; text-decoration: none; transition: background .15s, border-color .15s; white-space: nowrap; }
+.btn:hover { background: var(--hover); border-color: #dcdce2; }
+.btn.primary { background: var(--pink); border-color: var(--pink); color: #fff; }
+.btn.primary:hover { background: var(--pink-strong); border-color: var(--pink-strong); }
+.btn.soft { background: var(--pink-soft); border-color: var(--pink-line); color: var(--pink-strong); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn.ghost:hover { background: var(--hover); color: var(--ink); }
+.btn.danger { color: var(--bad); }
+.btn.lg { padding: 11px 18px; font-size: 15px; border-radius: 12px; }
+.btn.sm { padding: 5px 10px; font-size: 13px; border-radius: 8px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+input, select, textarea { font: inherit; color: var(--ink); background: #fff; border: 1px solid #e2e2e8;
+  border-radius: 10px; padding: 9px 12px; width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--pink); box-shadow: 0 0 0 3px var(--pink-soft); }
+input[type=checkbox], input[type=radio] { width: 16px; height: 16px; accent-color: var(--pink); padding: 0; margin: 0; }
+label.check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; color: var(--ink); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > span { font-size: 13px; color: var(--muted); }
+
+/* ---------- layout ---------- */
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 12px; }
 .spacer { flex: 1; }
-.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
-  font-size: 12px; background: var(--line); color: var(--ink); white-space: nowrap; }
-.chip.ok { background: var(--ok-soft); color: var(--ok); }
-.chip.warn { background: var(--warn-soft); color: var(--warn); }
-.chip.bad { background: var(--bad-soft); color: var(--bad); }
-main { max-width: 1200px; margin: 0 auto; padding: 20px; }
-section[hidden] { display: none; }
-.grid { display: grid; gap: 14px; }
-.cards { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
-.two { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; }
-.panel h2 { font-size: 15px; margin: 0 0 12px; }
-.stat .num { font-size: 28px; font-weight: 700; }
-.stat .label { color: var(--muted); font-size: 12px; }
-.stat .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
-.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; position: relative; }
-.bar > i { position: absolute; inset: 0 auto 0 0; background: var(--ok); border-radius: 99px; }
-.bar > i.solved { background: var(--accent); opacity: .35; }
-table { width: 100%; border-collapse: collapse; }
-th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-th { color: var(--muted); font-weight: 600; font-size: 12px; }
-tbody tr.click { cursor: pointer; }
-tbody tr.click:hover { background: var(--accent-soft); }
-.muted { color: var(--muted); }
-.small { font-size: 12px; }
-.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
-  border-radius: 8px; padding: 7px 10px; }
-input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-button.btn { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
-  padding: 7px 14px; border-radius: 8px; cursor: pointer; }
-button.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-button.btn.danger { color: var(--bad); }
-button.btn:disabled { opacity: .5; cursor: not-allowed; }
-.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.stack { display: flex; flex-direction: column; gap: 10px; }
-label.opt { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
-.tool { display: flex; flex-direction: column; gap: 10px; }
-.tool p { margin: 0; color: var(--muted); font-size: 13px; }
-pre.console { background: var(--code); color: var(--code-ink); padding: 12px; border-radius: 8px; margin: 0;
-  max-height: 420px; overflow: auto; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
-.tabs2 { display: flex; gap: 6px; margin-bottom: 12px; }
-.alert { padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); font-size: 13px; }
-.alert.bad { background: var(--bad-soft); color: var(--bad); }
-.alert.ok { background: var(--ok-soft); color: var(--ok); }
-dialog { width: min(920px, 94vw); max-height: 90vh; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--panel); color: var(--ink); padding: 0; }
-dialog::backdrop { background: rgba(0,0,0,.45); }
-.dlg-head { display: flex; gap: 10px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-.dlg-body { padding: 18px; overflow: auto; max-height: calc(90vh - 60px); }
-.md h1 { font-size: 18px; } .md h2 { font-size: 15px; margin-top: 18px; } .md h3 { font-size: 14px; }
-.md blockquote { margin: 0; padding: 4px 12px; border-left: 3px solid var(--line); color: var(--muted); }
-.md pre { background: var(--code); color: var(--code-ink); padding: 10px; border-radius: 8px; overflow: auto; }
-.md code { font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
-.md img { max-width: 100%; }
-.pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 11px; background: var(--line); margin-right: 3px; }
-.pill.ll { background: var(--accent-soft); color: var(--accent); }
-.pill.rec { background: var(--warn-soft); color: var(--warn); }
-.pill.mid, .pill.mini { background: var(--bad-soft); color: var(--bad); }
-.status-Passed { color: var(--ok); font-weight: 600; }
-.status-Not.Passed { color: var(--bad); }
-@media (max-width: 640px) { main { padding: 12px; } .hide-sm { display: none; } }
+.muted { color: var(--muted); } .faint { color: var(--faint); } .small { font-size: 12.5px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; min-width: 0; }
+.card h2 { font-size: 15px; font-weight: 600; margin: 0 0 14px; }
+.card h3 { font-size: 14px; font-weight: 600; margin: 0; }
+.grid { display: grid; gap: 16px; }
+.g4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.g2 { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+@media (max-width: 900px) { .g2 { grid-template-columns: 1fr; } }
+
+/* ---------- login ---------- */
+#login { min-height: 100vh; display: grid; place-items: center; padding: 24px;
+  background: radial-gradient(1200px 500px at 50% -10%, var(--pink-soft), transparent 70%), var(--bg); }
+.login-card { width: min(440px, 100%); padding: 32px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+.brand .logo { width: 30px; height: 30px; border-radius: 9px; background: var(--pink); color: #fff; display: grid; place-items: center;
+  font-size: 13px; font-weight: 800; letter-spacing: -.5px; }
+.login-card h1 { font-size: 22px; margin: 22px 0 4px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: #f3f4f6; border-radius: 11px; padding: 4px; margin: 20px 0 16px; }
+.seg button { font: inherit; border: 0; background: transparent; padding: 8px; border-radius: 8px; cursor: pointer; color: var(--muted); font-weight: 500; }
+.seg button.on { background: #fff; color: var(--ink); box-shadow: var(--shadow); }
+details.help { margin-top: 16px; font-size: 13px; color: var(--muted); }
+details.help summary { cursor: pointer; color: var(--pink-strong); }
+details.help ol { padding-left: 18px; margin: 8px 0 0; }
+
+/* ---------- top bar ---------- */
+header.top { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1240px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 22px; }
+nav.tabs { display: flex; gap: 2px; height: 100%; }
+nav.tabs button { font: inherit; border: 0; background: none; padding: 0 14px; color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent; font-weight: 500; }
+nav.tabs button:hover { color: var(--ink); }
+nav.tabs button.on { color: var(--pink-strong); border-bottom-color: var(--pink); }
+.user { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--pink-soft); color: var(--pink-strong);
+  display: grid; place-items: center; font-weight: 700; font-size: 13px; border: 1px solid var(--pink-line); }
+.user .who { line-height: 1.2; } .user .who b { display: block; font-size: 13px; } .user .who span { font-size: 12px; color: var(--muted); }
+main { max-width: 1240px; margin: 0 auto; padding: 28px 24px 120px; }
+.page-head { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.page-head h1 { font-size: 22px; margin: 0; }
+.page-head p { margin: 2px 0 0; color: var(--muted); }
+@media (max-width: 720px) { .hide-sm { display: none !important; } }
+@media (max-width: 720px) { .top-in { padding: 0 14px; gap: 10px; } .user .who { display: none; } main { padding: 18px 14px 120px; } nav.tabs button { padding: 0 8px; } }
+
+/* ---------- overview ---------- */
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat .label { color: var(--muted); font-size: 13px; }
+.stat .num { font-size: 30px; font-weight: 700; letter-spacing: -.5px; }
+.stat .num small { font-size: 15px; color: var(--faint); font-weight: 500; }
+.stat.hero { flex-direction: row; align-items: center; gap: 18px; }
+.ring { width: 76px; height: 76px; flex: none; }
+.ring circle { fill: none; stroke-width: 8; }
+.ring .bg { stroke: var(--pink-soft); } .ring .fg { stroke: var(--pink); stroke-linecap: round; transition: stroke-dashoffset .6s; }
+.ring text { font-size: 15px; font-weight: 700; fill: var(--ink); }
+.bar { height: 8px; background: #f3f4f6; border-radius: 99px; overflow: hidden; position: relative; }
+.bar i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; }
+.bar i.code { background: var(--pink-line); } .bar i.pass { background: var(--pink); }
+.week-row { display: grid; grid-template-columns: 74px 1fr 64px; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+.week-row:last-child { border-bottom: 0; }
+.week-row:hover .wl { color: var(--pink-strong); }
+.week-row .wl { font-weight: 600; font-size: 13px; }
+.week-row .wt { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+.week-row .wn { text-align: right; font-size: 13px; color: var(--muted); }
+.legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.list-row { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+.list-row:last-child { border-bottom: 0; }
+.list-row:hover .t { color: var(--pink-strong); }
+.list-row .id { font-weight: 600; font-size: 13px; width: 42px; color: var(--muted); }
+.list-row .t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; font-size: 13px;
+  background: var(--warn-soft); color: var(--warn); border: 1px solid #fde68a; }
+.notice.pink { background: var(--pink-soft); color: var(--pink-strong); border-color: var(--pink-line); }
+.notice.bad { background: var(--bad-soft); color: var(--bad); border-color: #fecaca; }
+.notice.ok { background: var(--ok-soft); color: var(--ok); border-color: #bbf7d0; }
+
+/* ---------- badges ---------- */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 99px; font-size: 12px; font-weight: 500; white-space: nowrap;
+  background: #f3f4f6; color: var(--muted); }
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .8; }
+.badge.plain::before { display: none; }
+.badge.ok { background: var(--ok-soft); color: var(--ok); }
+.badge.bad { background: var(--bad-soft); color: var(--bad); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.badge.pink { background: var(--pink-soft); color: var(--pink-strong); }
+.badge.info { background: var(--info-soft); color: var(--info); }
+.tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 6px; background: #f3f4f6; color: var(--muted); margin-left: 4px; font-weight: 500; }
+.tag.ll { background: var(--info-soft); color: var(--info); }
+.tag.rec { background: var(--warn-soft); color: var(--warn); }
+.tag.exam { background: var(--pink-soft); color: var(--pink-strong); }
+
+/* ---------- problems table ---------- */
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.toolbar input { max-width: 260px; } .toolbar select { width: auto; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip { font: inherit; font-size: 13px; border: 1px solid var(--line); background: #fff; color: var(--muted); padding: 5px 12px; border-radius: 99px; cursor: pointer; }
+.chip.on { border-color: var(--pink); background: var(--pink-soft); color: var(--pink-strong); font-weight: 500; }
+.table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 12px; font-weight: 600; color: var(--muted); background: #fcfcfd; position: sticky; top: 0; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.click { cursor: pointer; } tbody tr.click:hover { background: var(--hover); }
+tbody tr.sel { background: var(--pink-soft); }
+td.num, th.num { text-align: right; } td.chk, th.chk { width: 36px; }
+.empty { padding: 40px; text-align: center; color: var(--muted); }
+
+/* ---------- selection tray ---------- */
+.tray { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 20; display: flex; gap: 12px; align-items: center;
+  background: var(--ink); color: #fff; padding: 10px 10px 10px 18px; border-radius: 14px; box-shadow: 0 10px 30px rgba(17,24,39,.25); }
+.tray .btn.ghost { color: #d1d5db; } .tray .btn.ghost:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+/* ---------- drawer & modal ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(17,24,39,.35); z-index: 30; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 100vw); background: #fff; z-index: 31; display: flex; flex-direction: column;
+  box-shadow: -10px 0 40px rgba(17,24,39,.15); animation: slide .2s ease-out; }
+@keyframes slide { from { transform: translateX(30px); opacity: .6; } }
+.drawer-head { padding: 18px 22px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; align-items: flex-start; }
+.drawer-head h2 { margin: 0; font-size: 17px; }
+.drawer-body { padding: 20px 22px; overflow: auto; flex: 1; }
+.modal { position: fixed; z-index: 31; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(820px, calc(100vw - 24px));
+  max-height: calc(100vh - 40px); background: #fff; border-radius: 18px; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(17,24,39,.25); }
+.modal-head { padding: 20px 24px 0; display: flex; gap: 10px; align-items: flex-start; }
+.modal-head h2 { margin: 0; font-size: 18px; }
+.modal-body { padding: 18px 24px; overflow: auto; flex: 1; }
+.modal-foot { padding: 14px 24px 20px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--line); flex-wrap: wrap; align-items: center; }
+.steps { display: flex; gap: 8px; margin-top: 6px; font-size: 12.5px; color: var(--faint); }
+.steps span.on { color: var(--pink-strong); font-weight: 600; }
+.option { display: flex; gap: 12px; align-items: flex-start; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.option:hover { border-color: #dcdce2; }
+.option.on { border-color: var(--pink); background: var(--pink-soft); }
+.option input[type=radio] { margin-top: 3px; }
+.option .t { font-weight: 600; } .option .d { font-size: 12.5px; color: var(--muted); }
+.option select { margin-top: 8px; width: auto; }
+.seg-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.seg-tabs button { font: inherit; border: 0; background: none; padding: 8px 12px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+.seg-tabs button.on { color: var(--pink-strong); border-bottom-color: var(--pink); font-weight: 500; }
+
+/* ---------- markdown & console ---------- */
+.md { font-size: 14.5px; line-height: 1.7; }
+.md h1 { font-size: 19px; margin: 0 0 10px; } .md h2 { font-size: 15.5px; margin: 22px 0 8px; } .md h3 { font-size: 14px; margin: 14px 0 6px; }
+.md blockquote { margin: 0; padding: 2px 12px; border-left: 3px solid var(--pink-line); color: var(--muted); font-size: 13px; }
+.md pre { background: #f6f7f9; border: 1px solid var(--line); padding: 10px 12px; border-radius: 10px; overflow: auto; font-size: 13px; }
+.md hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0; }
+.md img { max-width: 100%; border-radius: 8px; }
+pre.code, pre.console { margin: 0; padding: 14px 16px; border-radius: 12px; overflow: auto; font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+pre.code { background: #f6f7f9; border: 1px solid var(--line); color: var(--ink); }
+pre.console { background: var(--code); color: var(--code-ink); max-height: 360px; }
+
+/* ---------- tools ---------- */
+.tool { display: flex; flex-direction: column; gap: 12px; }
+.tool .head { display: flex; gap: 12px; align-items: flex-start; }
+.tool .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--pink-soft); color: var(--pink-strong); display: grid; place-items: center; flex: none; font-weight: 700; }
+.tool p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.tool details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+.tool details[open] summary { margin-bottom: 10px; }
+.tool .opts { display: grid; gap: 10px; }
+.tool > .row:last-child { margin-top: auto; padding-top: 4px; }
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: #fff; border-top: 1px solid var(--line); box-shadow: 0 -6px 24px rgba(17,24,39,.06); }
+.dock-in { max-width: 1240px; margin: 0 auto; padding: 10px 24px; }
+.dock pre.console { margin-top: 10px; max-height: 280px; }
+.spin { width: 14px; height: 14px; border: 2px solid var(--pink-line); border-top-color: var(--pink); border-radius: 50%; animation: rot .8s linear infinite; display: inline-block; }
+@keyframes rot { to { transform: rotate(360deg); } }
+.progress { height: 6px; background: #f3f4f6; border-radius: 99px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--pink); width: 0; transition: width .3s; }
 </style>
 </head>
 <body>
-<header>
-  <h1>PSCP Dashboard</h1>
-  <nav id="nav">
-    <button data-tab="overview" class="active">ภาพรวม</button>
-    <button data-tab="problems">โจทย์</button>
-    <button data-tab="tools">เครื่องมือ</button>
-    <button data-tab="account">บัญชี iJudge</button>
-  </nav>
-  <div class="spacer"></div>
-  <span id="authChip" class="chip">กำลังตรวจ…</span>
-</header>
 
-<main>
-<!-- ===================== overview ===================== -->
-<section id="tab-overview">
-  <div class="row" style="margin-bottom:14px">
-    <button class="btn primary" id="quickSync">อัปเดตสถานะจาก iJudge</button>
-    <button class="btn" id="quickRefresh">รีเฟรชหน้า</button>
-    <span class="muted small" id="scrapedAt"></span>
-  </div>
-  <div class="grid cards" id="statCards"></div>
-  <div id="alerts" class="stack" style="margin:14px 0"></div>
-  <div class="grid two">
-    <div class="panel">
-      <h2>ความคืบหน้ารายสัปดาห์</h2>
-      <table><thead><tr><th>Week</th><th class="hide-sm">หัวข้อ</th><th>ผ่าน</th><th style="width:30%"></th></tr></thead>
-        <tbody id="weekRows"></tbody></table>
-      <p class="muted small">แถบเขียว = ผ่านบน iJudge · แถบฟ้าจาง = มีโค้ดในเครื่อง</p>
+<!-- ===================== login ===================== -->
+<section id="login" hidden>
+  <div class="card login-card">
+    <div class="brand"><span class="logo">OJ</span> PSCP · iJudge</div>
+    <h1>เข้าสู่ระบบ iJudge</h1>
+    <p class="muted" style="margin:0">เชื่อมบัญชีเพื่อดูความคืบหน้าและส่งโค้ดของคุณ</p>
+    <div class="seg">
+      <button data-mode="token" class="on">Access token</button>
+      <button data-mode="password">Username / Password</button>
     </div>
-    <div class="stack">
-      <div class="panel">
-        <h2>หมวด</h2>
-        <table><tbody id="catRows"></tbody></table>
-      </div>
-      <div class="panel">
-        <h2>ใกล้หมดเขต (ยังไม่ผ่าน)</h2>
-        <table><tbody id="dueRows"></tbody></table>
-      </div>
-    </div>
+    <form id="fToken" class="col">
+      <label class="field"><span>Access token หรือ cookie</span>
+        <textarea id="tokenIn" rows="3" placeholder="eyJhbGciOi… หรือ access_token=eyJ…" autocomplete="off" spellcheck="false"></textarea></label>
+      <button class="btn primary lg" type="submit">เข้าสู่ระบบ</button>
+    </form>
+    <form id="fPass" class="col" hidden>
+      <label class="field"><span>Username</span><input id="userIn" placeholder="it69070027" autocomplete="username"></label>
+      <label class="field"><span>Password</span><input id="passIn" type="password" autocomplete="current-password"></label>
+      <button class="btn primary lg" type="submit">เข้าสู่ระบบ</button>
+    </form>
+    <div id="loginMsg" style="margin-top:14px"></div>
+    <details class="help">
+      <summary>หา access token ยังไง?</summary>
+      <ol>
+        <li>เปิด ijudge.it.kmitl.ac.th แล้ว login ตามปกติ</li>
+        <li>กด F12 → แท็บ Application (Chrome) / Storage (Firefox) → Cookies</li>
+        <li>คัดลอกค่า <code>access_token</code> มาวางด้านบน</li>
+      </ol>
+      <p style="margin:8px 0 0">token บันทึกไว้ในเครื่องเท่านั้น (<code>.op/submit_config.json</code>) · รหัสผ่านใช้ขอ token ครั้งเดียว ไม่ถูกบันทึก</p>
+    </details>
   </div>
 </section>
 
-<!-- ===================== problems ===================== -->
-<section id="tab-problems" hidden>
-  <div class="panel">
-    <div class="filters">
-      <input id="fSearch" placeholder="ค้นหา id หรือชื่อ" style="flex:1;min-width:180px">
-      <select id="fWeek"><option value="">ทุก week</option></select>
-      <select id="fStatus">
-        <option value="">ทุกสถานะ</option><option>Passed</option><option>Not Passed</option><option>Not Submit</option>
-      </select>
-      <select id="fLocal">
-        <option value="">โค้ดในเครื่อง: ทั้งหมด</option><option value="solved">มีโค้ด</option><option value="stub">stub (ยังไม่ทำ)</option>
-      </select>
-      <select id="fCat">
-        <option value="">ทุกหมวด</option><option value="learning_log">Learning Log</option>
-        <option value="recommended">Recommended</option><option value="midterm">Midterm</option><option value="mini_exam">Mini Exam</option>
-      </select>
-    </div>
-    <div class="muted small" id="pCount" style="margin-bottom:6px"></div>
-    <div style="overflow:auto">
-      <table>
-        <thead><tr><th>ID</th><th>ชื่อ</th><th>Week</th><th>iJudge</th><th>ในเครื่อง</th><th class="hide-sm">หมดเขต</th><th class="hide-sm">% ผ่าน (ทั้งคลาส)</th></tr></thead>
-        <tbody id="pRows"></tbody>
-      </table>
-    </div>
+<!-- ===================== syncing ===================== -->
+<section id="syncing" hidden style="min-height:100vh;display:grid;place-items:center;padding:24px">
+  <div class="card" style="width:min(440px,100%);text-align:center;padding:36px">
+    <div class="spin" style="width:28px;height:28px;border-width:3px"></div>
+    <h2 style="margin:16px 0 4px;font-size:18px">กำลังดึงข้อมูลของ <span id="syncName"></span></h2>
+    <p class="muted small" id="syncLine" style="margin:0;min-height:20px">เชื่อมต่อ iJudge…</p>
+    <button class="btn ghost sm" id="syncSkip" style="margin-top:14px">ข้าม ใช้ข้อมูลเดิม</button>
   </div>
 </section>
 
-<!-- ===================== tools ===================== -->
-<section id="tab-tools" hidden>
-  <div class="grid two" id="toolCards"></div>
-  <div class="panel" style="margin-top:14px">
-    <div class="row" style="margin-bottom:8px">
-      <h2 style="margin:0">Output</h2>
-      <span id="jobState" class="chip">ว่าง</span>
-      <div class="spacer"></div>
-      <button class="btn danger" id="cancelJob" disabled>หยุด</button>
-      <button class="btn" id="clearOut">ล้าง</button>
-    </div>
-    <pre class="console" id="out">เลือกคำสั่งด้านบนแล้วกด Run</pre>
-  </div>
-  <p class="muted small">การส่งโค้ดเข้า iJudge (<code>submit</code>) ไม่มีในหน้านี้ — ใช้ <code>python3 .op/scripts/pscp.py submit</code> ใน terminal</p>
-</section>
-
-<!-- ===================== account ===================== -->
-<section id="tab-account" hidden>
-  <div class="grid two">
-    <div class="panel stack">
-      <h2>สถานะ</h2>
-      <div id="authDetail" class="muted">—</div>
-      <div class="row">
-        <button class="btn" id="authCheck">ตรวจกับ iJudge</button>
-        <button class="btn danger" id="authLogout">ลบ cookie ที่บันทึก</button>
-      </div>
-      <p class="muted small">cookie บันทึกใน <code>.op/submit_config.json</code> (gitignored) · รหัสผ่านไม่ถูกบันทึกที่ไหนเลย ใช้แค่ขอ cookie ครั้งเดียว</p>
-    </div>
-    <div class="panel">
-      <div class="tabs2">
-        <button class="btn primary" data-auth="cookie">ใช้ cookie</button>
-        <button class="btn" data-auth="password">username / password</button>
-      </div>
-      <form id="formCookie" class="stack">
-        <label class="muted small">วาง cookie หรือ access_token จาก browser (DevTools → Network → request ใดก็ได้ → Cookie)</label>
-        <textarea id="cookieIn" rows="4" placeholder="access_token=eyJ..." autocomplete="off" spellcheck="false"></textarea>
-        <div class="row"><button class="btn primary" type="submit">ตรวจและบันทึก</button></div>
-      </form>
-      <form id="formPass" class="stack" hidden>
-        <input id="userIn" placeholder="username (เช่น it69070027)" autocomplete="username">
-        <input id="passIn" type="password" placeholder="password" autocomplete="current-password">
-        <div class="row"><button class="btn primary" type="submit">เข้าสู่ระบบ</button></div>
-      </form>
-      <div id="authMsg" style="margin-top:10px"></div>
-    </div>
-  </div>
-</section>
-</main>
-
-<dialog id="dlg">
-  <div class="dlg-head">
-    <strong id="dlgTitle"></strong>
+<!-- ===================== app ===================== -->
+<div id="app" hidden>
+  <header class="top"><div class="top-in">
+    <div class="brand"><span class="logo">OJ</span><span class="hide-sm">PSCP</span></div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="overview" class="on">ภาพรวม</button>
+      <button data-tab="problems">โจทย์</button>
+      <button data-tab="tools">เครื่องมือ</button>
+    </nav>
     <div class="spacer"></div>
-    <button class="btn" id="dlgTest">ทดสอบ sample</button>
-    <a class="btn" id="dlgLink" target="_blank" rel="noopener" style="text-decoration:none">เปิดใน iJudge</a>
-    <button class="btn" id="dlgClose">ปิด</button>
-  </div>
-  <div class="dlg-body">
-    <div class="tabs2">
-      <button class="btn primary" data-dtab="md">โจทย์</button>
-      <button class="btn" data-dtab="code">main.py</button>
+    <button class="btn sm" id="syncBtn" title="ดึงสถานะล่าสุดจาก iJudge">อัปเดตจาก iJudge</button>
+    <div class="user">
+      <div class="avatar" id="avatar">?</div>
+      <div class="who"><b id="whoName"></b><span id="whoUser"></span></div>
+      <button class="btn ghost sm" id="logoutBtn">ออกจากระบบ</button>
     </div>
-    <div id="dlgMd" class="md"></div>
-    <pre id="dlgCode" class="console" hidden></pre>
-    <div id="dlgFolder" class="muted small"></div>
+  </div></header>
+
+  <main>
+    <!-- overview -->
+    <section id="tab-overview">
+      <div class="page-head">
+        <div><h1 id="hello">สวัสดี</h1><p id="updatedAt"></p></div>
+      </div>
+      <div class="grid g4" id="stats"></div>
+      <div class="col" id="notices" style="margin:16px 0"></div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="row" style="margin-bottom:6px"><h2 style="margin:0">ความคืบหน้ารายสัปดาห์</h2></div>
+          <div id="weeks"></div>
+          <div class="legend"><span><i style="background:var(--pink)"></i>ผ่านบน iJudge</span><span><i style="background:var(--pink-line)"></i>มีโค้ดในเครื่อง</span></div>
+        </div>
+        <div class="col">
+          <div class="card"><h2>ใกล้หมดเขต · ยังไม่ผ่าน</h2><div id="upcoming"></div></div>
+          <div class="card"><h2>หมวด</h2><div id="cats" class="col" style="gap:14px"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- problems -->
+    <section id="tab-problems" hidden>
+      <div class="page-head">
+        <div><h1>โจทย์</h1><p>คลิกที่แถวเพื่ออ่านโจทย์ · ติ๊กเลือกหลายข้อเพื่อส่งพร้อมกัน</p></div>
+        <div class="spacer"></div>
+        <button class="btn primary" id="openSubmit">ส่งเข้า iJudge</button>
+      </div>
+      <div class="chips" id="quick">
+        <button class="chip on" data-q="">ทั้งหมด</button>
+        <button class="chip" data-q="ready">พร้อมส่ง (มีโค้ด ยังไม่ผ่าน)</button>
+        <button class="chip" data-q="todo">ยังไม่ได้เขียน</button>
+        <button class="chip" data-q="passed">ผ่านแล้ว</button>
+        <button class="chip" data-q="learning_log">Learning Log</button>
+        <button class="chip" data-q="exam">Midterm / Mini Exam</button>
+      </div>
+      <div class="toolbar">
+        <input id="fSearch" placeholder="ค้นหา id หรือชื่อโจทย์">
+        <select id="fWeek"><option value="">ทุก week</option></select>
+        <span class="spacer"></span>
+        <span class="muted small" id="pCount"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th class="chk"><input type="checkbox" id="selAll" title="เลือกทั้งหมดที่แสดง"></th>
+            <th>ID</th><th>โจทย์</th><th>Week</th><th>iJudge</th><th>โค้ดในเครื่อง</th><th class="hide-sm">หมดเขต</th>
+          </tr></thead>
+          <tbody id="pRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- tools -->
+    <section id="tab-tools" hidden>
+      <div class="page-head"><div><h1>เครื่องมือ</h1><p>กดปุ่มเดียวจบ · ตั้งค่าเพิ่มเติมซ่อนอยู่ใต้แต่ละการ์ด</p></div></div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))" id="tools"></div>
+    </section>
+  </main>
+
+  <div class="tray" id="tray" hidden>
+    <span id="trayText"></span>
+    <button class="btn ghost sm" id="trayClear">ล้าง</button>
+    <button class="btn primary sm" id="traySubmit">ส่งเข้า iJudge</button>
   </div>
-</dialog>
+
+  <div class="dock" id="dock" hidden><div class="dock-in">
+    <div class="row">
+      <span id="dockIcon"></span><b id="dockTitle"></b><span class="muted small" id="dockState"></span>
+      <div class="spacer"></div>
+      <button class="btn sm danger" id="dockCancel">หยุด</button>
+      <button class="btn sm" id="dockToggle">ซ่อน log</button>
+      <button class="btn ghost sm" id="dockClose">ปิด</button>
+    </div>
+    <pre class="console" id="dockOut"></pre>
+  </div></div>
+</div>
+
+<!-- problem drawer -->
+<div id="drawer" hidden>
+  <div class="scrim" data-close></div>
+  <aside class="drawer">
+    <div class="drawer-head">
+      <div style="min-width:0"><div class="muted small" id="dMeta"></div><h2 id="dTitle"></h2></div>
+      <div class="spacer"></div>
+      <button class="btn ghost sm" data-close>ปิด</button>
+    </div>
+    <div class="drawer-body">
+      <div class="row" style="margin-bottom:16px">
+        <button class="btn primary sm" id="dSubmit">ส่งข้อนี้เข้า iJudge</button>
+        <button class="btn sm" id="dTest">ทดสอบกับ sample</button>
+        <a class="btn sm" id="dLink" target="_blank" rel="noopener">เปิดใน iJudge ↗</a>
+      </div>
+      <div id="dTestOut" hidden style="margin-bottom:16px"><pre class="console"></pre></div>
+      <div class="seg-tabs"><button data-dt="md" class="on">โจทย์</button><button data-dt="code">main.py</button></div>
+      <div id="dMd" class="md"></div>
+      <pre id="dCode" class="code" hidden></pre>
+      <p class="faint small" id="dFolder" style="margin-top:14px"></p>
+    </div>
+  </aside>
+</div>
+
+<!-- submit modal -->
+<div id="submitModal" hidden>
+  <div class="scrim"></div>
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>ส่งโค้ดเข้า iJudge</h2>
+        <div class="steps"><span data-step="1">1 เลือกโจทย์</span>›<span data-step="2">2 ตรวจรายการ</span>›<span data-step="3">3 ผลการส่ง</span></div></div>
+      <div class="spacer"></div>
+      <button class="btn ghost sm" id="sClose">ปิด</button>
+    </div>
+    <div class="modal-body">
+      <!-- step 1 -->
+      <div id="s1" class="col">
+        <label class="option" data-mode="selected"><input type="radio" name="smode" value="selected">
+          <div><div class="t">ข้อที่เลือกไว้</div><div class="d" id="sSelDesc"></div></div></label>
+        <label class="option" data-mode="week"><input type="radio" name="smode" value="week">
+          <div><div class="t">ทั้ง week</div><div class="d">ทุกข้อใน week ที่เลือก</div>
+            <select id="sWeek"></select></div></label>
+        <label class="option" data-mode="ready"><input type="radio" name="smode" value="ready">
+          <div><div class="t">ทุกข้อที่มีโค้ดแต่ยังไม่ผ่าน</div><div class="d" id="sReadyDesc"></div></div></label>
+        <label class="option" data-mode="all"><input type="radio" name="smode" value="all">
+          <div><div class="t">ทุกข้อ</div><div class="d">ทุกข้อที่มี main.py ที่เขียนแล้ว</div></div></label>
+        <div class="row" style="gap:20px;margin-top:4px">
+          <label class="check"><input type="checkbox" id="sSkipPassed" checked> ข้ามข้อที่ผ่านแล้ว</label>
+          <label class="check"><input type="checkbox" id="sIncLL"> รวม Learning Log</label>
+        </div>
+      </div>
+      <!-- step 2 -->
+      <div id="s2" hidden>
+        <div id="sSummary" style="margin-bottom:12px"></div>
+        <div class="table-wrap" style="max-height:46vh">
+          <table><thead><tr><th>ID</th><th>โจทย์</th><th>ไฟล์</th><th>สถานะ</th></tr></thead><tbody id="sPreview"></tbody></table>
+        </div>
+      </div>
+      <!-- step 3 -->
+      <div id="s3" hidden>
+        <div class="row" style="margin-bottom:10px"><b id="sProgText"></b><span class="spacer"></span><span class="muted small" id="sElapsed"></span></div>
+        <div class="progress" style="margin-bottom:14px"><i id="sProg"></i></div>
+        <div class="table-wrap" style="max-height:46vh">
+          <table><thead><tr><th>ID</th><th>โจทย์</th><th>ผล</th><th class="num">Score</th><th class="num">PEP8</th><th class="hide-sm">Sub #</th></tr></thead><tbody id="sResults"></tbody></table>
+        </div>
+        <div id="sDone" style="margin-top:12px"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="muted small" id="sFootNote"></span><span class="spacer"></span>
+      <button class="btn" id="sBack" hidden>ย้อนกลับ</button>
+      <button class="btn danger" id="sCancel" hidden>หยุดส่ง</button>
+      <button class="btn primary" id="sNext">ถัดไป</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const TOKEN = document.querySelector('meta[name="pscp-token"]').content;
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function api(path, body) {
-  const opt = body === undefined ? {} : {
-    method: 'POST', headers: {'Content-Type': 'application/json', 'X-PSCP-Token': TOKEN},
-    body: JSON.stringify(body)};
+  const opt = body === undefined ? {} : {method: 'POST',
+    headers: {'Content-Type': 'application/json', 'X-PSCP-Token': TOKEN}, body: JSON.stringify(body)};
   const r = await fetch(path, opt);
   const data = await r.json().catch(() => ({error: r.statusText}));
   if (!r.ok) throw new Error(data.error || r.statusText);
   return data;
 }
+function notice(kind, html) { return `<div class="notice ${kind}">${html}</div>`; }
+function show(id) { ['login', 'syncing', 'app'].forEach(x => $('#' + x).hidden = x !== id); }
 
-// ---------- tabs ----------
+// ===================== auth flow =====================
+let USER = null;
+async function boot() {
+  try {
+    const a = await api('/api/auth?check=1');
+    if (a.valid) { setUser(a); show('app'); await loadAll(); routeOnce(); return; }
+    if (a.has_cookie) $('#loginMsg').innerHTML = notice('bad', 'token เดิมหมดอายุแล้ว — เข้าสู่ระบบใหม่');
+  } catch (e) { $('#loginMsg').innerHTML = notice('bad', esc(e.message)); }
+  show('login');
+}
+function setUser(a) {
+  USER = a;
+  const name = a.fullname || a.username || '';
+  $('#whoName').textContent = name; $('#whoUser').textContent = a.username || '';
+  $('#avatar').textContent = (name.trim()[0] || '?').toUpperCase();
+  $('#hello').textContent = `สวัสดี, ${(a.fullname || a.username || '').split(' ')[0]}`;
+}
+$$('.seg button').forEach(b => b.onclick = () => {
+  $$('.seg button').forEach(x => x.classList.toggle('on', x === b));
+  $('#fToken').hidden = b.dataset.mode !== 'token'; $('#fPass').hidden = b.dataset.mode !== 'password';
+  $('#loginMsg').innerHTML = '';
+});
+async function afterLogin(r) {
+  if (!r.ok) { $('#loginMsg').innerHTML = notice('bad', esc(r.error)); return; }
+  setUser(r);
+  $('#syncName').textContent = r.fullname || r.username;
+  show('syncing');
+  await syncFromIjudge(line => $('#syncLine').textContent = line);
+  show('app'); await loadAll(); routeOnce();
+}
+function busy(form, on) { $$('button', form).forEach(b => b.disabled = on); if (on) $('#loginMsg').innerHTML = notice('pink', 'กำลังตรวจกับ iJudge…'); }
+$('#fToken').onsubmit = async e => {
+  e.preventDefault(); busy(e.target, true);
+  try { await afterLogin(await api('/api/auth/cookie', {cookie: $('#tokenIn').value})); $('#tokenIn').value = ''; }
+  catch (err) { $('#loginMsg').innerHTML = notice('bad', esc(err.message)); }
+  busy(e.target, false);
+};
+$('#fPass').onsubmit = async e => {
+  e.preventDefault(); busy(e.target, true);
+  try { const r = await api('/api/auth/login', {username: $('#userIn').value, password: $('#passIn').value});
+        $('#passIn').value = ''; await afterLogin(r); }
+  catch (err) { $('#loginMsg').innerHTML = notice('bad', esc(err.message)); }
+  busy(e.target, false);
+};
+$('#logoutBtn').onclick = async () => {
+  if (!confirm('ออกจากระบบและลบ token ที่บันทึกไว้?')) return;
+  await api('/api/auth/logout', {}); USER = null; $('#loginMsg').innerHTML = ''; show('login');
+};
+let skipSync = false;
+$('#syncSkip').onclick = () => skipSync = true;
+
+// scrape --fast: one request for the course listing -> statuses for this user
+async function syncFromIjudge(onLine) {
+  skipSync = false;
+  try {
+    const job = await runJob('scrape', {'--fast': true}, {title: 'อัปเดตสถานะจาก iJudge', quiet: !!onLine,
+      onLine: l => onLine && l.trim() && onLine(l.trim()), stop: () => skipSync});
+    return job;
+  } catch (e) { onLine && onLine(e.message); await sleep(1200); }
+}
+$('#syncBtn').onclick = async () => { await syncFromIjudge(); };
+
+// ===================== data =====================
+let O = null, P = [], WEEKS = [];
+async function loadAll() {
+  [O, P, WEEKS] = await Promise.all([api('/api/overview'), api('/api/problems'), api('/api/weeks')]);
+  renderOverview(); fillWeekSelects(); renderProblems();
+}
+let ROUTED = false;
+function routeOnce() {
+  if (ROUTED) return; ROUTED = true;
+  const t = location.hash.slice(1);
+  if (['overview', 'problems', 'tools'].includes(t)) showTab(t);
+}
+function fillWeekSelects() {
+  const used = [...new Set(P.map(p => p.week))].filter(w => w != null).sort((a, b) => a - b);
+  const label = w => (WEEKS.find(x => x.week === w) || {}).label || 'Week ' + w;
+  $('#fWeek').innerHTML = '<option value="">ทุก week</option>' + used.map(w => `<option value="${w}">${esc(label(w))}</option>`).join('');
+  $('#sWeek').innerHTML = used.map(w => `<option value="${w}">${esc(label(w))}</option>`).join('');
+  $('#tWeek').innerHTML = '<option value="">—</option>' + used.map(w => `<option value="${w}">${esc(label(w))}</option>`).join('');
+}
+
+// ===================== tabs =====================
 function showTab(name) {
-  $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
   $$('main > section').forEach(s => s.hidden = s.id !== 'tab-' + name);
-  if (name === 'problems' && !PROBLEMS.length) loadProblems();
+  window.scrollTo(0, 0);
+  if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
 }
-$$('#nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+$$('#tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
 
-// ---------- overview ----------
-const CAT_NAMES = {learning_log: 'Learning Log', recommended: 'Recommended', midterm: 'Midterm', mini_exam: 'Mini Exam'};
-const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
-
-async function loadOverview() {
-  const o = await api('/api/overview');
-  $('#scrapedAt').textContent = o.scraped_at ? 'ข้อมูลล่าสุด: ' + o.scraped_at.replace('T', ' ') : '';
-  const card = (num, label, sub) => `<div class="panel stat"><div class="num">${num}</div><div class="label">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
-  $('#statCards').innerHTML = [
-    card(`${o.passed}<span class="muted" style="font-size:16px"> / ${o.total}</span>`, 'ผ่านบน iJudge',
-         `<div class="bar" style="margin-top:6px"><i style="width:${pct(o.passed, o.total)}%"></i></div>${pct(o.passed, o.total)}%`),
-    card(o.not_passed, 'ส่งแล้วยังไม่ผ่าน'),
-    card(o.not_submitted, 'ยังไม่ส่ง'),
-    card(o.solved_local, 'มีโค้ดในเครื่อง', `stub ${o.stubs} ข้อ`),
-    card(o.archived, 'อยู่ในคลัง solutions/'),
-  ].join('');
-
-  const alerts = [];
-  if (o.passed_not_local.length) alerts.push(`<div class="alert">ผ่านบน iJudge แต่ในเครื่องยังเป็น stub: ${o.passed_not_local.join(', ')} — ใช้ scrape ติ๊ก --seed-code เพื่อดึงโค้ดที่ส่งไว้</div>`);
-  if (o.learning_log_missing.length) alerts.push(`<div class="alert">Learning Log ที่ยังไม่มี submission.md (${o.learning_log_missing.length}): ${o.learning_log_missing.join(', ')}</div>`);
-  $('#alerts').innerHTML = alerts.join('');
-
-  $('#weekRows').innerHTML = o.weeks.map(w => `<tr>
-    <td><strong>${esc(w.label)}</strong></td>
-    <td class="hide-sm muted small">${esc(w.title)}</td>
-    <td>${w.passed}/${w.total}</td>
-    <td><div class="bar"><i class="solved" style="width:${pct(w.solved, w.total)}%"></i><i style="width:${pct(w.passed, w.total)}%"></i></div></td>
-  </tr>`).join('');
-
-  $('#catRows').innerHTML = Object.entries(o.categories).map(([k, c]) => `<tr>
-    <td>${CAT_NAMES[k]}</td><td>${c.passed}/${c.total}</td>
-    <td style="width:45%"><div class="bar"><i style="width:${pct(c.passed, c.total)}%"></i></div></td></tr>`).join('');
-
-  $('#dueRows').innerHTML = o.upcoming.length ? o.upcoming.map(r => `<tr class="click" data-id="${r.id}">
-    <td>${r.id}</td><td>${esc(r.title)}</td><td class="muted small">${esc(r.deadline)}</td></tr>`).join('')
-    : '<tr><td class="muted">ไม่มีโจทย์ค้างที่ยังไม่หมดเขต</td></tr>';
-  $$('#dueRows tr.click').forEach(tr => tr.onclick = () => openProblem(+tr.dataset.id));
+// ===================== overview =====================
+const CAT = {learning_log: 'Learning Log', recommended: 'Recommended', midterm: 'Midterm', mini_exam: 'Mini Exam'};
+function ring(p) {
+  const r = 32, c = 2 * Math.PI * r;
+  return `<svg class="ring" viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="${r}"/>
+    <circle class="fg" cx="38" cy="38" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}" transform="rotate(-90 38 38)"/>
+    <text x="38" y="43" text-anchor="middle">${p}%</text></svg>`;
+}
+function renderOverview() {
+  $('#updatedAt').textContent = O.scraped_at ? 'ข้อมูลจาก iJudge ล่าสุด ' + O.scraped_at.replace('T', ' ') : '';
+  $('#stats').innerHTML = `
+    <div class="card stat hero">${ring(pct(O.passed, O.total))}
+      <div><div class="label">ผ่านแล้ว</div><div class="num">${O.passed}<small> / ${O.total}</small></div></div></div>
+    <div class="card stat"><div class="label">ส่งแล้ว ยังไม่ผ่าน</div><div class="num">${O.not_passed}</div>
+      <div class="faint small">ยังไม่เคยส่ง ${O.not_submitted} ข้อ</div></div>
+    <div class="card stat"><div class="label">โค้ดในเครื่อง</div><div class="num">${O.solved_local}<small> / ${O.total}</small></div>
+      <div class="faint small">ยังไม่ได้เขียน ${O.stubs} ข้อ</div></div>
+    <div class="card stat"><div class="label">พร้อมส่ง</div><div class="num" style="color:var(--pink)">${O.ready_to_submit}</div>
+      <div><button class="btn soft sm" id="sendReady" ${O.ready_to_submit ? '' : 'disabled'}>ส่งเลย</button></div></div>`;
+  $('#sendReady').onclick = () => openSubmit('ready');
+  const n = [];
+  if (O.learning_log_missing.length) n.push(notice('', `<div><b>Learning Log ยังไม่มี submission.md (${O.learning_log_missing.length})</b><br>${O.learning_log_missing.join(', ')}</div>`));
+  if (O.passed_not_local.length) n.push(notice('pink', `<div><b>ผ่านบน iJudge แต่ในเครื่องยังว่าง:</b> ${O.passed_not_local.join(', ')} — ดึงโค้ดที่ส่งไว้ได้ที่เครื่องมือ › ดึงโจทย์ใหม่ (ติ๊ก “เอาโค้ดที่ส่งไว้ใส่ไฟล์ว่าง”)</div>`));
+  $('#notices').innerHTML = n.join('');
+  $('#weeks').innerHTML = O.weeks.map(w => `<div class="week-row" data-week="${w.week}">
+      <div class="wl">${esc(w.label)}</div>
+      <div style="min-width:0"><div class="wt">${esc(w.title)}</div>
+        <div class="bar"><i class="code" style="width:${pct(w.solved, w.total)}%"></i><i class="pass" style="width:${pct(w.passed, w.total)}%"></i></div></div>
+      <div class="wn">${w.passed}/${w.total}</div></div>`).join('');
+  $$('#weeks .week-row').forEach(r => r.onclick = () => { setQuick(''); $('#fWeek').value = r.dataset.week; renderProblems(); showTab('problems'); });
+  $('#upcoming').innerHTML = O.upcoming.length ? O.upcoming.map(r => `<div class="list-row" data-id="${r.id}">
+      <span class="id">${r.id}</span><span class="t">${esc(r.title)}</span><span class="faint small">${esc(r.deadline.replace(/ \d{4},/, ','))}</span></div>`).join('')
+    : '<p class="muted small" style="margin:0">ไม่มีโจทย์ค้างที่ยังไม่หมดเขต 🎉</p>';
+  $$('#upcoming .list-row').forEach(r => r.onclick = () => openProblem(+r.dataset.id));
+  $('#cats').innerHTML = Object.entries(O.categories).map(([k, c]) => `<div>
+      <div class="row small" style="margin-bottom:6px"><span>${CAT[k]}</span><span class="spacer"></span><span class="muted">${c.passed}/${c.total}</span></div>
+      <div class="bar"><i class="pass" style="width:${pct(c.passed, c.total)}%"></i></div></div>`).join('');
 }
 
-// ---------- problems ----------
-let PROBLEMS = [];
-async function loadProblems() {
-  PROBLEMS = await api('/api/problems');
-  const weeks = [...new Set(PROBLEMS.map(p => p.week))].sort((a, b) => a - b);
-  $('#fWeek').innerHTML = '<option value="">ทุก week</option>' + weeks.map(w => `<option value="${w}">Week ${w}</option>`).join('');
-  renderProblems();
+// ===================== problems =====================
+let QUICK = '';
+const SEL = new Set();
+function setQuick(q) { QUICK = q; $$('#quick .chip').forEach(c => c.classList.toggle('on', c.dataset.q === q)); }
+$$('#quick .chip').forEach(c => c.onclick = () => { setQuick(c.dataset.q); renderProblems(); });
+['#fSearch', '#fWeek'].forEach(s => $(s).addEventListener('input', renderProblems));
+function quickMatch(p) {
+  switch (QUICK) {
+    case 'ready': return p.local === 'solved' && p.status !== 'Passed';
+    case 'todo': return p.local !== 'solved';
+    case 'passed': return p.status === 'Passed';
+    case 'learning_log': return p.categories.includes('learning_log');
+    case 'exam': return p.categories.includes('midterm') || p.categories.includes('mini_exam');
+    default: return true;
+  }
 }
-const PILL = {learning_log: ['ll', 'LL'], recommended: ['rec', 'Rec'], midterm: ['mid', 'Midterm'], mini_exam: ['mini', 'Mini']};
+function visibleProblems() {
+  const q = $('#fSearch').value.trim().toLowerCase(), w = $('#fWeek').value;
+  return P.filter(p => quickMatch(p) && (!w || String(p.week) === w) &&
+    (!q || String(p.id).includes(q) || p.title.toLowerCase().includes(q)));
+}
+const TAGS = {learning_log: ['ll', 'LL'], recommended: ['rec', 'แนะนำ'], midterm: ['exam', 'Midterm'], mini_exam: ['exam', 'Mini']};
+function statusBadge(s) {
+  if (s === 'Passed') return '<span class="badge ok">ผ่าน</span>';
+  if (s === 'Not Passed') return '<span class="badge bad">ไม่ผ่าน</span>';
+  return '<span class="badge">ยังไม่ส่ง</span>';
+}
+function localBadge(p) {
+  if (p.local === 'solved') return '<span class="badge pink plain">มีโค้ด</span>';
+  if (p.local === 'stub') return '<span class="faint small">ยังไม่ได้เขียน</span>';
+  return '<span class="faint small">—</span>';
+}
 function renderProblems() {
-  const q = $('#fSearch').value.trim().toLowerCase();
-  const w = $('#fWeek').value, st = $('#fStatus').value, lo = $('#fLocal').value, cat = $('#fCat').value;
-  const rows = PROBLEMS.filter(p =>
-    (!q || String(p.id).includes(q) || p.title.toLowerCase().includes(q)) &&
-    (!w || String(p.week) === w) && (!st || p.status === st) &&
-    (!lo || p.local === lo) && (!cat || p.categories.includes(cat)));
+  const rows = visibleProblems();
   $('#pCount').textContent = `${rows.length} ข้อ`;
-  $('#pRows').innerHTML = rows.map(p => `<tr class="click" data-id="${p.id}">
-    <td>${p.id}</td>
-    <td>${esc(p.title)} ${p.categories.map(c => `<span class="pill ${PILL[c][0]}">${PILL[c][1]}</span>`).join('')}</td>
-    <td>${p.week ?? '-'}</td>
-    <td class="status-${p.status.replace(' ', '.')}">${p.status === 'Passed' ? '✅ Passed' : esc(p.status)}</td>
-    <td>${p.local === 'solved' ? 'มีโค้ด' : p.local === 'stub' ? '<span class="muted">stub</span>' : '—'}${p.archived ? ' <span class="muted small">· คลัง</span>' : ''}</td>
-    <td class="hide-sm muted small">${esc(p.deadline)}</td>
-    <td class="hide-sm muted small">${p.percentage}% (${p.passed_count}/${p.attempt_count})</td>
-  </tr>`).join('');
-  $$('#pRows tr').forEach(tr => tr.onclick = () => openProblem(+tr.dataset.id));
+  $('#pRows').innerHTML = rows.length ? rows.map(p => `<tr class="click ${SEL.has(p.id) ? 'sel' : ''}" data-id="${p.id}">
+    <td class="chk"><input type="checkbox" ${SEL.has(p.id) ? 'checked' : ''} ${p.local === 'solved' ? '' : 'disabled title="ยังไม่มีโค้ด"'}></td>
+    <td class="muted">${p.id}</td>
+    <td>${esc(p.title)}${p.categories.map(c => `<span class="tag ${TAGS[c][0]}">${TAGS[c][1]}</span>`).join('')}</td>
+    <td class="muted">${p.week ?? '—'}</td>
+    <td>${statusBadge(p.status)}</td>
+    <td>${localBadge(p)}</td>
+    <td class="hide-sm faint small">${esc(p.deadline)}</td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">ไม่มีโจทย์ตรงกับตัวกรอง</td></tr>';
+  $$('#pRows tr[data-id]').forEach(tr => {
+    const id = +tr.dataset.id, box = tr.querySelector('input');
+    box.onclick = e => { e.stopPropagation(); box.checked ? SEL.add(id) : SEL.delete(id); tr.classList.toggle('sel', box.checked); paintTray(); };
+    tr.onclick = () => openProblem(id);
+  });
+  const selectable = rows.filter(p => p.local === 'solved');
+  $('#selAll').checked = selectable.length > 0 && selectable.every(p => SEL.has(p.id));
+  paintTray();
 }
-['#fSearch', '#fWeek', '#fStatus', '#fLocal', '#fCat'].forEach(s => $(s).addEventListener('input', renderProblems));
+$('#selAll').onclick = e => {
+  const selectable = visibleProblems().filter(p => p.local === 'solved');
+  selectable.forEach(p => e.target.checked ? SEL.add(p.id) : SEL.delete(p.id));
+  renderProblems();
+};
+function paintTray() {
+  $('#tray').hidden = SEL.size === 0 || $('#tab-problems').hidden;
+  $('#trayText').textContent = `เลือก ${SEL.size} ข้อ`;
+}
+$('#trayClear').onclick = () => { SEL.clear(); renderProblems(); };
+$('#traySubmit').onclick = () => openSubmit('selected');
+$('#openSubmit').onclick = () => openSubmit(SEL.size ? 'selected' : 'ready');
+new MutationObserver(paintTray).observe($('#tab-problems'), {attributes: true});
 
-// ---------- problem dialog ----------
+// ===================== problem drawer =====================
 function mdToHtml(md) {
   const out = []; let inCode = false, buf = [];
   const inline = t => esc(t)
@@ -334,151 +658,246 @@ function mdToHtml(md) {
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\\([$<*_`\\])/g, '$1');
+    .replace(/\\([$*_`\\])/g, '$1').replace(/\\&lt;/g, '&lt;');
   for (const raw of md.split('\n')) {
     const line = raw.replace(/^\s{0,2}(?=```)/, '');
     if (line.startsWith('```')) {
-      if (inCode) { out.push(`<pre><code>${esc(buf.join('\n'))}</code></pre>`); buf = []; }
+      if (inCode) { out.push(`<pre>${esc(buf.join('\n'))}</pre>`); buf = []; }
       inCode = !inCode; continue;
     }
     if (inCode) { buf.push(raw.replace(/^ {2}/, '')); continue; }
     if (/^<!--.*-->$/.test(line.trim())) continue;
     let m;
     if ((m = line.match(/^(#{1,3})\s+(.*)/))) out.push(`<h${m[1].length}>${inline(m[2])}</h${m[1].length}>`);
-    else if (line.startsWith('>')) out.push(`<blockquote>${inline(line.replace(/^>\s?/, ''))}</blockquote>`);
+    else if (line.startsWith('>')) out.push(`<blockquote>${inline(line.replace(/^>\s?(-\s)?/, ''))}</blockquote>`);
     else if (line.trim() === '---') out.push('<hr>');
-    else if (!line.trim()) out.push('<p></p>');
+    else if (/^- \*\*/.test(line.trim())) out.push(`<div class="muted small" style="margin-top:8px">${inline(line.trim().slice(2))}</div>`);
+    else if (!line.trim()) out.push('<div style="height:8px"></div>');
     else out.push(`<div>${inline(line)}</div>`);
   }
   return out.join('\n');
 }
-let CURRENT = null;
+let CUR = null;
 async function openProblem(id) {
-  const meta = PROBLEMS.find(p => p.id === id) || {};
-  const d = await api('/api/problem/' + id);
-  CURRENT = id;
-  $('#dlgTitle').textContent = `OJ ${id} ${meta.title || ''}`;
-  $('#dlgLink').href = meta.url || `https://ijudge.it.kmitl.ac.th/problems/${id}/description`;
-  $('#dlgMd').innerHTML = d.problem_md ? mdToHtml(d.problem_md) : '<p class="muted">ไม่มี problem.md</p>';
-  $('#dlgCode').textContent = d.main_py || '(ไม่มี main.py)';
-  $('#dlgFolder').textContent = d.folder;
-  setDialogTab('md');
-  $('#dlg').showModal();
-}
-function setDialogTab(t) {
-  $$('[data-dtab]').forEach(b => b.classList.toggle('primary', b.dataset.dtab === t));
-  $('#dlgMd').hidden = t !== 'md'; $('#dlgCode').hidden = t !== 'code';
-}
-$$('[data-dtab]').forEach(b => b.onclick = () => setDialogTab(b.dataset.dtab));
-$('#dlgClose').onclick = () => $('#dlg').close();
-$('#dlgTest').onclick = () => { $('#dlg').close(); showTab('tools'); runCommand('test', {ids: String(CURRENT)}); };
-
-// ---------- tools ----------
-const TOOLS = [
-  {cmd: 'scrape', title: 'ดึงข้อมูลจาก iJudge', desc: 'อัปเดตรายการโจทย์ สถานะ และ problem.md (ต้อง login)', opts: [
-    {k: '--fast', t: 'flag', l: '--fast (รายการ + สถานะเท่านั้น)', d: true},
-    {k: '--only', t: 'ids', l: 'เฉพาะ id', ph: '3586-3598'},
-    {k: '--seed-code', t: 'flag', l: '--seed-code (เอาโค้ดที่ส่งไว้ใส่ stub)'},
-    {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
-  {cmd: 'render', title: 'สร้างไฟล์โจทย์', desc: 'problem.md + main.py stub จาก JSON (ไม่ต่อเน็ต)', opts: [
-    {k: '--only', t: 'ids', l: 'เฉพาะ id', ph: '3290-3301'},
-    {k: '--check', t: 'flag', l: '--check'}, {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
-  {cmd: 'test', title: 'ทดสอบกับ sample', desc: 'รัน main.py กับตัวอย่างทางการ', opts: [
-    {k: 'ids', t: 'ids', l: 'id', ph: '3290-3292,2988'},
-    {k: '--week', t: 'int', l: 'week', ph: '9'},
-    {k: '--solutions', t: 'flag', l: 'ใช้โค้ดในคลัง solutions/'}]},
-  {cmd: 'status', title: 'ซิงก์ ✅', desc: 'เติม/ลบ ✅ ท้ายชื่อโฟลเดอร์ตามสถานะ', opts: [
-    {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
-  {cmd: 'archive', title: 'เก็บเข้าคลัง', desc: 'คัดลอกโค้ดที่ทำเสร็จจาก main ไป solutions/', opts: [
-    {k: '--ids', t: 'ids', l: 'เฉพาะ id'}, {k: '--update', t: 'flag', l: '--update (ทับโค้ดในคลังที่ต่าง)'},
-    {k: '--restore', t: 'ids', l: 'restore id (คลัง → stub ใน main)'},
-    {k: '--blank', t: 'ids', l: 'blank id (main → stub เพื่อฝึกใหม่)'},
-    {k: '--dry-run', t: 'flag', l: '--dry-run', d: true}]},
-  {cmd: 'readme', title: 'สร้าง README', desc: 'README.md บน main', opts: [
-    {k: '--check', t: 'flag', l: '--check'}, {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
-  {cmd: 'doctor', title: 'ตรวจความเรียบร้อย', desc: 'registry ↔ โฟลเดอร์ ↔ คลัง', opts: [
-    {k: '--quiet', t: 'flag', l: '--quiet'}]},
-];
-$('#toolCards').innerHTML = TOOLS.map((t, i) => `<div class="panel tool" data-i="${i}">
-  <div class="row"><h2 style="margin:0">${t.title}</h2><code class="muted small">${t.cmd}</code></div>
-  <p>${t.desc}</p>
-  <div class="row">${t.opts.map(o => o.t === 'flag'
-      ? `<label class="opt"><input type="checkbox" data-k="${o.k}" ${o.d ? 'checked' : ''}>${o.l}</label>`
-      : `<label class="opt">${o.l} <input data-k="${o.k}" placeholder="${o.ph || ''}" size="12"></label>`).join('')}</div>
-  <div><button class="btn primary run">Run</button></div></div>`).join('');
-$$('#toolCards .tool').forEach(card => card.querySelector('.run').onclick = () => {
-  const t = TOOLS[+card.dataset.i], options = {};
-  $$('[data-k]', card).forEach(inp => options[inp.dataset.k] = inp.type === 'checkbox' ? inp.checked : inp.value.trim());
-  runCommand(t.cmd, options);
-});
-
-let JOB = null;
-async function runCommand(cmd, options, after) {
+  const p = P.find(x => x.id === id) || {id};
+  CUR = p;
+  $('#dMeta').innerHTML = `OJ ${id} · ${p.week ? 'Week ' + p.week : ''} · ${statusBadge(p.status)}`;
+  $('#dTitle').textContent = p.title || '';
+  $('#dLink').href = p.url || `https://ijudge.it.kmitl.ac.th/problems/${id}/description`;
+  $('#dSubmit').disabled = p.local !== 'solved';
+  $('#dTest').disabled = p.local !== 'solved';
+  $('#dTestOut').hidden = true;
+  $('#dMd').innerHTML = '<span class="spin"></span>'; $('#dCode').textContent = '';
+  setDrawerTab('md'); $('#drawer').hidden = false;
   try {
-    const r = await api('/api/run', {command: cmd, options});
-    JOB = r.job;
-    $('#out').textContent = '$ pscp.py ' + r.argv.join(' ') + '\n';
-    setJobState('กำลังรัน…', 'warn'); $('#cancelJob').disabled = false;
-    pollJob(0, after);
-  } catch (e) { $('#out').textContent = 'ERROR: ' + e.message; setJobState('ผิดพลาด', 'bad'); }
+    const d = await api('/api/problem/' + id);
+    $('#dMd').innerHTML = d.problem_md ? mdToHtml(d.problem_md) : '<p class="muted">ไม่มี problem.md</p>';
+    $('#dCode').textContent = d.main_py || '(ไม่มี main.py)';
+    $('#dFolder').textContent = d.folder;
+  } catch (e) { $('#dMd').innerHTML = notice('bad', esc(e.message)); }
 }
-async function pollJob(since, after) {
-  const j = await api(`/api/jobs/${JOB}?since=${since}`);
-  if (j.lines.length) {
-    const out = $('#out'); out.textContent += j.lines.join('\n') + '\n'; out.scrollTop = out.scrollHeight;
+function setDrawerTab(t) {
+  $$('[data-dt]').forEach(b => b.classList.toggle('on', b.dataset.dt === t));
+  $('#dMd').hidden = t !== 'md'; $('#dCode').hidden = t !== 'code';
+}
+$$('[data-dt]').forEach(b => b.onclick = () => setDrawerTab(b.dataset.dt));
+$$('#drawer [data-close]').forEach(b => b.onclick = () => $('#drawer').hidden = true);
+$('#dSubmit').onclick = () => { $('#drawer').hidden = true; openSubmit('one', CUR.id); };
+$('#dTest').onclick = async () => {
+  const box = $('#dTestOut'), pre = $('pre', box);
+  box.hidden = false; pre.textContent = '';
+  try { await runJob('test', {ids: String(CUR.id)}, {quiet: true, onLine: l => { pre.textContent += l + '\n'; pre.scrollTop = pre.scrollHeight; }}); }
+  catch (e) { pre.textContent = e.message; }
+};
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('#drawer').hidden = true; if (!SUBMITTING) $('#submitModal').hidden = true; } });
+
+// ===================== submit flow =====================
+let SMODE = 'ready', SONE = null, SPLAN = null, SUBMITTING = false, SJOB = null;
+function step(n) {
+  [1, 2, 3].forEach(i => $('#s' + i).hidden = i !== n);
+  $$('.steps span').forEach(s => s.classList.toggle('on', +s.dataset.step === n));
+  $('#sBack').hidden = n !== 2; $('#sCancel').hidden = n !== 3;
+}
+function openSubmit(mode, one) {
+  SONE = one || null; SPLAN = null;
+  $('#sSelDesc').textContent = SONE ? `OJ ${SONE}` : (SEL.size ? `${SEL.size} ข้อที่ติ๊กในตาราง` : 'ยังไม่ได้ติ๊กเลือก');
+  $('[data-mode="selected"]').style.opacity = (SONE || SEL.size) ? 1 : .5;
+  const ready = P.filter(p => p.local === 'solved' && p.status !== 'Passed').length;
+  $('#sReadyDesc').textContent = `${ready} ข้อ`;
+  if (mode === 'one') mode = 'selected';
+  if (mode === 'selected' && !SONE && !SEL.size) mode = 'ready';
+  const w = $('#fWeek').value; if (w) $('#sWeek').value = w;
+  setMode(mode);
+  $('#sSkipPassed').checked = mode !== 'selected'; $('#sIncLL').checked = mode === 'selected';
+  $('#sNext').textContent = 'ถัดไป: ตรวจรายการ'; $('#sNext').disabled = false; $('#sFootNote').textContent = '';
+  step(1); $('#submitModal').hidden = false;
+}
+function setMode(m) {
+  SMODE = m;
+  $$('#s1 .option').forEach(o => { const on = o.dataset.mode === m; o.classList.toggle('on', on); $('input', o).checked = on; });
+}
+$$('#s1 .option').forEach(o => o.onclick = () => setMode(o.dataset.mode));
+function chosenIds() {
+  switch (SMODE) {
+    case 'selected': return SONE ? [SONE] : [...SEL];
+    case 'week': return P.filter(p => String(p.week) === $('#sWeek').value).map(p => p.id);
+    case 'ready': return P.filter(p => p.status !== 'Passed').map(p => p.id);
+    default: return P.map(p => p.id);
   }
-  if (!j.done) return setTimeout(() => pollJob(j.next, after), 400);
-  setJobState(j.exit_code === 0 ? `เสร็จ (${j.elapsed}s)` : `จบด้วย exit ${j.exit_code}`, j.exit_code === 0 ? 'ok' : 'bad');
-  $('#cancelJob').disabled = true;
-  loadOverview(); if (PROBLEMS.length) loadProblems();
-  if (after) after(j);
 }
-function setJobState(text, kind) { const c = $('#jobState'); c.textContent = text; c.className = 'chip ' + (kind || ''); }
-$('#cancelJob').onclick = () => JOB && api(`/api/jobs/${JOB}/cancel`, {});
-$('#clearOut').onclick = () => $('#out').textContent = '';
-$('#quickSync').onclick = () => { showTab('tools'); runCommand('scrape', {'--fast': true}); };
-$('#quickRefresh').onclick = () => { loadOverview(); if (PROBLEMS.length) loadProblems(); };
+$('#sNext').onclick = async () => {
+  if (!$('#s1').hidden) return preview();
+  if (!$('#s2').hidden) return startSubmit();
+  $('#submitModal').hidden = true;
+};
+$('#sBack').onclick = () => { step(1); $('#sNext').textContent = 'ถัดไป: ตรวจรายการ'; $('#sNext').disabled = false; };
+$('#sClose').onclick = () => { if (SUBMITTING && !confirm('ยังส่งไม่เสร็จ — ปิดหน้าต่างนี้? (การส่งจะทำต่อเบื้องหลัง)')) return; $('#submitModal').hidden = true; };
+async function preview() {
+  const ids = chosenIds();
+  if (!ids.length) { $('#sFootNote').textContent = 'ยังไม่มีโจทย์ที่เลือก'; return; }
+  $('#sNext').disabled = true; $('#sFootNote').innerHTML = '<span class="spin"></span>';
+  try {
+    SPLAN = await api('/api/submit/preview', {ids, skip_passed: $('#sSkipPassed').checked, include_ll: $('#sIncLL').checked});
+  } catch (e) { $('#sFootNote').textContent = e.message; $('#sNext').disabled = false; return; }
+  const ready = SPLAN.rows.filter(r => !r.skip), skipped = SPLAN.rows.length - ready.length;
+  const warn = ready.filter(r => r.warnings.length).length;
+  $('#sSummary').innerHTML = ready.length
+    ? notice('pink', `<div>จะส่ง <b>${ready.length}</b> ข้อ${skipped ? ` · ข้าม ${skipped}` : ''}${warn ? ` · มีคำเตือน ${warn}` : ''} · ใช้เวลาประมาณ ${Math.ceil(ready.length * 8 / 60)} นาที</div>`)
+    : notice('bad', 'ไม่มีข้อที่ส่งได้ — ลองเอา “ข้ามข้อที่ผ่านแล้ว” ออก หรือเขียน main.py ก่อน');
+  const order = r => r.skip ? 1 : 0;
+  $('#sPreview').innerHTML = [...SPLAN.rows].sort((a, b) => order(a) - order(b) || a.id - b.id).map(r => `<tr>
+    <td class="muted">${r.id}</td><td>${esc(r.title)}</td>
+    <td class="faint small">${r.file ? esc(r.file.split('/').slice(-2).join('/')) + ` · ${r.lines} บรรทัด` : '—'}</td>
+    <td>${r.skip ? `<span class="badge plain">ข้าม: ${esc(r.skip)}</span>` : r.warnings.length
+        ? `<span class="badge warn" title="${esc(r.warnings.join('\n'))}">ส่ง · ${esc(r.warnings[0])}</span>` : '<span class="badge pink">จะส่ง</span>'}</td></tr>`).join('');
+  step(2);
+  $('#sFootNote').textContent = USER ? `ส่งในชื่อ ${USER.username}` : '';
+  $('#sNext').textContent = ready.length ? `ยืนยันส่ง ${ready.length} ข้อ` : 'ส่งไม่ได้';
+  $('#sNext').disabled = !ready.length;
+}
+const STATE = {
+  queued: ['', 'รอคิว'], submitting: ['info', 'กำลังส่ง'], judging: ['info', 'กำลังตรวจ'], skipped: ['', 'ข้าม'],
+  failed: ['bad', 'ส่งไม่สำเร็จ'], timeout: ['warn', 'ยังตรวจไม่เสร็จ'], cancelled: ['', 'ยกเลิก'],
+};
+function resultBadge(i) {
+  if (i.state === 'done') return i.perfect ? '<span class="badge ok">ผ่าน 100%</span>'
+    : i.passed ? '<span class="badge warn">ผ่าน (score ไม่เต็ม)</span>' : `<span class="badge bad">${esc(i.result || 'ไม่ผ่าน')}</span>`;
+  const [k, t] = STATE[i.state] || ['', i.state];
+  const spin = ['submitting', 'judging'].includes(i.state) ? '<span class="spin" style="width:10px;height:10px;margin-right:4px"></span>' : '';
+  return `<span class="badge ${k} ${spin ? 'plain' : ''}">${spin}${t}</span>${i.error ? `<div class="faint small">${esc(i.error)}</div>` : ''}`;
+}
+async function startSubmit() {
+  const ids = SPLAN.rows.filter(r => !r.skip).map(r => r.id);
+  $('#sNext').disabled = true;
+  try { SJOB = (await api('/api/submit', {ids})).job; }
+  catch (e) { $('#sFootNote').textContent = e.message; $('#sNext').disabled = false; return; }
+  SUBMITTING = true; step(3); $('#sDone').innerHTML = ''; $('#sNext').textContent = 'ปิด'; $('#sFootNote').textContent = '';
+  const t0 = Date.now();
+  while (true) {
+    const j = await api(`/api/jobs/${SJOB}`);
+    const items = j.items || [], finished = items.filter(i => !['queued', 'submitting', 'judging'].includes(i.state)).length;
+    $('#sProg').style.width = pct(finished, items.length) + '%';
+    $('#sProgText').textContent = j.done ? 'ส่งครบแล้ว' : `กำลังส่ง ${Math.min(finished + 1, items.length)} / ${items.length}`;
+    $('#sElapsed').textContent = Math.round((Date.now() - t0) / 1000) + ' วินาที';
+    $('#sResults').innerHTML = items.map(i => `<tr><td class="muted">${i.id}</td><td>${esc(i.title)}</td><td>${resultBadge(i)}</td>
+      <td class="num">${i.score != null ? i.score : '—'}</td><td class="num">${i.pep8 != null ? i.pep8 : '—'}</td>
+      <td class="hide-sm faint small">${i.submission_id ? '#' + i.submission_id : ''}</td></tr>`).join('');
+    if (j.done) {
+      const perfect = items.filter(i => i.perfect).length, passed = items.filter(i => i.passed).length;
+      $('#sDone').innerHTML = notice(passed === items.length ? 'ok' : 'pink',
+        `ผ่าน ${passed}/${items.length} ข้อ (เต็ม ${perfect}) — กำลังอัปเดตสถานะในหน้า dashboard…`);
+      break;
+    }
+    await sleep(900);
+  }
+  SUBMITTING = false; $('#sNext').disabled = false; $('#sCancel').hidden = true;
+  SEL.clear();
+  await syncFromIjudge();
+}
+$('#sCancel').onclick = async () => { if (SJOB) await api(`/api/jobs/${SJOB}/cancel`, {}); $('#sCancel').disabled = true; };
 
-// ---------- account ----------
-function paintAuth(a) {
-  const chip = $('#authChip');
-  if (!a.has_cookie) { chip.className = 'chip bad'; chip.textContent = 'ยังไม่ login'; }
-  else if (a.valid === true) { chip.className = 'chip ok'; chip.textContent = '● ' + (a.username || 'logged in'); }
-  else if (a.valid === false) { chip.className = 'chip bad'; chip.textContent = 'cookie หมดอายุ'; }
-  else { chip.className = 'chip warn'; chip.textContent = 'มี cookie (ยังไม่ตรวจ)'; }
-  $('#authDetail').innerHTML = !a.has_cookie ? 'ยังไม่มี cookie — login ด้านขวา'
-    : `cookie <code>${esc(a.masked)}</code> จาก ${esc(a.source)}` +
-      (a.valid === true ? `<br><span class="status-Passed">ใช้ได้ — ${esc(a.username)} ${esc(a.fullname || '')}</span>` : '') +
-      (a.valid === false ? `<br><span style="color:var(--bad)">${esc(a.error || 'ใช้ไม่ได้')}</span>` : '');
+// ===================== jobs & dock =====================
+let JOB_RUNNING = false;
+async function runJob(command, options, ui = {}) {
+  if (JOB_RUNNING) throw new Error('มีงานกำลังรันอยู่ — รอให้เสร็จก่อน');
+  const r = await api('/api/run', {command, options});
+  JOB_RUNNING = true; $('#syncBtn').disabled = true;
+  if (!ui.quiet) {
+    $('#dock').hidden = false; $('#dockOut').textContent = '$ pscp.py ' + r.argv.join(' ') + '\n';
+    $('#dockTitle').textContent = ui.title || command; $('#dockState').textContent = 'กำลังทำงาน…';
+    $('#dockIcon').innerHTML = '<span class="spin"></span>'; $('#dockCancel').hidden = false; $('#dockCancel').dataset.job = r.job;
+  }
+  let since = 0, j;
+  try {
+    while (true) {
+      j = await api(`/api/jobs/${r.job}?since=${since}`);
+      since = j.next;
+      for (const l of j.lines) {
+        ui.onLine && ui.onLine(l);
+        if (!ui.quiet) { const o = $('#dockOut'); o.textContent += l + '\n'; o.scrollTop = o.scrollHeight; }
+      }
+      if (j.done) break;
+      if (ui.stop && ui.stop()) { await api(`/api/jobs/${r.job}/cancel`, {}); }
+      await sleep(350);
+    }
+  } finally {
+    JOB_RUNNING = false; $('#syncBtn').disabled = false;
+  }
+  if (!ui.quiet) {
+    const ok = j.exit_code === 0;
+    $('#dockIcon').innerHTML = ok ? '<span class="badge ok">เสร็จ</span>' : `<span class="badge bad">exit ${j.exit_code}</span>`;
+    $('#dockState').textContent = `${j.elapsed} วินาที`; $('#dockCancel').hidden = true;
+  }
+  if (USER) loadAll().catch(() => {});
+  return j;
 }
-async function loadAuth(check) { paintAuth(await api('/api/auth' + (check ? '?check=1' : ''))); }
-function authMsg(ok, text) { $('#authMsg').innerHTML = `<div class="alert ${ok ? 'ok' : 'bad'}">${esc(text)}</div>`; }
-$$('[data-auth]').forEach(b => b.onclick = () => {
-  $$('[data-auth]').forEach(x => x.classList.toggle('primary', x === b));
-  $('#formCookie').hidden = b.dataset.auth !== 'cookie'; $('#formPass').hidden = b.dataset.auth !== 'password';
+$('#dockCancel').onclick = () => api(`/api/jobs/${$('#dockCancel').dataset.job}/cancel`, {});
+$('#dockToggle').onclick = () => { const o = $('#dockOut'); o.hidden = !o.hidden; $('#dockToggle').textContent = o.hidden ? 'แสดง log' : 'ซ่อน log'; };
+$('#dockClose').onclick = () => { if (!JOB_RUNNING) $('#dock').hidden = true; };
+
+// ===================== tools =====================
+const TOOLS = [
+  {ic: '↻', title: 'อัปเดตสถานะจาก iJudge', desc: 'ดึงสถานะผ่าน/ไม่ผ่านล่าสุดของทุกข้อ (เร็ว ~2 วินาที)', btn: 'อัปเดตเลย',
+   cmd: 'scrape', base: {'--fast': true}},
+  {ic: '⤓', title: 'ดึงโจทย์ใหม่', desc: 'ดาวน์โหลดโจทย์ + ตัวอย่าง แล้วสร้างโฟลเดอร์ problem.md และ main.py ให้ (ใช้เวลาหลายนาทีถ้าดึงทั้งหมด)', btn: 'ดึงโจทย์',
+   cmd: 'scrape', opts: [
+    {k: '--only', t: 'ids', l: 'เฉพาะ id (เว้นว่าง = ทั้งหมด)', ph: '3586-3598'},
+    {k: '--seed-code', t: 'flag', l: 'เอาโค้ดที่เคยส่งบน iJudge ใส่ไฟล์ที่ยังว่าง'},
+    {k: '--dry-run', t: 'flag', l: 'ลองดูก่อน ไม่เขียนไฟล์'}]},
+  {ic: '▶', title: 'ทดสอบโค้ดกับ sample', desc: 'รัน main.py กับตัวอย่างทางการ ดูว่าผลตรงไหม', btn: 'รันทดสอบ',
+   cmd: 'test', opts: [
+    {k: '--week', t: 'week', l: 'ทั้ง week'},
+    {k: 'ids', t: 'ids', l: 'หรือระบุ id', ph: '3290-3292,2988'},
+    {k: '--solutions', t: 'flag', l: 'ใช้โค้ดในคลัง solutions/ แทน'}], require: ['--week', 'ids']},
+  {ic: '✓', title: 'เติม ✅ ท้ายชื่อโฟลเดอร์', desc: 'เปลี่ยนชื่อโฟลเดอร์ใน oj/ ให้ตรงกับสถานะผ่านบน iJudge', btn: 'ซิงก์ ✅',
+   cmd: 'status', opts: [{k: '--dry-run', t: 'flag', l: 'ลองดูก่อน ไม่เปลี่ยนชื่อจริง'}]},
+  {ic: '▣', title: 'เก็บโค้ดเข้าคลัง', desc: 'คัดลอกโค้ดที่เขียนเสร็จใน main ไปเก็บใน .op/solutions/', btn: 'เก็บเข้าคลัง',
+   cmd: 'archive', opts: [
+    {k: '--update', t: 'flag', l: 'ทับโค้ดในคลังที่ต่างจากในเครื่อง'},
+    {k: '--restore', t: 'ids', l: 'ดึงจากคลังกลับมาใส่ไฟล์ว่าง (id)', ph: '3355'},
+    {k: '--blank', t: 'ids', l: 'ล้างเป็นไฟล์ว่างเพื่อฝึกใหม่ (id)', ph: '3290'},
+    {k: '--dry-run', t: 'flag', l: 'ลองดูก่อน'}]},
+  {ic: '≡', title: 'สร้างไฟล์โจทย์ใหม่', desc: 'สร้าง problem.md จากข้อมูลที่มีอยู่ (ไม่ต่อเน็ต) — ใช้เมื่อไฟล์หายหรือหน้าตาเพี้ยน', btn: 'สร้างไฟล์',
+   cmd: 'render', opts: [{k: '--only', t: 'ids', l: 'เฉพาะ id', ph: '3290-3301'}, {k: '--dry-run', t: 'flag', l: 'ลองดูก่อน'}]},
+  {ic: '¶', title: 'อัปเดต README', desc: 'สร้าง README.md บน main ใหม่จากข้อมูลล่าสุด', btn: 'สร้าง README', cmd: 'readme'},
+  {ic: '?', title: 'ตรวจความเรียบร้อย', desc: 'เช็คว่าโฟลเดอร์ ข้อมูล และคลังตรงกันหมด', btn: 'ตรวจเลย', cmd: 'doctor', base: {'--quiet': true}},
+];
+$('#tools').innerHTML = TOOLS.map((t, i) => `<div class="card tool" data-i="${i}">
+  <div class="head"><div class="ic">${t.ic}</div><div><h3>${t.title}</h3><p>${t.desc}</p></div></div>
+  ${t.opts ? `<details ${t.require ? 'open' : ''}><summary>${t.require ? 'เลือก' : 'ตั้งค่าเพิ่มเติม'}</summary><div class="opts">${t.opts.map(o =>
+    o.t === 'flag' ? `<label class="check small"><input type="checkbox" data-k="${o.k}"> ${o.l}</label>`
+    : o.t === 'week' ? `<label class="field"><span>${o.l}</span><select data-k="${o.k}" id="tWeek"></select></label>`
+    : `<label class="field"><span>${o.l}</span><input data-k="${o.k}" placeholder="${o.ph || ''}"></label>`).join('')}</div></details>` : ''}
+  <div class="row"><button class="btn soft run">${t.btn}</button><span class="small muted msg"></span></div></div>`).join('');
+$$('#tools .tool').forEach(card => $('.run', card).onclick = async () => {
+  const t = TOOLS[+card.dataset.i], options = Object.assign({}, t.base || {});
+  $$('[data-k]', card).forEach(i => options[i.dataset.k] = i.type === 'checkbox' ? i.checked : i.value.trim());
+  const msg = $('.msg', card); msg.textContent = '';
+  if (t.require && !t.require.some(k => options[k])) { msg.textContent = 'เลือก week หรือใส่ id ก่อน'; return; }
+  try { await runJob(t.cmd, options, {title: t.title}); } catch (e) { msg.textContent = e.message; }
 });
-$('#formCookie').onsubmit = async e => {
-  e.preventDefault(); authMsg(true, 'กำลังตรวจกับ iJudge…');
-  try {
-    const r = await api('/api/auth/cookie', {cookie: $('#cookieIn').value});
-    if (r.ok) { $('#cookieIn').value = ''; authMsg(true, `บันทึกแล้ว — ${r.username} ${r.fullname || ''}`); loadAuth(true); }
-    else authMsg(false, r.error);
-  } catch (err) { authMsg(false, err.message); }
-};
-$('#formPass').onsubmit = async e => {
-  e.preventDefault(); authMsg(true, 'กำลังเข้าสู่ระบบ…');
-  try {
-    const r = await api('/api/auth/login', {username: $('#userIn').value, password: $('#passIn').value});
-    $('#passIn').value = '';
-    if (r.ok) { authMsg(true, `เข้าสู่ระบบแล้ว — ${r.username} ${r.fullname || ''}`); loadAuth(true); }
-    else authMsg(false, r.error);
-  } catch (err) { authMsg(false, err.message); }
-};
-$('#authCheck').onclick = () => loadAuth(true);
-$('#authLogout').onclick = async () => { await api('/api/auth/logout', {}); authMsg(true, 'ลบ cookie แล้ว'); loadAuth(false); };
 
-loadOverview().catch(e => $('#statCards').innerHTML = `<div class="alert bad">${esc(e.message)}</div>`);
-loadAuth(false);
+boot();
 </script>
 </body>
 </html>

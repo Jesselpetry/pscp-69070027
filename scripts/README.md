@@ -49,7 +49,7 @@ python3 .op/scripts/pscp.py <command> [options]
 | `readme` | `update_readme.py` | regenerate `README.md` on main. `--check`, `--output PATH` | no |
 | `doctor` | `check_repo.py` | consistency report: registry ↔ folders, ✅ vs status, archive drift, missing `submission.md` | no |
 | `submit` | `submit_oj.py` | submit code from main to iJudge (interactive menu without arguments) | yes |
-| `web` | `web_app.py` | local dashboard at http://127.0.0.1:8765: progress, iJudge login, run the commands above (not `submit`) | for login/scrape |
+| `web` | `web_app.py` | local dashboard at http://127.0.0.1:8765: sign in, progress, submit to iJudge, run the commands above | yes |
 
 Every command that writes accepts `--dry-run`. `--dry-run` on `scrape` still
 fetches; only writes are suppressed.
@@ -57,16 +57,18 @@ fetches; only writes are suppressed.
 ## Web dashboard
 
 ```sh
-python3 .op/scripts/pscp.py web                 # opens the browser
+python3 .op/scripts/pscp.py web                 # opens http://127.0.0.1:8765
 python3 .op/scripts/pscp.py web --port 9000 --no-browser
 ```
 
-- **ภาพรวม**: passed / not passed / not submitted, code on main vs stubs, per-week and per-category progress, upcoming deadlines, Learning Logs without `submission.md`
-- **โจทย์**: searchable table; click a row to read `problem.md` / `main.py` and run its samples
-- **เครื่องมือ**: every command except `submit`, with its options, and live output
-- **บัญชี iJudge**: paste a cookie, or sign in with username + password (used once to mint a cookie, never stored); the cookie goes to `submit_config.json`
+1. **Sign in** with an iJudge access token (or cookie), or username + password. The password is used once to mint a token and never stored; the token goes to `submit_config.json`. A saved token that is still valid skips this page.
+2. Right after signing in it runs `scrape --fast`, so the dashboard shows that account's current status.
+3. **ภาพรวม** — passed / not passed, code on main vs stubs, "พร้อมส่ง" (code written, not passed yet), per-week and per-category progress, upcoming deadlines, Learning Logs without `submission.md`.
+4. **โจทย์** — quick filters, search, week filter, row checkboxes. A row opens `problem.md` / `main.py` with "ทดสอบกับ sample" and "ส่งข้อนี้".
+5. **ส่งเข้า iJudge** — choose the selected rows, a whole week, everything with code that has not passed, or everything; options skip passed problems and include Learning Logs. A preview lists what will be sent and why the rest is skipped (no main.py, stub, passed, Learning Log) plus lint warnings; after confirming, each problem shows its live verdict, score and PEP8. Submissions reuse `submit_oj.submit_problem` / `poll_submission_status`; stubs are never sent. Status is refreshed afterwards.
+6. **เครื่องมือ** — one-button cards for every other command; extra options are folded under each card.
 
-It binds to 127.0.0.1 only; POSTs need a per-launch token embedded in the page and the Host header must be this server, so other sites in the browser cannot drive it.
+It binds to 127.0.0.1 only; POSTs need a per-launch token embedded in the page and the Host header must be this server, so other sites in the browser cannot drive it. Deep links: `#overview`, `#problems`, `#tools`.
 
 ## Data
 
