@@ -14,10 +14,9 @@ import sys
 import urllib.request
 from typing import Any
 
+from . import config as course_config
 from .client import BASE_URL, USER_AGENT, AuthExpired
-
-PSCP_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CONFIG_FILE = os.path.join(PSCP_ROOT, "submit_config.json")
+from .paths import CONFIG_FILE
 
 # Prefer a browser session cookie; the password path exists only to mint one.
 IJUDGE_USERNAME = os.environ.get("IJUDGE_USER")
@@ -31,7 +30,6 @@ SIGNIN_ACTION_ID = os.environ.get(
 )
 
 DEFAULT_CONFIG: dict[str, Any] = {
-    "course_id": 78,
     "exclude_learning_logs": True,
     "poll_interval": 2.0,
     "poll_timeout": 20.0,
@@ -49,7 +47,7 @@ class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
 
 
 def load_config(path: str = CONFIG_FILE) -> dict[str, Any]:
-    config = dict(DEFAULT_CONFIG)
+    config = dict(DEFAULT_CONFIG, course_id=course_config.course_id())
     if os.path.exists(path):
         try:
             with open(path, "r", encoding="utf-8") as f:

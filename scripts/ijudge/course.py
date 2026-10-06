@@ -1,55 +1,64 @@
 """Turn raw iJudge problem records into the registry shape both repos consume.
 
-The scraper and the sync script previously built this dict independently, with
-subtly different field sets; the summary/detail split is now explicit.
+Category flags come from the title tags configured in data/course.json, and
+once a flag has been seen it stays set: iJudge drops tags such as [Recommend]
+from a title after its deadline passes.
 """
 
 from __future__ import annotations
 
 from typing import Any, Mapping
 
+from . import config
 from .client import BASE_URL
-from .weeks import format_expire_date, get_week
+from .weeks import format_expire_date
 
-MIDTERM_RANGE = (3274, 3282)
-
-# Fields written to the summary registry (oj_problems.json). The detail registry
-# adds course_page, courseProblem, problem, sampleCases, submission, beforeCode.
+# Fields written to the summary registry (data/oj_problems.json). The detail
+# registry adds course_page, courseProblem, problem, sampleCases, submission,
+# beforeCode.
 SUMMARY_FIELDS = (
     "id", "name", "week", "status", "difficulty", "passed_count",
-    "attempt_count", "percentage", "expire_date", "is_learning_log",
+    "attempt_count", "percentage", "expire_date", "released", "is_learning_log",
     "is_recommended", "is_midterm", "is_mini_exam", "url",
 )
+
+# registry flag -> category name in course.json
+FLAG_CATEGORIES = {
+    "is_learning_log": "learning_log",
+    "is_recommended": "recommended",
+    "is_midterm": "midterm",
+    "is_mini_exam": "mini_exam",
+}
 
 
 def build_problem_item(
     raw: Mapping[str, Any],
     index: int,
     existing: Mapping[int, Mapping[str, Any]] | None = None,
+    details: Mapping[int, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Normalise one raw `cp_*` record from the course listing.
 
     `index` is the problem's position in the listing, which determines the
-    ?problemPage= value in its URL. `existing` preserves the [Recommend] flag,
-    which iJudge drops from the title once a deadline passes.
+    ?problemPage= value in its URL. `existing` (summary records) and `details`
+    (detail records) supply sticky flags, the stored week and, when the
+    listing omits it, the release time.
     """
     pid = raw["cp_id"]
     name = raw.get("cp_title", "") or ""
     attempted = raw.get("attempted", 0) or 0
     passed = raw.get("passed", 0) or 0
+    prev = (existing or {}).get(pid, {})
+    prev_detail = (details or {}).get(pid, {})
 
-    upper = name.upper()
-    is_learning_log = "[LEARNING LOG" in upper
-    is_recommended = "[RECOMMEND" in upper
-    is_midterm = "[ MIDTERM ]" in upper or MIDTERM_RANGE[0] <= pid <= MIDTERM_RANGE[1]
-    is_mini_exam = "MINI EXAM" in upper or (3489 <= pid <= 3511) or (3546 <= pid <= 3551)
-
-    # A problem flagged as recommended in a previous run stays recommended even
-    # after iJudge stops advertising it in the title.
-    if existing and existing.get(pid, {}).get("is_recommended"):
-        is_recommended = True
-        if "[recommend]" not in name.lower():
-            name = f"[Recommend] {name}"
+    flags = {
+        flag: config.has_category(name, category) or bool(prev.get(flag))
+        for flag, category in FLAG_CATEGORIES.items()
+    }
+    # Keep the [Recommend] marker in the name once iJudge has dropped it, so
+    # the title still shows why the problem is listed as recommended.
+    if flags["is_recommended"] and not config.has_category(name, "recommended"):
+        name = f"[Recommend] {name}"
 
     if raw.get("status", "") == "PASSED":
         status = "Passed"
@@ -57,6 +66,12 @@ def build_problem_item(
         status = "Not Passed"
     else:
         status = "Not Submit"
+
+    released = (
+        raw.get("cp_release_time")
+        or (prev_detail.get("courseProblem") or {}).get("cp_release_time")
+        or prev.get("released")
+    )
 
     page_num = index // 10
     item: dict[str, Any] = {
@@ -68,14 +83,12 @@ def build_problem_item(
         "attempt_count": attempted,
         "percentage": round(passed / attempted * 100, 2) if attempted > 0 else 0.0,
         "expire_date": format_expire_date(raw.get("cp_expired_time", "")),
-        "is_learning_log": is_learning_log,
-        "is_recommended": is_recommended,
-        "is_midterm": is_midterm,
-        "is_mini_exam": is_mini_exam,
+        "released": released,
+        **flags,
         "url": f"{BASE_URL}/problems/{pid}/description?problemPage={page_num}",
         "course_page": page_num,
     }
-    item["week"] = get_week(item)
+    item["week"] = config.get_week(pid, name, released, fallback=prev.get("week"))
     return item
 
 

@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import json
 import time
-import urllib.error
-import urllib.request
 from typing import Any
+
+from . import config
 
 BASE_URL = "https://ijudge.it.kmitl.ac.th"
 USER_AGENT = (
@@ -82,15 +82,6 @@ def fetch(
     raise HttpError(f"GET {url} failed after {retries} attempts: {last_error}")
 
 
-def _retry_after(err: urllib.error.HTTPError) -> float | None:
-    raw = err.headers.get("Retry-After") if err.headers else None
-    if not raw:
-        return None
-    try:
-        return max(0.0, float(raw))
-    except (TypeError, ValueError):
-        return None
-
 
 def extract_balanced(text: str, opener: str = "[", closer: str = "]", start: int = 0) -> str:
     """Return the balanced bracket span beginning at/after `start`."""
@@ -106,8 +97,10 @@ def extract_balanced(text: str, opener: str = "[", closer: str = "]", start: int
     raise HttpError("Unbalanced bracket span in RSC stream.")
 
 
-def fetch_problem_list(cookie: str, course_id: int = 78) -> list[dict[str, Any]]:
-    """Fetch the raw problem records for a course from the RSC stream."""
+def fetch_problem_list(cookie: str, course_id: int | None = None) -> list[dict[str, Any]]:
+    """Fetch the raw problem records for a course (default: the regular course)."""
+    if course_id is None:
+        course_id = config.course_id()
     url = f"{BASE_URL}/courses/{course_id}/problems?page=0"
     rsc = fetch(url, cookie, rsc=True)
 
