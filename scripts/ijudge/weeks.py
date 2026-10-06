@@ -16,6 +16,7 @@ MONTH_NAMES = [
 
 _ISO_PREFIX = re.compile(r"^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})")
 
+_WEEK_2_EXTRA_IDS = {2996, 2997, 2998, 3014, 3018, 3019}
 _WEEK_5_EXTRA_IDS = {3129, 3135}
 _MIDTERM_RANGE = (3274, 3282)
 _WEEK_3_4_RANGE = (3058, 3116)
@@ -35,20 +36,26 @@ def format_expire_date(iso_str: str | None) -> str:
 
 
 def get_week(item: Mapping[str, Any]) -> int:
-    """Classify a problem into its teaching week (1-9).
+    """Classify a problem into its teaching week (1-14).
 
-    Rule order is significant and mirrors the original implementation exactly:
-    the week 9 and week 8 deadlines are tested BEFORE the midterm rule, so a
-    midterm-flagged problem carrying a late deadline classifies by that deadline
-    rather than as week 7. No real problem currently hits that overlap, but the
-    committed registries were built with this precedence.
-
+    Rule order is significant and mirrors the original implementation:
+    deadlines and explicit ID ranges are tested to map to teaching weeks.
     Falls back to week 1 for anything unrecognised.
     """
     pid = item["id"]
     name = (item.get("name") or "").upper()
     expire = item.get("expire_date") or ""
 
+    if "MINI EXAM" in name or (3489 <= pid <= 3511) or (3546 <= pid <= 3551):
+        return 14
+    if "24 October 2027" in expire or 3586 <= pid <= 3598:
+        return 13
+    if "23 October" in expire or 3529 <= pid <= 3544:
+        return 12
+    if 3473 <= pid <= 3488:
+        return 11
+    if 3381 <= pid <= 3396:
+        return 10
     if "9 October" in expire or 3349 <= pid <= 3363:
         return 9
     if "25 September" in expire or 3290 <= pid <= 3301:
@@ -64,8 +71,10 @@ def get_week(item: Mapping[str, Any]) -> int:
     # Weeks 3 and 4 share the "28 August" deadline, split by problem id.
     if "28 August" in expire or _WEEK_3_4_RANGE[0] <= pid <= _WEEK_3_4_RANGE[1]:
         return 3 if pid <= _WEEK_3_MAX_ID else 4
-    if any(d in expire for d in ("14 August", "16 August", "17 August")) or (
-        3020 <= pid <= 3042
+    if (
+        any(d in expire for d in ("14 August", "16 August", "17 August"))
+        or (3020 <= pid <= 3042)
+        or (pid in _WEEK_2_EXTRA_IDS)
     ):
         return 2
     if "31 July" in expire or "7 August" in expire or pid <= 3019:

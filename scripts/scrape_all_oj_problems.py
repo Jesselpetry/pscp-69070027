@@ -86,6 +86,23 @@ FOLDER_ALIASES = {
     3361: "Sell_Car_II",
     3362: "Destiny_Love",
     3363: "New_Rabbit_Flu_Strain",
+    3390: "Array_2D_Check",
+    3391: "Magic_Coin_Collection",
+    3392: "Array_Haha",
+    3393: "Cave_Explorer",
+    3395: "Line_Up",
+    3396: "Lap_Overtake",
+    3480: "Bird",
+    3481: "Under_The_Bridge",
+    3482: "Demon_Slayer",
+    3483: "Team_Up",
+    3485: "Unique_Code",
+    3486: "Artillery_Impact",
+    3487: "Install_Light",
+    3488: "Spotlight",
+    3543: "Sieve_of_Eratosthenes",
+    3544: "Warehouse_Management",
+    3598: "Heatwave_Statistics",
 }
 
 STUB_MARKER = "# solution code here"
@@ -473,7 +490,9 @@ def scrape_all(fast=False, only_ids=None, seed_code=False):
                 if alias:
                     folder_name = f"oj{pid}-{alias}"
                 else:
-                    safe_name = re.sub(r"[^\w\s-]", "", p_name).strip().replace(" ", "_")
+                    clean_title = re.sub(r"\s+", " ", p_name).strip()
+                    safe_name = re.sub(r"[^\w\s-]", "", clean_title).strip().replace(" ", "_")
+                    safe_name = re.sub(r"_+", "_", safe_name)
                     folder_name = f"oj{pid}-{safe_name}"
                 if is_passed:
                     folder_name += " ✅"

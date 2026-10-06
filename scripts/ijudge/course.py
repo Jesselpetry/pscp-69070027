@@ -18,7 +18,7 @@ MIDTERM_RANGE = (3274, 3282)
 SUMMARY_FIELDS = (
     "id", "name", "week", "status", "difficulty", "passed_count",
     "attempt_count", "percentage", "expire_date", "is_learning_log",
-    "is_recommended", "is_midterm", "url",
+    "is_recommended", "is_midterm", "is_mini_exam", "url",
 )
 
 
@@ -42,6 +42,7 @@ def build_problem_item(
     is_learning_log = "[LEARNING LOG" in upper
     is_recommended = "[RECOMMEND" in upper
     is_midterm = "[ MIDTERM ]" in upper or MIDTERM_RANGE[0] <= pid <= MIDTERM_RANGE[1]
+    is_mini_exam = "MINI EXAM" in upper or (3489 <= pid <= 3511) or (3546 <= pid <= 3551)
 
     # A problem flagged as recommended in a previous run stays recommended even
     # after iJudge stops advertising it in the title.
@@ -70,6 +71,7 @@ def build_problem_item(
         "is_learning_log": is_learning_log,
         "is_recommended": is_recommended,
         "is_midterm": is_midterm,
+        "is_mini_exam": is_mini_exam,
         "url": f"{BASE_URL}/problems/{pid}/description?problemPage={page_num}",
         "course_page": page_num,
     }
