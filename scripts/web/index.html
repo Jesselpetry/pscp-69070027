@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="pscp-token" content="__PSCP_TOKEN__">
+<title>PSCP Dashboard</title>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --ink: #1d2330; --muted: #667085; --line: #e3e6ec;
+  --accent: #2f6fde; --accent-soft: #e6eefc; --ok: #1f9d55; --ok-soft: #e3f5eb;
+  --warn: #b7791f; --warn-soft: #fbf0dc; --bad: #c53030; --bad-soft: #fbe5e5;
+  --code: #0f172a; --code-ink: #e2e8f0; --radius: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Thai", "Sukhumvit Set", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1218; --panel: #171b23; --ink: #e6e8ee; --muted: #98a2b3; --line: #2a303c;
+    --accent: #6c9cf0; --accent-soft: #1d2a42; --ok: #4cc287; --ok-soft: #15291f;
+    --warn: #e2b04a; --warn-soft: #2d2412; --bad: #f07878; --bad-soft: #321818;
+    --code: #0b0e13; --code-ink: #d6dbe4;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5; }
+header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 16px; padding: 10px 20px; flex-wrap: wrap; }
+header h1 { font-size: 16px; margin: 0; }
+nav { display: flex; gap: 4px; flex-wrap: wrap; }
+nav button { background: none; border: 0; padding: 7px 12px; border-radius: 8px; color: var(--muted);
+  font: inherit; cursor: pointer; }
+nav button.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.spacer { flex: 1; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; background: var(--line); color: var(--ink); white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+main { max-width: 1200px; margin: 0 auto; padding: 20px; }
+section[hidden] { display: none; }
+.grid { display: grid; gap: 14px; }
+.cards { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.two { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; }
+.panel h2 { font-size: 15px; margin: 0 0 12px; }
+.stat .num { font-size: 28px; font-weight: 700; }
+.stat .label { color: var(--muted); font-size: 12px; }
+.stat .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; position: relative; }
+.bar > i { position: absolute; inset: 0 auto 0 0; background: var(--ok); border-radius: 99px; }
+.bar > i.solved { background: var(--accent); opacity: .35; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover { background: var(--accent-soft); }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 10px; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+button.btn { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  padding: 7px 14px; border-radius: 8px; cursor: pointer; }
+button.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.btn.danger { color: var(--bad); }
+button.btn:disabled { opacity: .5; cursor: not-allowed; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+label.opt { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
+.tool { display: flex; flex-direction: column; gap: 10px; }
+.tool p { margin: 0; color: var(--muted); font-size: 13px; }
+pre.console { background: var(--code); color: var(--code-ink); padding: 12px; border-radius: 8px; margin: 0;
+  max-height: 420px; overflow: auto; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+.tabs2 { display: flex; gap: 6px; margin-bottom: 12px; }
+.alert { padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); font-size: 13px; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.ok { background: var(--ok-soft); color: var(--ok); }
+dialog { width: min(920px, 94vw); max-height: 90vh; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); color: var(--ink); padding: 0; }
+dialog::backdrop { background: rgba(0,0,0,.45); }
+.dlg-head { display: flex; gap: 10px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.dlg-body { padding: 18px; overflow: auto; max-height: calc(90vh - 60px); }
+.md h1 { font-size: 18px; } .md h2 { font-size: 15px; margin-top: 18px; } .md h3 { font-size: 14px; }
+.md blockquote { margin: 0; padding: 4px 12px; border-left: 3px solid var(--line); color: var(--muted); }
+.md pre { background: var(--code); color: var(--code-ink); padding: 10px; border-radius: 8px; overflow: auto; }
+.md code { font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+.md img { max-width: 100%; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 11px; background: var(--line); margin-right: 3px; }
+.pill.ll { background: var(--accent-soft); color: var(--accent); }
+.pill.rec { background: var(--warn-soft); color: var(--warn); }
+.pill.mid, .pill.mini { background: var(--bad-soft); color: var(--bad); }
+.status-Passed { color: var(--ok); font-weight: 600; }
+.status-Not.Passed { color: var(--bad); }
+@media (max-width: 640px) { main { padding: 12px; } .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>PSCP Dashboard</h1>
+  <nav id="nav">
+    <button data-tab="overview" class="active">ภาพรวม</button>
+    <button data-tab="problems">โจทย์</button>
+    <button data-tab="tools">เครื่องมือ</button>
+    <button data-tab="account">บัญชี iJudge</button>
+  </nav>
+  <div class="spacer"></div>
+  <span id="authChip" class="chip">กำลังตรวจ…</span>
+</header>
+
+<main>
+<!-- ===================== overview ===================== -->
+<section id="tab-overview">
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn primary" id="quickSync">อัปเดตสถานะจาก iJudge</button>
+    <button class="btn" id="quickRefresh">รีเฟรชหน้า</button>
+    <span class="muted small" id="scrapedAt"></span>
+  </div>
+  <div class="grid cards" id="statCards"></div>
+  <div id="alerts" class="stack" style="margin:14px 0"></div>
+  <div class="grid two">
+    <div class="panel">
+      <h2>ความคืบหน้ารายสัปดาห์</h2>
+      <table><thead><tr><th>Week</th><th class="hide-sm">หัวข้อ</th><th>ผ่าน</th><th style="width:30%"></th></tr></thead>
+        <tbody id="weekRows"></tbody></table>
+      <p class="muted small">แถบเขียว = ผ่านบน iJudge · แถบฟ้าจาง = มีโค้ดในเครื่อง</p>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <h2>หมวด</h2>
+        <table><tbody id="catRows"></tbody></table>
+      </div>
+      <div class="panel">
+        <h2>ใกล้หมดเขต (ยังไม่ผ่าน)</h2>
+        <table><tbody id="dueRows"></tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== problems ===================== -->
+<section id="tab-problems" hidden>
+  <div class="panel">
+    <div class="filters">
+      <input id="fSearch" placeholder="ค้นหา id หรือชื่อ" style="flex:1;min-width:180px">
+      <select id="fWeek"><option value="">ทุก week</option></select>
+      <select id="fStatus">
+        <option value="">ทุกสถานะ</option><option>Passed</option><option>Not Passed</option><option>Not Submit</option>
+      </select>
+      <select id="fLocal">
+        <option value="">โค้ดในเครื่อง: ทั้งหมด</option><option value="solved">มีโค้ด</option><option value="stub">stub (ยังไม่ทำ)</option>
+      </select>
+      <select id="fCat">
+        <option value="">ทุกหมวด</option><option value="learning_log">Learning Log</option>
+        <option value="recommended">Recommended</option><option value="midterm">Midterm</option><option value="mini_exam">Mini Exam</option>
+      </select>
+    </div>
+    <div class="muted small" id="pCount" style="margin-bottom:6px"></div>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>ID</th><th>ชื่อ</th><th>Week</th><th>iJudge</th><th>ในเครื่อง</th><th class="hide-sm">หมดเขต</th><th class="hide-sm">% ผ่าน (ทั้งคลาส)</th></tr></thead>
+        <tbody id="pRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== tools ===================== -->
+<section id="tab-tools" hidden>
+  <div class="grid two" id="toolCards"></div>
+  <div class="panel" style="margin-top:14px">
+    <div class="row" style="margin-bottom:8px">
+      <h2 style="margin:0">Output</h2>
+      <span id="jobState" class="chip">ว่าง</span>
+      <div class="spacer"></div>
+      <button class="btn danger" id="cancelJob" disabled>หยุด</button>
+      <button class="btn" id="clearOut">ล้าง</button>
+    </div>
+    <pre class="console" id="out">เลือกคำสั่งด้านบนแล้วกด Run</pre>
+  </div>
+  <p class="muted small">การส่งโค้ดเข้า iJudge (<code>submit</code>) ไม่มีในหน้านี้ — ใช้ <code>python3 .op/scripts/pscp.py submit</code> ใน terminal</p>
+</section>
+
+<!-- ===================== account ===================== -->
+<section id="tab-account" hidden>
+  <div class="grid two">
+    <div class="panel stack">
+      <h2>สถานะ</h2>
+      <div id="authDetail" class="muted">—</div>
+      <div class="row">
+        <button class="btn" id="authCheck">ตรวจกับ iJudge</button>
+        <button class="btn danger" id="authLogout">ลบ cookie ที่บันทึก</button>
+      </div>
+      <p class="muted small">cookie บันทึกใน <code>.op/submit_config.json</code> (gitignored) · รหัสผ่านไม่ถูกบันทึกที่ไหนเลย ใช้แค่ขอ cookie ครั้งเดียว</p>
+    </div>
+    <div class="panel">
+      <div class="tabs2">
+        <button class="btn primary" data-auth="cookie">ใช้ cookie</button>
+        <button class="btn" data-auth="password">username / password</button>
+      </div>
+      <form id="formCookie" class="stack">
+        <label class="muted small">วาง cookie หรือ access_token จาก browser (DevTools → Network → request ใดก็ได้ → Cookie)</label>
+        <textarea id="cookieIn" rows="4" placeholder="access_token=eyJ..." autocomplete="off" spellcheck="false"></textarea>
+        <div class="row"><button class="btn primary" type="submit">ตรวจและบันทึก</button></div>
+      </form>
+      <form id="formPass" class="stack" hidden>
+        <input id="userIn" placeholder="username (เช่น it69070027)" autocomplete="username">
+        <input id="passIn" type="password" placeholder="password" autocomplete="current-password">
+        <div class="row"><button class="btn primary" type="submit">เข้าสู่ระบบ</button></div>
+      </form>
+      <div id="authMsg" style="margin-top:10px"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="dlg">
+  <div class="dlg-head">
+    <strong id="dlgTitle"></strong>
+    <div class="spacer"></div>
+    <button class="btn" id="dlgTest">ทดสอบ sample</button>
+    <a class="btn" id="dlgLink" target="_blank" rel="noopener" style="text-decoration:none">เปิดใน iJudge</a>
+    <button class="btn" id="dlgClose">ปิด</button>
+  </div>
+  <div class="dlg-body">
+    <div class="tabs2">
+      <button class="btn primary" data-dtab="md">โจทย์</button>
+      <button class="btn" data-dtab="code">main.py</button>
+    </div>
+    <div id="dlgMd" class="md"></div>
+    <pre id="dlgCode" class="console" hidden></pre>
+    <div id="dlgFolder" class="muted small"></div>
+  </div>
+</dialog>
+
+<script>
+const TOKEN = document.querySelector('meta[name="pscp-token"]').content;
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : {
+    method: 'POST', headers: {'Content-Type': 'application/json', 'X-PSCP-Token': TOKEN},
+    body: JSON.stringify(body)};
+  const r = await fetch(path, opt);
+  const data = await r.json().catch(() => ({error: r.statusText}));
+  if (!r.ok) throw new Error(data.error || r.statusText);
+  return data;
+}
+
+// ---------- tabs ----------
+function showTab(name) {
+  $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  $$('main > section').forEach(s => s.hidden = s.id !== 'tab-' + name);
+  if (name === 'problems' && !PROBLEMS.length) loadProblems();
+}
+$$('#nav button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+
+// ---------- overview ----------
+const CAT_NAMES = {learning_log: 'Learning Log', recommended: 'Recommended', midterm: 'Midterm', mini_exam: 'Mini Exam'};
+const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
+
+async function loadOverview() {
+  const o = await api('/api/overview');
+  $('#scrapedAt').textContent = o.scraped_at ? 'ข้อมูลล่าสุด: ' + o.scraped_at.replace('T', ' ') : '';
+  const card = (num, label, sub) => `<div class="panel stat"><div class="num">${num}</div><div class="label">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+  $('#statCards').innerHTML = [
+    card(`${o.passed}<span class="muted" style="font-size:16px"> / ${o.total}</span>`, 'ผ่านบน iJudge',
+         `<div class="bar" style="margin-top:6px"><i style="width:${pct(o.passed, o.total)}%"></i></div>${pct(o.passed, o.total)}%`),
+    card(o.not_passed, 'ส่งแล้วยังไม่ผ่าน'),
+    card(o.not_submitted, 'ยังไม่ส่ง'),
+    card(o.solved_local, 'มีโค้ดในเครื่อง', `stub ${o.stubs} ข้อ`),
+    card(o.archived, 'อยู่ในคลัง solutions/'),
+  ].join('');
+
+  const alerts = [];
+  if (o.passed_not_local.length) alerts.push(`<div class="alert">ผ่านบน iJudge แต่ในเครื่องยังเป็น stub: ${o.passed_not_local.join(', ')} — ใช้ scrape ติ๊ก --seed-code เพื่อดึงโค้ดที่ส่งไว้</div>`);
+  if (o.learning_log_missing.length) alerts.push(`<div class="alert">Learning Log ที่ยังไม่มี submission.md (${o.learning_log_missing.length}): ${o.learning_log_missing.join(', ')}</div>`);
+  $('#alerts').innerHTML = alerts.join('');
+
+  $('#weekRows').innerHTML = o.weeks.map(w => `<tr>
+    <td><strong>${esc(w.label)}</strong></td>
+    <td class="hide-sm muted small">${esc(w.title)}</td>
+    <td>${w.passed}/${w.total}</td>
+    <td><div class="bar"><i class="solved" style="width:${pct(w.solved, w.total)}%"></i><i style="width:${pct(w.passed, w.total)}%"></i></div></td>
+  </tr>`).join('');
+
+  $('#catRows').innerHTML = Object.entries(o.categories).map(([k, c]) => `<tr>
+    <td>${CAT_NAMES[k]}</td><td>${c.passed}/${c.total}</td>
+    <td style="width:45%"><div class="bar"><i style="width:${pct(c.passed, c.total)}%"></i></div></td></tr>`).join('');
+
+  $('#dueRows').innerHTML = o.upcoming.length ? o.upcoming.map(r => `<tr class="click" data-id="${r.id}">
+    <td>${r.id}</td><td>${esc(r.title)}</td><td class="muted small">${esc(r.deadline)}</td></tr>`).join('')
+    : '<tr><td class="muted">ไม่มีโจทย์ค้างที่ยังไม่หมดเขต</td></tr>';
+  $$('#dueRows tr.click').forEach(tr => tr.onclick = () => openProblem(+tr.dataset.id));
+}
+
+// ---------- problems ----------
+let PROBLEMS = [];
+async function loadProblems() {
+  PROBLEMS = await api('/api/problems');
+  const weeks = [...new Set(PROBLEMS.map(p => p.week))].sort((a, b) => a - b);
+  $('#fWeek').innerHTML = '<option value="">ทุก week</option>' + weeks.map(w => `<option value="${w}">Week ${w}</option>`).join('');
+  renderProblems();
+}
+const PILL = {learning_log: ['ll', 'LL'], recommended: ['rec', 'Rec'], midterm: ['mid', 'Midterm'], mini_exam: ['mini', 'Mini']};
+function renderProblems() {
+  const q = $('#fSearch').value.trim().toLowerCase();
+  const w = $('#fWeek').value, st = $('#fStatus').value, lo = $('#fLocal').value, cat = $('#fCat').value;
+  const rows = PROBLEMS.filter(p =>
+    (!q || String(p.id).includes(q) || p.title.toLowerCase().includes(q)) &&
+    (!w || String(p.week) === w) && (!st || p.status === st) &&
+    (!lo || p.local === lo) && (!cat || p.categories.includes(cat)));
+  $('#pCount').textContent = `${rows.length} ข้อ`;
+  $('#pRows').innerHTML = rows.map(p => `<tr class="click" data-id="${p.id}">
+    <td>${p.id}</td>
+    <td>${esc(p.title)} ${p.categories.map(c => `<span class="pill ${PILL[c][0]}">${PILL[c][1]}</span>`).join('')}</td>
+    <td>${p.week ?? '-'}</td>
+    <td class="status-${p.status.replace(' ', '.')}">${p.status === 'Passed' ? '✅ Passed' : esc(p.status)}</td>
+    <td>${p.local === 'solved' ? 'มีโค้ด' : p.local === 'stub' ? '<span class="muted">stub</span>' : '—'}${p.archived ? ' <span class="muted small">· คลัง</span>' : ''}</td>
+    <td class="hide-sm muted small">${esc(p.deadline)}</td>
+    <td class="hide-sm muted small">${p.percentage}% (${p.passed_count}/${p.attempt_count})</td>
+  </tr>`).join('');
+  $$('#pRows tr').forEach(tr => tr.onclick = () => openProblem(+tr.dataset.id));
+}
+['#fSearch', '#fWeek', '#fStatus', '#fLocal', '#fCat'].forEach(s => $(s).addEventListener('input', renderProblems));
+
+// ---------- problem dialog ----------
+function mdToHtml(md) {
+  const out = []; let inCode = false, buf = [];
+  const inline = t => esc(t)
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img alt="$1" src="$2" loading="lazy">')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\\([$<*_`\\])/g, '$1');
+  for (const raw of md.split('\n')) {
+    const line = raw.replace(/^\s{0,2}(?=```)/, '');
+    if (line.startsWith('```')) {
+      if (inCode) { out.push(`<pre><code>${esc(buf.join('\n'))}</code></pre>`); buf = []; }
+      inCode = !inCode; continue;
+    }
+    if (inCode) { buf.push(raw.replace(/^ {2}/, '')); continue; }
+    if (/^<!--.*-->$/.test(line.trim())) continue;
+    let m;
+    if ((m = line.match(/^(#{1,3})\s+(.*)/))) out.push(`<h${m[1].length}>${inline(m[2])}</h${m[1].length}>`);
+    else if (line.startsWith('>')) out.push(`<blockquote>${inline(line.replace(/^>\s?/, ''))}</blockquote>`);
+    else if (line.trim() === '---') out.push('<hr>');
+    else if (!line.trim()) out.push('<p></p>');
+    else out.push(`<div>${inline(line)}</div>`);
+  }
+  return out.join('\n');
+}
+let CURRENT = null;
+async function openProblem(id) {
+  const meta = PROBLEMS.find(p => p.id === id) || {};
+  const d = await api('/api/problem/' + id);
+  CURRENT = id;
+  $('#dlgTitle').textContent = `OJ ${id} ${meta.title || ''}`;
+  $('#dlgLink').href = meta.url || `https://ijudge.it.kmitl.ac.th/problems/${id}/description`;
+  $('#dlgMd').innerHTML = d.problem_md ? mdToHtml(d.problem_md) : '<p class="muted">ไม่มี problem.md</p>';
+  $('#dlgCode').textContent = d.main_py || '(ไม่มี main.py)';
+  $('#dlgFolder').textContent = d.folder;
+  setDialogTab('md');
+  $('#dlg').showModal();
+}
+function setDialogTab(t) {
+  $$('[data-dtab]').forEach(b => b.classList.toggle('primary', b.dataset.dtab === t));
+  $('#dlgMd').hidden = t !== 'md'; $('#dlgCode').hidden = t !== 'code';
+}
+$$('[data-dtab]').forEach(b => b.onclick = () => setDialogTab(b.dataset.dtab));
+$('#dlgClose').onclick = () => $('#dlg').close();
+$('#dlgTest').onclick = () => { $('#dlg').close(); showTab('tools'); runCommand('test', {ids: String(CURRENT)}); };
+
+// ---------- tools ----------
+const TOOLS = [
+  {cmd: 'scrape', title: 'ดึงข้อมูลจาก iJudge', desc: 'อัปเดตรายการโจทย์ สถานะ และ problem.md (ต้อง login)', opts: [
+    {k: '--fast', t: 'flag', l: '--fast (รายการ + สถานะเท่านั้น)', d: true},
+    {k: '--only', t: 'ids', l: 'เฉพาะ id', ph: '3586-3598'},
+    {k: '--seed-code', t: 'flag', l: '--seed-code (เอาโค้ดที่ส่งไว้ใส่ stub)'},
+    {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
+  {cmd: 'render', title: 'สร้างไฟล์โจทย์', desc: 'problem.md + main.py stub จาก JSON (ไม่ต่อเน็ต)', opts: [
+    {k: '--only', t: 'ids', l: 'เฉพาะ id', ph: '3290-3301'},
+    {k: '--check', t: 'flag', l: '--check'}, {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
+  {cmd: 'test', title: 'ทดสอบกับ sample', desc: 'รัน main.py กับตัวอย่างทางการ', opts: [
+    {k: 'ids', t: 'ids', l: 'id', ph: '3290-3292,2988'},
+    {k: '--week', t: 'int', l: 'week', ph: '9'},
+    {k: '--solutions', t: 'flag', l: 'ใช้โค้ดในคลัง solutions/'}]},
+  {cmd: 'status', title: 'ซิงก์ ✅', desc: 'เติม/ลบ ✅ ท้ายชื่อโฟลเดอร์ตามสถานะ', opts: [
+    {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
+  {cmd: 'archive', title: 'เก็บเข้าคลัง', desc: 'คัดลอกโค้ดที่ทำเสร็จจาก main ไป solutions/', opts: [
+    {k: '--ids', t: 'ids', l: 'เฉพาะ id'}, {k: '--update', t: 'flag', l: '--update (ทับโค้ดในคลังที่ต่าง)'},
+    {k: '--restore', t: 'ids', l: 'restore id (คลัง → stub ใน main)'},
+    {k: '--blank', t: 'ids', l: 'blank id (main → stub เพื่อฝึกใหม่)'},
+    {k: '--dry-run', t: 'flag', l: '--dry-run', d: true}]},
+  {cmd: 'readme', title: 'สร้าง README', desc: 'README.md บน main', opts: [
+    {k: '--check', t: 'flag', l: '--check'}, {k: '--dry-run', t: 'flag', l: '--dry-run'}]},
+  {cmd: 'doctor', title: 'ตรวจความเรียบร้อย', desc: 'registry ↔ โฟลเดอร์ ↔ คลัง', opts: [
+    {k: '--quiet', t: 'flag', l: '--quiet'}]},
+];
+$('#toolCards').innerHTML = TOOLS.map((t, i) => `<div class="panel tool" data-i="${i}">
+  <div class="row"><h2 style="margin:0">${t.title}</h2><code class="muted small">${t.cmd}</code></div>
+  <p>${t.desc}</p>
+  <div class="row">${t.opts.map(o => o.t === 'flag'
+      ? `<label class="opt"><input type="checkbox" data-k="${o.k}" ${o.d ? 'checked' : ''}>${o.l}</label>`
+      : `<label class="opt">${o.l} <input data-k="${o.k}" placeholder="${o.ph || ''}" size="12"></label>`).join('')}</div>
+  <div><button class="btn primary run">Run</button></div></div>`).join('');
+$$('#toolCards .tool').forEach(card => card.querySelector('.run').onclick = () => {
+  const t = TOOLS[+card.dataset.i], options = {};
+  $$('[data-k]', card).forEach(inp => options[inp.dataset.k] = inp.type === 'checkbox' ? inp.checked : inp.value.trim());
+  runCommand(t.cmd, options);
+});
+
+let JOB = null;
+async function runCommand(cmd, options, after) {
+  try {
+    const r = await api('/api/run', {command: cmd, options});
+    JOB = r.job;
+    $('#out').textContent = '$ pscp.py ' + r.argv.join(' ') + '\n';
+    setJobState('กำลังรัน…', 'warn'); $('#cancelJob').disabled = false;
+    pollJob(0, after);
+  } catch (e) { $('#out').textContent = 'ERROR: ' + e.message; setJobState('ผิดพลาด', 'bad'); }
+}
+async function pollJob(since, after) {
+  const j = await api(`/api/jobs/${JOB}?since=${since}`);
+  if (j.lines.length) {
+    const out = $('#out'); out.textContent += j.lines.join('\n') + '\n'; out.scrollTop = out.scrollHeight;
+  }
+  if (!j.done) return setTimeout(() => pollJob(j.next, after), 400);
+  setJobState(j.exit_code === 0 ? `เสร็จ (${j.elapsed}s)` : `จบด้วย exit ${j.exit_code}`, j.exit_code === 0 ? 'ok' : 'bad');
+  $('#cancelJob').disabled = true;
+  loadOverview(); if (PROBLEMS.length) loadProblems();
+  if (after) after(j);
+}
+function setJobState(text, kind) { const c = $('#jobState'); c.textContent = text; c.className = 'chip ' + (kind || ''); }
+$('#cancelJob').onclick = () => JOB && api(`/api/jobs/${JOB}/cancel`, {});
+$('#clearOut').onclick = () => $('#out').textContent = '';
+$('#quickSync').onclick = () => { showTab('tools'); runCommand('scrape', {'--fast': true}); };
+$('#quickRefresh').onclick = () => { loadOverview(); if (PROBLEMS.length) loadProblems(); };
+
+// ---------- account ----------
+function paintAuth(a) {
+  const chip = $('#authChip');
+  if (!a.has_cookie) { chip.className = 'chip bad'; chip.textContent = 'ยังไม่ login'; }
+  else if (a.valid === true) { chip.className = 'chip ok'; chip.textContent = '● ' + (a.username || 'logged in'); }
+  else if (a.valid === false) { chip.className = 'chip bad'; chip.textContent = 'cookie หมดอายุ'; }
+  else { chip.className = 'chip warn'; chip.textContent = 'มี cookie (ยังไม่ตรวจ)'; }
+  $('#authDetail').innerHTML = !a.has_cookie ? 'ยังไม่มี cookie — login ด้านขวา'
+    : `cookie <code>${esc(a.masked)}</code> จาก ${esc(a.source)}` +
+      (a.valid === true ? `<br><span class="status-Passed">ใช้ได้ — ${esc(a.username)} ${esc(a.fullname || '')}</span>` : '') +
+      (a.valid === false ? `<br><span style="color:var(--bad)">${esc(a.error || 'ใช้ไม่ได้')}</span>` : '');
+}
+async function loadAuth(check) { paintAuth(await api('/api/auth' + (check ? '?check=1' : ''))); }
+function authMsg(ok, text) { $('#authMsg').innerHTML = `<div class="alert ${ok ? 'ok' : 'bad'}">${esc(text)}</div>`; }
+$$('[data-auth]').forEach(b => b.onclick = () => {
+  $$('[data-auth]').forEach(x => x.classList.toggle('primary', x === b));
+  $('#formCookie').hidden = b.dataset.auth !== 'cookie'; $('#formPass').hidden = b.dataset.auth !== 'password';
+});
+$('#formCookie').onsubmit = async e => {
+  e.preventDefault(); authMsg(true, 'กำลังตรวจกับ iJudge…');
+  try {
+    const r = await api('/api/auth/cookie', {cookie: $('#cookieIn').value});
+    if (r.ok) { $('#cookieIn').value = ''; authMsg(true, `บันทึกแล้ว — ${r.username} ${r.fullname || ''}`); loadAuth(true); }
+    else authMsg(false, r.error);
+  } catch (err) { authMsg(false, err.message); }
+};
+$('#formPass').onsubmit = async e => {
+  e.preventDefault(); authMsg(true, 'กำลังเข้าสู่ระบบ…');
+  try {
+    const r = await api('/api/auth/login', {username: $('#userIn').value, password: $('#passIn').value});
+    $('#passIn').value = '';
+    if (r.ok) { authMsg(true, `เข้าสู่ระบบแล้ว — ${r.username} ${r.fullname || ''}`); loadAuth(true); }
+    else authMsg(false, r.error);
+  } catch (err) { authMsg(false, err.message); }
+};
+$('#authCheck').onclick = () => loadAuth(true);
+$('#authLogout').onclick = async () => { await api('/api/auth/logout', {}); authMsg(true, 'ลบ cookie แล้ว'); loadAuth(false); };
+
+loadOverview().catch(e => $('#statCards').innerHTML = `<div class="alert bad">${esc(e.message)}</div>`);
+loadAuth(false);
+</script>
+</body>
+</html>

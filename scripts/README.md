@@ -49,9 +49,24 @@ python3 .op/scripts/pscp.py <command> [options]
 | `readme` | `update_readme.py` | regenerate `README.md` on main. `--check`, `--output PATH` | no |
 | `doctor` | `check_repo.py` | consistency report: registry ↔ folders, ✅ vs status, archive drift, missing `submission.md` | no |
 | `submit` | `submit_oj.py` | submit code from main to iJudge (interactive menu without arguments) | yes |
+| `web` | `web_app.py` | local dashboard at http://127.0.0.1:8765: progress, iJudge login, run the commands above (not `submit`) | for login/scrape |
 
 Every command that writes accepts `--dry-run`. `--dry-run` on `scrape` still
 fetches; only writes are suppressed.
+
+## Web dashboard
+
+```sh
+python3 .op/scripts/pscp.py web                 # opens the browser
+python3 .op/scripts/pscp.py web --port 9000 --no-browser
+```
+
+- **ภาพรวม**: passed / not passed / not submitted, code on main vs stubs, per-week and per-category progress, upcoming deadlines, Learning Logs without `submission.md`
+- **โจทย์**: searchable table; click a row to read `problem.md` / `main.py` and run its samples
+- **เครื่องมือ**: every command except `submit`, with its options, and live output
+- **บัญชี iJudge**: paste a cookie, or sign in with username + password (used once to mint a cookie, never stored); the cookie goes to `submit_config.json`
+
+It binds to 127.0.0.1 only; POSTs need a per-launch token embedded in the page and the Host header must be this server, so other sites in the browser cannot drive it.
 
 ## Data
 
@@ -98,6 +113,7 @@ folder becomes bare `oj<id>`; add a name to `folder_names` and re-run
 ```
 scripts/
   pscp.py                    single entry point
+  web_app.py, web/           local dashboard (stdlib http.server + one HTML page)
   ijudge/                    shared library — import, don't copy
     paths.py                 main / OP locations, problem folder index
     config.py                data/course.json: weeks, tags, folder names

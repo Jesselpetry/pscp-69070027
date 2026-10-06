@@ -120,7 +120,8 @@ def test_problem(pid: int, record: dict[str, Any] | None, use_archive: bool) -> 
     base = paths.OP_ROOT if use_archive else paths.MAIN_ROOT
     print(f"{head}  ({os.path.relpath(main_py, base)})")
     for i, case in enumerate(samples, 1):
-        stdin = case.get("testcase_input") or ""
+        # iJudge stores some samples with CRLF; programs split lines on LF.
+        stdin = (case.get("testcase_input") or "").replace("\r\n", "\n")
         expected = normalise(case.get("testcase_output") or "")
         problem, stdout = run_once(main_py, stdin)
         actual = normalise(stdout)

@@ -28,6 +28,7 @@ COMMANDS: dict[str, tuple[str, str]] = {
     "archive": ("archive_solutions.py", "sync solutions/ with main (--update, --restore, --blank)"),
     "test": ("run_samples.py", "run main.py against the official samples"),
     "submit": ("submit_oj.py", "submit solutions to iJudge"),
+    "web": ("web_app.py", "local web dashboard: progress, iJudge login, run commands"),
 }
 
 
