@@ -1,114 +1,93 @@
 #!/usr/bin/env python3
-"""
-Sync OJ Problem folder names, checkmark tags (✅), and verify that all
-problems in pscp-69070027 match live iJudge status and repository conventions.
+"""Add or remove the ` ✅` suffix on oj/ folders to match the registry status.
 
-Run:  python3 scripts/sync_oj_status.py [--dry-run]
+The status comes from the summary registry (data/oj_problems.json), which the
+scraper refreshes from iJudge -- `scrape_all_oj_problems.py --fast` is enough.
+Learning Log folders at the repo root never carry the suffix and are left
+alone; render_problems.py applies the same rule while rendering.
 
-Renaming is destructive and not trivially reversible (the ✅ suffix encodes
-state that only exists on iJudge), so `--dry-run` prints the planned renames
-to stderr and touches nothing.
+Run (from the repo root):
+    python3 .op/scripts/sync_oj_status.py [--dry-run]
+
+Renaming moves the student's folder, so `--dry-run` prints the planned renames
+to stderr and touches nothing. A rename onto an existing folder is refused.
+
+Exit codes: 0 ok, 1 a rename was refused, 2 the registry could not be read.
 """
+
+from __future__ import annotations
 
 import argparse
-import json
 import os
-import re
 import sys
 
-PSCP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OJ_DIR = os.path.join(PSCP_ROOT, "oj")
-DETAIL_JSON = os.path.join(PSCP_ROOT, "data", "all_problems_detail.json")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-EARLIER_PASSED_PIDS = {
-    2981, 2988, 2992, 2995, 2997, 2998, 2999, 3002, 3004, 3005, 3006, 3008, 3010,
-    3014, 3015, 3016, 3018, 3019, 3020, 3021, 3023, 3027, 3030, 3032, 3033, 3034,
-    3035, 3037, 3038, 3039, 3040, 3041
-}
+from ijudge import fsio, paths, render  # noqa: E402
 
 
-def sync_status(dry_run: bool = False) -> int:
-    if not os.path.exists(DETAIL_JSON):
+def sync_status() -> int:
+    try:
+        registry = render.load_registry(paths.SUMMARY_JSON)
+    except (OSError, ValueError, KeyError) as e:
+        print(f"Error: could not read {paths.SUMMARY_JSON}: {e}", file=sys.stderr)
+        return 2
+    if not registry:
         print(
-            f"Error: {DETAIL_JSON} not found. Run scrape_all_oj_problems.py first.",
+            f"Error: {paths.SUMMARY_JSON} is missing or empty. "
+            f"Run scrape_all_oj_problems.py --fast first.",
             file=sys.stderr,
         )
-        return 1
+        return 2
+    if not os.path.isdir(paths.OJ_DIR):
+        print(f"Error: {paths.OJ_DIR} not found.", file=sys.stderr)
+        return 2
 
-    with open(DETAIL_JSON, "r", encoding="utf-8") as f:
-        active_details = json.load(f)
-    active_map = {p["id"]: p for p in active_details}
-
-    renames = 0
-    skipped = 0
-    for d in sorted(os.listdir(OJ_DIR)):
-        dir_path = os.path.join(OJ_DIR, d)
-        if not os.path.isdir(dir_path):
+    renames = refused = 0
+    unknown: list[str] = []
+    for name in sorted(os.listdir(paths.OJ_DIR)):
+        folder = os.path.join(paths.OJ_DIR, name)
+        pid = paths.problem_id_of(name)
+        if pid is None or not os.path.isdir(folder):
+            continue
+        item = registry.get(pid)
+        if item is None:
+            unknown.append(name)
             continue
 
-        m = re.match(r"^oj(\d+)-(.*?)(?: ✅)?$", d)
-        if not m:
+        desired = render.status_folder(item, folder)
+        if desired == folder:
             continue
-
-        pid = int(m.group(1))
-        base_name = m.group(2).strip()
-
-        # Clean double underscores
-        base_name = re.sub(r"_+", "_", base_name)
-
-        is_passed = False
-        if pid in active_map:
-            is_passed = (active_map[pid]["status"] == "Passed")
-        elif pid in EARLIER_PASSED_PIDS:
-            is_passed = True
-
-        target_name = f"oj{pid}-{base_name} ✅" if is_passed else f"oj{pid}-{base_name}"
-        if target_name == d:
+        if os.path.exists(desired):
+            render.sync_folder_status(item, folder)  # prints the refusal
+            refused += 1
             continue
-
-        new_path = os.path.join(OJ_DIR, target_name)
-
-        # os.rename onto an existing directory either raises (non-empty) or
-        # silently replaces (empty) depending on the platform. Neither is a
-        # good outcome for a folder holding a solution, so refuse instead.
-        if os.path.exists(new_path):
-            print(
-                f"[SKIP] target already exists, not renaming: "
-                f"{d!r} -> {target_name!r}",
-                file=sys.stderr,
-            )
-            skipped += 1
-            continue
-
-        if dry_run:
-            print(f"[DRY-RUN] Would rename: {d!r} -> {target_name!r}", file=sys.stderr)
-        else:
-            os.rename(dir_path, new_path)
-            print(f"Renamed: {d} -> {target_name}")
+        render.sync_folder_status(item, folder)
+        if not fsio.is_dry_run():
+            print(f"Renamed: {name} -> {os.path.basename(desired)}")
         renames += 1
 
-    if dry_run:
-        print(
-            f"[DRY-RUN] Status sync preview complete. "
-            f"({renames} folders would be renamed, {skipped} skipped)",
-            file=sys.stderr,
-        )
-    else:
-        print(f"Status sync completed. ({renames} folders renamed, {skipped} skipped)")
-    return 0
+    if unknown:
+        print(f"[WARN] not in the registry, left as is: {', '.join(unknown)}",
+              file=sys.stderr)
+    verb = "would be renamed" if fsio.is_dry_run() else "renamed"
+    print(f"Status sync complete: {renames} folder(s) {verb}, {refused} refused, "
+          f"{len(registry)} problems in the registry.")
+    return 1 if refused else 0
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Sync oj/ folder names with iJudge pass status."
+        description="Sync the ✅ suffix of oj/ folders with the registry pass status."
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Preview directory renames and file modifications without executing changes.",
+        help="Print the planned renames to stderr and touch nothing.",
     )
     args = parser.parse_args()
-    return sync_status(dry_run=args.dry_run)
+    fsio.set_dry_run(args.dry_run)
+    return sync_status()
 
 
 if __name__ == "__main__":

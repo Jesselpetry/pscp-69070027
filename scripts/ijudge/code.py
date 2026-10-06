@@ -59,11 +59,12 @@ def _is_main_guard(node: ast.stmt) -> bool:
 def is_stub(code: str) -> bool:
     """True if `code` is an untouched template, safe to overwrite or skip.
 
-    Covers the current template (it carries STUB_MARKER) and the older one
-    whose main() holds only a docstring. Anything that does not parse counts
-    as real work: a half-written solution must never be treated as empty.
+    Judged on the AST, so STUB_MARKER (a comment) is irrelevant: the current
+    template and the older docstring-only one both qualify, while code written
+    under a leftover marker does not. Anything that does not parse counts as
+    real work: a half-written solution must never be treated as empty.
     """
-    if not code.strip() or STUB_MARKER in code:
+    if not code.strip():
         return True
     try:
         tree = ast.parse(code)

@@ -160,7 +160,9 @@ def folder_name(pid: int, name: str | None) -> str:
     picked = load_course().get("folder_names", {}).get(str(pid))
     if picked:
         return f"oj{pid}-{picked}"
-    text = re.sub(r"[\[\]]", " ", name or "")
+    # [Recommend] is a status iJudge drops later, not part of the name.
+    text = re.sub(r"\[\s*recommend\w*\s*\]", " ", name or "", flags=re.I)
+    text = re.sub(r"[\[\]]", " ", text)
     slug = re.sub(r"[^A-Za-z0-9_\s-]", "", text)
     slug = re.sub(r"\s+", "_", slug.strip())
     slug = re.sub(r"_+", "_", slug).strip("_-")

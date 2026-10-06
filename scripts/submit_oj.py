@@ -13,7 +13,6 @@ Features:
 """
 
 import argparse
-import glob
 import json
 import os
 import random
@@ -25,17 +24,22 @@ from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from ijudge import USER_AGENT, load_config, save_config, validate_cookie  # noqa: E402
+from ijudge import (  # noqa: E402
+    USER_AGENT,
+    config as course_config,
+    load_config,
+    paths,
+    save_config,
+    validate_cookie,
+)
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PSCP_ROOT = os.path.dirname(SCRIPT_DIR)
-WORKSPACE_ROOT = os.path.dirname(PSCP_ROOT)
-CONFIG_FILE = os.path.join(PSCP_ROOT, "submit_config.json")
-PROBLEMS_JSON = os.path.join(PSCP_ROOT, "oj_problems.json")
-COURSE_84_JSON = os.path.join(PSCP_ROOT, "data", "course_84_problems.json")
-OJ_DIR = os.path.join(PSCP_ROOT, "oj")
+CONFIG_FILE = paths.CONFIG_FILE
+PROBLEMS_JSON = paths.SUMMARY_JSON
+COURSE_84_JSON = paths.COURSE_84_JSON
+OJ_DIR = paths.OJ_DIR
 
-DEFAULT_COURSE_ID = 78
+DEFAULT_COURSE_ID = course_config.course_id("regular")
+MIDTERM_COURSE_ID = course_config.course_id("midterm")
 CURRENT_ACTION_ID = "7fb7acaef042f69199bda46c6a7a0f2b05848f3aee"
 DEFAULT_HEADERS = {
     "User-Agent": USER_AGENT,
@@ -43,19 +47,6 @@ DEFAULT_HEADERS = {
     "Content-Type": "text/plain;charset=UTF-8",
     "next-action": CURRENT_ACTION_ID,
     "Origin": "https://ijudge.it.kmitl.ac.th"
-}
-
-# Alias map for Midterm Course 84 problem IDs to local directory keywords
-MIDTERM_ALIAS_MAP = {
-    3243: ["Stats"],
-    3242: ["ijudge-itkmitl", "ijudge"],
-    3143: ["Pizza_Time", "Pizza"],
-    3138: ["ThaiPlus", "FakeThaiPlus"],
-    3142: ["Triangle"],
-    3146: ["Units"],
-    3240: ["PM_Watch", "PM"],
-    3239: ["Code_Cleaner", "Cleaner"],
-    3148: ["RealThaiPlus", "RealThai"]
 }
 
 
@@ -111,8 +102,8 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None, username=Non
         return config["cookie"].strip()
 
     for candidate in [
-        os.path.join(PSCP_ROOT, ".ijudge_cookie"),
-        os.path.join(WORKSPACE_ROOT, ".ijudge_cookie")
+        os.path.join(paths.OP_ROOT, ".ijudge_cookie"),
+        os.path.join(paths.MAIN_ROOT, ".ijudge_cookie")
     ]:
         if os.path.exists(candidate):
             try:
@@ -124,10 +115,10 @@ def find_cookie(cli_cookie=None, cli_cookie_file=None, config=None, username=Non
                 pass
 
     for env_file in [
-        os.path.join(WORKSPACE_ROOT, ".env.local"),
-        os.path.join(WORKSPACE_ROOT, ".env"),
-        os.path.join(PSCP_ROOT, ".env.local"),
-        os.path.join(PSCP_ROOT, ".env")
+        os.path.join(paths.OP_ROOT, ".env.local"),
+        os.path.join(paths.OP_ROOT, ".env"),
+        os.path.join(paths.MAIN_ROOT, ".env.local"),
+        os.path.join(paths.MAIN_ROOT, ".env")
     ]:
         if os.path.exists(env_file):
             try:
@@ -173,7 +164,7 @@ def prompt_enter_cookie(config):
 
 def load_all_problems(course_id=DEFAULT_COURSE_ID):
     """Load problems from appropriate JSON registry depending on course ID."""
-    if course_id == 84:
+    if course_id == MIDTERM_COURSE_ID:
         if os.path.exists(COURSE_84_JSON):
             with open(COURSE_84_JSON, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -187,43 +178,19 @@ def load_all_problems(course_id=DEFAULT_COURSE_ID):
 
 
 def find_solution_file(problem_id, problem_name=""):
-    """Locate the Python solution file for a problem."""
-    # 1. Direct ID matching in oj/oj<id>-*
-    for path in glob.glob(os.path.join(OJ_DIR, f"oj{problem_id}-*")):
-        if os.path.isdir(path):
-            main_py = os.path.join(path, "main.py")
-            if os.path.exists(main_py):
-                return main_py
+    """Locate the main.py that answers a problem, from the folder index only.
 
-    # 2. Check root-level oj<id> directories
-    root_oj = os.path.join(PSCP_ROOT, f"oj{problem_id}")
-    if os.path.isdir(root_oj):
-        main_py = os.path.join(root_oj, "main.py")
+    A midterm (course-84) id is first mapped to the course-78 problem it
+    mirrors. No name or repo-wide globbing: `*ThaiPlus*` matched both 3276 and
+    3277, so a fuzzy match could submit the wrong problem's code.
+    `problem_name` is unused and kept for callers.
+    """
+    target = course_config.midterm_target(problem_id) or problem_id
+    folder = paths.find_problem_dir(target)
+    if folder:
+        main_py = os.path.join(folder, "main.py")
         if os.path.exists(main_py):
             return main_py
-
-    # 3. Check Midterm Alias Map (for Course 84)
-    if problem_id in MIDTERM_ALIAS_MAP:
-        for keyword in MIDTERM_ALIAS_MAP[problem_id]:
-            for p in glob.glob(os.path.join(OJ_DIR, f"*{keyword}*")):
-                main_py = os.path.join(p, "main.py")
-                if os.path.exists(main_py):
-                    return main_py
-
-    # 4. Check problem name in oj directory
-    if problem_name:
-        sanitized = re.sub(r"[^\w\s]", "", problem_name).strip().replace(" ", "_")
-        for p in glob.glob(os.path.join(OJ_DIR, f"*{sanitized}*")):
-            main_py = os.path.join(p, "main.py")
-            if os.path.exists(main_py):
-                return main_py
-
-    # 5. Check loose files across repo
-    candidates = glob.glob(os.path.join(PSCP_ROOT, "**", f"*{problem_id}*.py"), recursive=True)
-    candidates = [c for c in candidates if not c.endswith("problem.md") and not "scripts" in c and not "node_modules" in c]
-    if candidates:
-        return candidates[0]
-
     return None
 
 
@@ -277,7 +244,7 @@ def filter_problems(all_problems, args, config):
     elif args.all or args.midterm:
         filtered = list(all_problems)
         if args.midterm:
-            resolved_course = 84
+            resolved_course = MIDTERM_COURSE_ID
 
     else:
         filtered, chosen_course = interactive_selection_menu(all_problems, config)
@@ -322,7 +289,7 @@ def interactive_selection_menu(all_problems, config):
 
         sorted_dates = sorted(expire_groups.keys(), key=lambda d: ("1" if "2026" in d else "2", d))
 
-        print("Regular Course (Course 78) - Options:")
+        print(f"Regular Course (Course {DEFAULT_COURSE_ID}) - Options:")
         for idx, d in enumerate(sorted_dates, 1):
             count = len(expire_groups[d])
             ll_count = sum(1 for p in expire_groups[d] if p.get("is_learning_log"))
@@ -330,10 +297,10 @@ def interactive_selection_menu(all_problems, config):
         
         ll_status = "EXCLUDED" if config.get("exclude_learning_logs", True) else "INCLUDED"
         print("\nSpecial Options:")
-        print(f"  [ M] Midterm Exam (Course 84: 9 problems)")
+        print(f"  [ M] Midterm Exam (Course {MIDTERM_COURSE_ID}: 9 problems)")
         print(f"  [ W] Filter by Week (e.g. Week 1, 2, 3)")
         print(f"  [ I] Enter Specific Problem IDs / Ranges (e.g. 3155-3167, 3129)")
-        print(f"  [ A] All Problems (Course 78, {len(all_problems)} total)")
+        print(f"  [ A] All Problems (Course {DEFAULT_COURSE_ID}, {len(all_problems)} total)")
         print(f"  [ L] Toggle Learning Logs (Currently: {ll_status})")
         print(f"  [ C] Enter / Update iJudge Cookie")
         print(f"  [ Q] Quit")
@@ -356,8 +323,8 @@ def interactive_selection_menu(all_problems, config):
             continue
 
         if choice.lower() == "m":
-            m_probs = load_all_problems(course_id=84)
-            return m_probs, 84
+            m_probs = load_all_problems(course_id=MIDTERM_COURSE_ID)
+            return m_probs, MIDTERM_COURSE_ID
 
         if choice.isdigit() and 1 <= int(choice) <= len(sorted_dates):
             selected_date = sorted_dates[int(choice) - 1]
@@ -367,11 +334,11 @@ def interactive_selection_menu(all_problems, config):
                 incl = input(f"This batch contains {ll_count} Learning Log(s). Include them? [y/N]: ").strip().lower()
                 if incl in ("y", "yes"):
                     config["_temp_include_ll"] = True
-            return probs, 78
+            return probs, DEFAULT_COURSE_ID
         elif choice.lower() == "w":
             weeks_str = input("Enter week numbers separated by comma (e.g. 1, 2, 5): ").strip()
             weeks = {int(w.strip()) for w in weeks_str.split(",") if w.strip().isdigit()}
-            return [p for p in all_problems if p.get("week") in weeks], 78
+            return [p for p in all_problems if p.get("week") in weeks], DEFAULT_COURSE_ID
         elif choice.lower() == "i":
             ids_str = input("Enter problem IDs or ranges (e.g. 3129, 3155-3167): ").strip()
             target_ids = set()
@@ -382,9 +349,9 @@ def interactive_selection_menu(all_problems, config):
                     target_ids.update(range(start, end + 1))
                 elif token.isdigit():
                     target_ids.add(int(token))
-            return [p for p in all_problems if p.get("id") in target_ids], 78
+            return [p for p in all_problems if p.get("id") in target_ids], DEFAULT_COURSE_ID
         elif choice.lower() == "a":
-            return list(all_problems), 78
+            return list(all_problems), DEFAULT_COURSE_ID
         else:
             print("[!] Invalid choice. Please try again.")
 
@@ -589,7 +556,7 @@ def main():
     parser.add_argument("--week", "-w", type=str, help="Filter by week number(s) (e.g. '5' or '1,2,3')")
     parser.add_argument("--ids", "-i", type=str, help="Filter by problem IDs/ranges (e.g. '3129,3155-3167')")
     parser.add_argument("--all", "-a", action="store_true", help="Submit all problems")
-    parser.add_argument("--midterm", "-m", action="store_true", help="Select Midterm Exam Course (Course 84)")
+    parser.add_argument("--midterm", "-m", action="store_true", help=f"Select Midterm Exam Course (Course {MIDTERM_COURSE_ID})")
     parser.add_argument("--include-learning-log", action="store_true", help="Include Learning Log problems (default: False)")
     parser.add_argument("--recommended-only", action="store_true", help="Only submit recommended problems")
     parser.add_argument("--cookie", "-c", type=str, help="iJudge session cookie")
@@ -636,7 +603,7 @@ def main():
         if delay_min > delay_max:
             delay_min, delay_max = delay_max, delay_min
 
-    init_course_id = 84 if args.midterm else (args.course_id or config.get("course_id", DEFAULT_COURSE_ID))
+    init_course_id = MIDTERM_COURSE_ID if args.midterm else (args.course_id or config.get("course_id", DEFAULT_COURSE_ID))
     all_problems = load_all_problems(course_id=init_course_id)
 
     selected_problems, course_id = filter_problems(all_problems, args, config)
@@ -711,7 +678,7 @@ def main():
             user_display = f"⚠️ Invalid session ({auth_info['error']})"
 
     print("\n" + "=" * 90)
-    course_label = "Course 84 (Midterm)" if course_id == 84 else f"Course {course_id} (Regular)"
+    course_label = f"Course {course_id} (Midterm)" if course_id == MIDTERM_COURSE_ID else f"Course {course_id} (Regular)"
     print(f"  iJudge Submission Batch Preview: {course_label} ({len(problem_plans)} problems)")
     print(f"  Target Account: {user_display}")
     print("=" * 90)
@@ -724,7 +691,7 @@ def main():
         pid = p["id"]
         name = p["name"]
         if plan["file_exists"]:
-            rel_path = os.path.relpath(plan["file_path"], PSCP_ROOT)
+            rel_path = os.path.relpath(plan["file_path"], paths.MAIN_ROOT)
             if plan["warnings"]:
                 status_str = "⚠️ WARNING"
                 detail_str = f"{rel_path} ({', '.join(plan['warnings'])})"
