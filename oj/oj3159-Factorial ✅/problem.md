@@ -1,4 +1,4 @@
-# OJ 3159: [Recommend] Factorial
+# OJ 3159: Factorial
 
 > - **iJudge cp_id**: 3159 — ภาษา Python
 > - **เวลาจำกัด**: 1 วินาที | **หน่วยความจำ**: 32,000 KB

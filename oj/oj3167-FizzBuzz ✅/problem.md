@@ -1,4 +1,4 @@
-# OJ 3167: [Recommend] FizzBuzz
+# OJ 3167: FizzBuzz
 
 > - **iJudge cp_id**: 3167 — ภาษา Python
 > - **เวลาจำกัด**: 1 วินาที | **หน่วยความจำ**: 32,000 KB
