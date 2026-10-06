@@ -72,7 +72,7 @@ pscp-69070027/           # branch main — โจทย์ + โค้ดขอ�
 ├── README.md            # generated โดย update_readme.py — ห้ามแก้มือ
 ├── CONTRIBUTE.md        # วิธีเพิ่มโจทย์และส่งงาน
 └── .op/                 # worktree ของ branch OP (gitignored บน main)
-    ├── scripts/         # 9 scripts + ijudge/ (shared package)
+    ├── scripts/         # 10 scripts + ijudge/ (shared package)
     ├── data/            # course.json, oj_problems.json (222 ข้อ), all_problems_detail.json (221 ข้อ), html_cache/ (gitignored)
     ├── solutions/       # เฉลยครบ 134 ข้อ: oj<id>/main.py
     └── docs/            # PLAN.md
@@ -84,8 +84,8 @@ pscp-69070027/           # branch main — โจทย์ + โค้ดขอ�
 
 | Branch | บทบาท | Commit ล่าสุด | นำ / ตาม อีก branch | ยังไม่ push |
 | :--- | :--- | :--- | :---: | :---: |
-| `main` | โจทย์ + โค้ดของตัวเอง | `afca3ab` · 2026-10-06 | 1 / 3 | 3 |
-| `OP` | scripts + data + เฉลยครบใน `solutions/` | `540a538` · 2026-10-07 | 3 / 1 | - |
+| `main` | โจทย์ + โค้ดของตัวเอง | `00b96b0` · 2026-10-07 | 2 / 3 | 4 |
+| `OP` | scripts + data + เฉลยครบใน `solutions/` | `540a538` · 2026-10-07 | 3 / 2 | - |
 
 > `solutions/2026-s1` เป็น branch เก่า — ถูกแทนที่ด้วย `OP` (`solutions/`) แล้ว ลบได้เมื่อตรวจว่าโค้ดครบ
 
