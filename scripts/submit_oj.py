@@ -178,14 +178,19 @@ def load_all_problems(course_id=DEFAULT_COURSE_ID):
 
 
 def find_solution_file(problem_id, problem_name=""):
-    """Locate the main.py that answers a problem, from the folder index only.
+    """Locate the main.py that answers a problem.
 
-    A midterm (course-84) id is first mapped to the course-78 problem it
-    mirrors. No name or repo-wide globbing: `*ThaiPlus*` matched both 3276 and
-    3277, so a fuzzy match could submit the wrong problem's code.
-    `problem_name` is unused and kept for callers.
+    The OP branch's archived reference solution (solutions/oj<id>/main.py)
+    wins; otherwise the student's own folder on main. A midterm (course-84)
+    id is first mapped to the course-78 problem it mirrors. No name or
+    repo-wide globbing: `*ThaiPlus*` matched both 3276 and 3277, so a fuzzy
+    match could submit the wrong problem's code. `problem_name` is unused
+    and kept for callers.
     """
     target = course_config.midterm_target(problem_id) or problem_id
+    archived = paths.solution_file(target)
+    if os.path.exists(archived):
+        return archived
     folder = paths.find_problem_dir(target)
     if folder:
         main_py = os.path.join(folder, "main.py")
