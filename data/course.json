@@ -19,7 +19,7 @@
     {"week": 11, "from": "2026-09-18", "title": "การจำลองการทำงานและเซต (Simulation, String Processing & Sets)"},
     {"week": 12, "from": "2026-09-25", "title": "ดิกชันนารีและเซตขั้นสูง (Advanced Dictionaries, Sets & Algorithms)"},
     {"week": 13, "from": "2026-10-02", "title": "การเรียกซ้ำ (Recursion & Divide and Conquer)"},
-    {"week": 14, "title": "ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test)"}
+    {"week": 14, "from": "2026-10-09", "title": "ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test)"}
   ],
   "week_overrides": {
     "2981": 1,
@@ -141,7 +141,8 @@
     "3488": "Spotlight",
     "3543": "Sieve_of_Eratosthenes",
     "3544": "Warehouse_Management",
-    "3598": "Heatwave_Statistics"
+    "3598": "Heatwave_Statistics",
+    "3600": "Calories"
   },
   "midterm_course_map": {
     "3138": 3276,
