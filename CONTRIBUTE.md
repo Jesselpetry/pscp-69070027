@@ -1,146 +1,180 @@
-# CONTRIBUTE.md — วิธีเพิ่มและทำโจทย์ใน repo นี้
+# CONTRIBUTE.md — คู่มือเพิ่มและทำโจทย์ PSCP แบบ Fast-Track
 
-repo นี้มี 2 branch ที่ทำหน้าที่ต่างกัน:
-
-| Branch | อยู่ที่ | มีอะไร |
-|---|---|---|
-| `main` | root ของ repo | โฟลเดอร์โจทย์ (`problem.md` + `main.py`), Learning Log, `recommended/`, README |
-| `OP` | worktree `.op/` (gitignored บน main) | scripts, ข้อมูลโจทย์ (JSON), คลังโค้ดที่ทำเสร็จ (`solutions/`) |
-
-เขียนโค้ดบน `main` เท่านั้น ส่วนเครื่องมือทั้งหมดรันจาก `.op/`
+เอกสารนี้รวบรวม **ขั้นตอนการทำงานมาตรฐาน (Standard Workflow)** สำหรับการเพิ่มโจทย์ใหม่, เขียนโค้ด, ตรวจสอบ, ส่งตรวจ iJudge, ซิงค์ระบบ และ commit อย่างรวดเร็วและถูกต้อง 100%
 
 ---
 
-## ⚙️ ตั้งค่าครั้งแรก
+## ⚡ Fast-Track Pipeline (ขั้นตอนด่วนเมื่อได้รับโจทย์ใหม่)
 
+เมื่อได้รับโจทย์ใหม่ (เช่น ลิงก์ iJudge, เลข OJ ID, หรือชื่อโจทย์) ให้ดำเนินการตาม 8 ขั้นตอนนี้ตามลำดับ:
+
+```
+[1. Check Auth] ──> [2. Config Course] ──> [3. Scrape & Render] ──> [4. Solve Code]
+                                                                            │
+[8. Commit & Push] <── [7. Post-Pass Sync] <── [6. Submit iJudge] <── [5. Test Samples]
+```
+
+### 1. ตรวจสอบ Session Cookie (iJudge Auth)
+เครื่องมือใน repo มีระบบ **Auto-Refresh** จากโปรไฟล์ของ Zen Browser (`cookies.sqlite`) โดยอัตโนมัติ  
+แต่หากต้องการตั้งค่าด้วยตนเองหรือ session หมดอายุ:
 ```bash
-git worktree add .op OP                          # เอา branch OP มาไว้ที่ .op/
-export IJUDGE_COOKIE='access_token=...'          # cookie จาก browser — เฉพาะคำสั่งที่ต่อ iJudge
-python3 .op/scripts/pscp.py                      # ดูคำสั่งทั้งหมด
+# ตรวจสอบว่า cookie ใช้งานได้หรือไม่ (แสดงชื่อผู้ใช้และคอร์ส)
+python3 .op/scripts/pscp.py submit --dry-run --ids 3599
 ```
-
-วิธีหา cookie และตัวเลือกอื่นอยู่ใน `.op/scripts/README.md`
+*หากต้องการดึง Cookie จาก Zen Browser แบบด่วน (One-Liner):*
+```bash
+python3 -c "import sqlite3, shutil, os, json, glob; p = glob.glob(os.path.expanduser('~/Library/Application Support/zen/Profiles/*.Default*/cookies.sqlite'))[0]; shutil.copy2(p, '/tmp/z.sqlite'); c = sqlite3.connect('/tmp/z.sqlite').cursor(); t = c.execute(\"SELECT value FROM moz_cookies WHERE host LIKE '%ijudge%' AND name='access_token'\").fetchone(); os.remove('/tmp/z.sqlite'); conf = json.load(open('.op/submit_config.json')); conf['cookie'] = f'access_token={t[0]}'; json.dump(conf, open('.op/submit_config.json', 'w'), indent=2); print('Cookie refreshed!')"
+```
 
 ---
 
-## 📌 รูปแบบชื่อโฟลเดอร์
-
-| ประเภท | โฟลเดอร์ | ตัวอย่าง |
-|---|---|---|
-| โจทย์ปกติ / Midterm / Mini Exam | `oj/oj<id>-<Problem_Name>/` | `oj/oj3019-Safe_Password/` |
-| โจทย์ที่ผ่านแล้ว | ต่อท้าย ` ✅` | `oj/oj3019-Safe_Password ✅/` |
-| Learning Log | `oj<id>/` ที่ root (ไม่ใส่ ✅) | `oj2996/` |
-
-ชื่อ `<Problem_Name>` ของโจทย์ชื่อภาษาไทยตั้งไว้ใน `.op/data/course.json` (`folder_names`)
+### 2. ตรวจสอบ Config ของโจทย์ใน `.op/data/course.json` (ก่อนดึงโจทย์)
+หากโจทย์เข้าเงื่อนไขต่อไปนี้ ให้เพิ่มค่าใน [`.op/data/course.json`](file:///.op/data/course.json) ก่อน:
+1. **โจทย์ชื่อภาษาไทย**: ให้เพิ่มการแปลงเป็นภาษาอังกฤษใน `"folder_names"` เพื่อไม่ให้ชื่อโฟลเดอร์กลายเป็น `oj<id>` เปล่าๆ:
+   ```json
+   "folder_names": {
+     "3600": "Calories"
+   }
+   ```
+2. **ขึ้นสัปดาห์ใหม่**: หากโจทย์ถูกปล่อยในสัปดาห์ใหม่ ให้เช็คว่าใน `"weeks"` มี `"from": "YYYY-MM-DD"` ระบุวันที่เริ่มสัปดาห์นั้นแล้ว:
+   ```json
+   {"week": 14, "from": "2026-10-09", "title": "ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test)"}
+   ```
 
 ---
 
-## 🗂️ ไฟล์ในโฟลเดอร์โจทย์
-
+### 3. ดึงโจทย์และสร้างโครงไฟล์ (Scrape & Render)
+ดึงรายละเอียดของโจทย์จาก iJudge พร้อมสร้างโฟลเดอร์, `problem.md`, และ stub ของ `main.py`:
+```bash
+# ดึงเฉพาะข้อที่ต้องการ (ระบุ id เดี่ยว หรือช่วง เช่น 3599,3600 หรือ 3586-3598)
+python3 .op/scripts/pscp.py scrape --only <ids>
 ```
-oj/oj<id>-<Name>/
-├── problem.md       # สร้างจาก JSON — ห้ามแก้มือ (แก้แล้วจะโดนเขียนทับ)
-└── main.py          # โค้ดของเรา — script สร้าง stub ให้ครั้งเดียว ไม่เขียนทับ
+*สิ่งที่ระบบสร้างให้:*
+- `oj/oj<id>-<Problem_Name>/problem.md`: รายละเอียดโจทย์, Input/Output spec, ข้อจำกัดเวลา/หน่วยความจำ, และ Sample cases
+- `oj/oj<id>-<Problem_Name>/main.py`: โครงไฟล์ stub พร้อม docstring มาตรฐาน
 
-oj<id>/                          # Learning Log
-├── problem.md
-├── main.py
-├── submission.md                # เขียนเอง! ห้ามให้ AI เขียน
-└── ai_reflection.md             # เฉพาะเมื่อใช้ AI — เขียนเอง
-```
+---
 
-`main.py` มาตรฐาน:
-
+### 4. เขียนโค้ดเฉลย (Solve Problem)
+เปิดไฟล์ `oj/oj<id>-<Problem_Name>/main.py` แล้วเขียนตรรกะโปรแกรม  
+**กฎเหล็กของโครงสร้างโค้ดและ PEP 8 (เพื่อให้ได้คะแนน 10.0 เต็ม):**
 ```python
 """ Problem Name """
 
 
 def main():
     """Problem Name"""
-    # solution code here
+    # โค้ดแก้ปัญหาที่นี่
 
 
 if __name__ == "__main__":
     main()
 ```
-
-- บรรทัดแรกเป็น module docstring ชื่อโจทย์
-- โค้ดทั้งหมดอยู่ใน `def main()` ที่มี docstring
-- ปิดท้ายด้วย `if __name__ == "__main__": main()`
-
----
-
-## 🚀 ทำโจทย์ใหม่
-
-### 1. ดึงโจทย์
-
-```bash
-python3 .op/scripts/pscp.py scrape --only 3586-3598   # ดึงจาก iJudge → JSON → problem.md + main.py stub
-python3 .op/scripts/pscp.py render                    # (ไม่ต่อเน็ต) สร้างไฟล์ใหม่จาก JSON ที่มีอยู่
-```
-
-Learning Log: คัดลอก template มาเขียน `submission.md` เอง
-
-```bash
-cp AI-Guidelines-PSCP/templates/SUBMISSION_TEMPLATE.th.md "oj<id>/SUBMISSION_TEMPLATE.th.md"
-```
-
-### 2. เขียนและทดสอบ
-
-```bash
-python3 "oj/oj<id>-<Name>/main.py"          # รันเองใน VS Code
-python3 .op/scripts/pscp.py test <id>       # รันกับ sample ทางการจาก iJudge
-```
-
-### 3. หลังผ่าน OJ
-
-```bash
-python3 .op/scripts/pscp.py scrape --fast   # อัปเดตสถานะจาก iJudge
-python3 .op/scripts/pscp.py status          # เติม/ลบ ✅ ท้ายชื่อโฟลเดอร์ตามสถานะ
-python3 .op/scripts/pscp.py archive         # เก็บโค้ดที่เสร็จแล้วเข้า .op/solutions/
-python3 .op/scripts/pscp.py readme          # สร้าง README ใหม่ (ห้ามแก้ README มือ)
-python3 .op/scripts/pscp.py doctor          # ตรวจว่าไม่มีอะไรหลุด
-```
-
-แล้ว commit แยกกันทั้ง 2 branch:
-
-```bash
-git add -A && git commit -m "feat(oj): ..."              # main
-git -C .op add -A && git -C .op commit -m "chore: ..."   # OP
-```
+- ✅ มี Module docstring บรรทัดแรกสุด
+- ✅ โค้ดทั้งหมดอยู่ใน `def main():` และมี docstring บรรทัดแรกในฟังก์ชัน
+- ✅ เว้น 2 บรรทัดว่างระหว่าง `def main():` กับ `if __name__ == "__main__":`
+- ✅ ความยาวแต่ละบรรทัดห้ามเกิน 79 ตัวอักษร
+- ✅ ห้ามมี Trailing whitespace ท้ายบรรทัด
+- ✅ ไม่มี Unused imports หรือตัวแปรที่ไม่ได้ใช้
 
 ---
 
-## 📋 Checklist
+### 5. ทดสอบกับตัวอย่างและตรวจ Lint (Test & Lint)
+ทดสอบโค้ดกับ Official Sample Cases จาก iJudge และตรวจ PEP 8:
+```bash
+# 1. รัน Sample testcases
+python3 .op/scripts/pscp.py test <id>
 
-### โจทย์ปกติ
+# 2. ตรวจ PEP 8 Linting
+flake8 "oj/oj<id>-<Problem_Name>/main.py"
+```
+*ต้องผ่านทุก sample testcase (`PASS`) และไม่มี flake8 warning ใดๆ ก่อนส่ง*
 
-```text
-[ ] มีโฟลเดอร์ oj/oj<id>-<Name>/ พร้อม problem.md + main.py (scrape/render สร้างให้)
-[ ] เขียน main.py ตามโครงสร้าง def main() + docstring + if __name__ guard
-[ ] ทดสอบใน VS Code และ pscp.py test <id>
-[ ] หลัง Pass: scrape --fast → status → archive → readme
+---
+
+### 6. ส่งตรวจเข้า iJudge (Submit)
+ส่งโค้ดเข้าประเมินผลบนระบบ iJudge ทันที:
+```bash
+python3 .op/scripts/pscp.py submit --ids <ids> --yes
+```
+*ระบบจะแสดงรายงานสรุปผล:*
+- **Verdict**: ต้องได้ `✅ PPPPP...` (ผ่านครบทุก testcase)
+- **Score**: `1000.0 / 1000.0`
+- **PEP8**: `10.0 / 10.0`
+
+---
+
+### 7. Post-Pass One-Liner (ซิงค์สถานะ, เก็บ Archive, อัปเดต README, เช็ค Doctor)
+เมื่อส่งผ่านแล้ว ให้รันคำสั่ง One-Liner นี้ทันทีเพื่อซิงค์ทั้งระบบ:
+```bash
+python3 .op/scripts/pscp.py status && python3 .op/scripts/pscp.py archive && python3 .op/scripts/pscp.py readme && python3 .op/scripts/pscp.py doctor
 ```
 
-### โจทย์ Learning Log
+**หน้าที่ของแต่ละคำสั่ง:**
+| คำสั่ง | หน้าที่ |
+|---|---|
+| `pscp.py status` | เปลี่ยนชื่อโฟลเดอร์เติม ` ✅` ท้ายชื่อ เช่น `oj/oj3599-SumOfNumber ✅/` |
+| `pscp.py archive` | คัดลอกโค้ดที่ผ่านแล้วไปเก็บที่ `.op/solutions/oj<id>/main.py` |
+| `pscp.py readme` | อัปเดตสถิติและสร้างตารางใน [`README.md`](file:///README.md) ใหม่ทั้งหมด |
+| `pscp.py doctor` | ตรวจสอบความสอดคล้องของ repo (ต้องรายงาน `Errors: none`) |
 
-```text
-[ ] มีโฟลเดอร์ oj<id>/ พร้อม problem.md + main.py
-[ ] คัดลอก SUBMISSION_TEMPLATE.th.md แล้วเขียน submission.md เอง
-[ ] เขียน ai_reflection.md เอง (ถ้าใช้ AI)
-[ ] ทดสอบใน VS Code และ pscp.py test <id>
-[ ] หลัง Pass: scrape --fast → archive → readme
+---
+
+### 8. Commit & Push ทั้ง 2 Branches
+เนื่องจากโปรเจกต์นี้แยก `main` (โค้ดของตัวเอง) และ `OP` (worktree เครื่องมือ + data + solutions) ให้ commit และ push ทั้งสอง branch:
+```bash
+# 1. Commit & Push บน main
+git add -A && git commit -m "feat(oj): complete Week <W> problems <ids>, update README"
+git push origin main
+
+# 2. Commit & Push บน OP
+git -C .op add -A && git -C .op commit -m "feat(solutions): add <ids> solutions and course data"
+git -C .op push origin OP
 ```
 
 ---
 
-## 🗒️ สรุป
+## 🗂️ สถาปัตยกรรมของ Repository (2 Branches)
 
-| ไฟล์ | ใครเขียน | หมายเหตุ |
+| Branch | โฟลเดอร์ | หน้าที่ |
 |---|---|---|
-| `problem.md` | script | generate จาก `.op/data/all_problems_detail.json` |
-| `main.py` | เรา | script สร้าง stub ครั้งเดียว |
-| `submission.md` | เรา | เฉพาะ Learning Log — ห้ามให้ AI เขียน |
-| `ai_reflection.md` | เรา | เฉพาะ Learning Log ที่ใช้ AI — ห้ามให้ AI เขียน |
-| `README.md` | script | `pscp.py readme` |
-| `recommended/` | เรา | script ไม่แตะ |
+| `main` | root ของโปรเจกต์ | โฟลเดอร์โจทย์ (`oj/oj<id>-<Name>[ ✅]/`), Learning Logs (`oj<id>/`), `README.md` |
+| `OP` | `.op/` (git worktree) | สคริปต์ (`scripts/`), ฐานข้อมูล JSON (`data/`), โค้ดเฉลยสำรอง (`solutions/`) |
+
+---
+
+## 📌 รูปแบบโครงสร้างโฟลเดอร์
+
+| ประเภท | โฟลเดอร์ | ตัวอย่าง |
+|---|---|---|
+| โจทย์ปกติ / Midterm / Mini Exam | `oj/oj<id>-<Problem_Name>/` | `oj/oj3599-SumOfNumber/` |
+| โจทย์ที่ผ่าน OJ แล้ว | มี ` ✅` ต่อท้าย | `oj/oj3599-SumOfNumber ✅/` |
+| Learning Log | `oj<id>/` ที่ root (ไม่ใส่ ✅) | `oj2996/` |
+
+---
+
+## 📝 กรณีโจทย์ Learning Log
+สำหรับโจทย์ประเภท Learning Log (มีแท็ก `[LEARNING LOG]`):
+1. โฟลเดอร์จะอยู่ที่ root เช่น `oj3536/` (ไม่ใช่ใน `oj/`)
+2. จะต้องมีไฟล์เอกสารเพิ่มเติม:
+   - `submission.md`: บันทึกการเรียนรู้ (เขียนด้วยตนเองตาม template)
+   - `ai_reflection.md`: บันทึกการใช้ AI (เขียนด้วยตนเองหากมีการใช้ AI)
+3. สคริปต์ `submit` ปกติจะเว้น Learning Log ไว้ป้องกันการส่งซ้ำ หากต้องการส่งให้ระบุ `--include-learning-log`
+
+---
+
+## 🛠️ สรุปคำสั่งลัดที่ใช้บ่อย (Cheat Sheet)
+
+```bash
+# ทดสอบ Sample ทุกข้อในสัปดาห์
+python3 .op/scripts/pscp.py test --week 14
+
+# ทดสอบ Sample โดยใช้โค้ดจาก archive
+python3 .op/scripts/pscp.py test <id> --solutions
+
+# ตรวจสุขภาพของ repo
+python3 .op/scripts/pscp.py doctor
+
+# เปิด Web Dashboard สำหรับจัดการและดูสถิติ
+python3 .op/scripts/pscp.py web
+```
