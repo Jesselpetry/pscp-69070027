@@ -15,21 +15,30 @@
 ```
 
 ### 1. ตรวจสอบ Session Cookie (iJudge Auth)
-เครื่องมือใน repo มีระบบ **Auto-Refresh** จากโปรไฟล์ของ Zen Browser (`cookies.sqlite`) โดยอัตโนมัติ  
-แต่หากต้องการตั้งค่าด้วยตนเองหรือ session หมดอายุ:
+เครื่องมือจะค้นหา session ให้อัตโนมัติตามลำดับนี้ (ตรงกับที่ระบุใน [`.op/scripts/README.md`](.op/scripts/README.md)):
+1. ตัวแปรแวดล้อม `IJUDGE_COOKIE` (ถ้ายังไม่หมดอายุ)
+2. token ที่แคชไว้ใน `.op/submit_config.json` (ถ้ายังไม่หมดอายุ)
+3. **Auto-refresh**: ดึง `access_token` สดจากโปรไฟล์ Zen/Firefox (`cookies.sqlite`) ให้อัตโนมัติ
+4. ล็อกอินด้วย `IJUDGE_USER` / `IJUDGE_PASS`
+
+ปกติ**ไม่ต้องตั้งค่าอะไร** แค่เปิด iJudge ค้างไว้ใน Zen Browser ระบบก็ดึง cookie ให้เอง — ตรวจว่า session ยังใช้งานได้ด้วยคำสั่งนี้ (ไม่ส่งจริง):
 ```bash
-# ตรวจสอบว่า cookie ใช้งานได้หรือไม่ (แสดงชื่อผู้ใช้และคอร์ส)
+# พรีวิวว่าจะส่งข้ออะไร + ยืนยันว่า session ยังใช้งานได้
 python3 .op/scripts/pscp.py submit --dry-run --ids 3599
 ```
-*หากต้องการดึง Cookie จาก Zen Browser แบบด่วน (One-Liner):*
+หากต้องตั้ง cookie เอง (เช่น Zen ปิดอยู่ หรือใช้เบราว์เซอร์อื่น):
 ```bash
-python3 -c "import sqlite3, shutil, os, json, glob; p = glob.glob(os.path.expanduser('~/Library/Application Support/zen/Profiles/*.Default*/cookies.sqlite'))[0]; shutil.copy2(p, '/tmp/z.sqlite'); c = sqlite3.connect('/tmp/z.sqlite').cursor(); t = c.execute(\"SELECT value FROM moz_cookies WHERE host LIKE '%ijudge%' AND name='access_token'\").fetchone(); os.remove('/tmp/z.sqlite'); conf = json.load(open('.op/submit_config.json')); conf['cookie'] = f'access_token={t[0]}'; json.dump(conf, open('.op/submit_config.json', 'w'), indent=2); print('Cookie refreshed!')"
+# วิธีที่ 1: วางแล้วบันทึก cookie แบบโต้ตอบ
+python3 .op/scripts/pscp.py submit --set-cookie
+
+# วิธีที่ 2: ตั้งผ่าน env (คัดจาก DevTools > Network > Cookie header, อายุ ~24 ชม.)
+export IJUDGE_COOKIE='access_token=...'
 ```
 
 ---
 
 ### 2. ตรวจสอบ Config ของโจทย์ใน `.op/data/course.json` (ก่อนดึงโจทย์)
-หากโจทย์เข้าเงื่อนไขต่อไปนี้ ให้เพิ่มค่าใน [`.op/data/course.json`](file:///.op/data/course.json) ก่อน:
+หากโจทย์เข้าเงื่อนไขต่อไปนี้ ให้เพิ่มค่าใน [`.op/data/course.json`](.op/data/course.json) ก่อน:
 1. **โจทย์ชื่อภาษาไทย**: ให้เพิ่มการแปลงเป็นภาษาอังกฤษใน `"folder_names"` เพื่อไม่ให้ชื่อโฟลเดอร์กลายเป็น `oj<id>` เปล่าๆ:
    ```json
    "folder_names": {
@@ -115,7 +124,7 @@ python3 .op/scripts/pscp.py status && python3 .op/scripts/pscp.py archive && pyt
 |---|---|
 | `pscp.py status` | เปลี่ยนชื่อโฟลเดอร์เติม ` ✅` ท้ายชื่อ เช่น `oj/oj3599-SumOfNumber ✅/` |
 | `pscp.py archive` | คัดลอกโค้ดที่ผ่านแล้วไปเก็บที่ `.op/solutions/oj<id>/main.py` |
-| `pscp.py readme` | อัปเดตสถิติและสร้างตารางใน [`README.md`](file:///README.md) ใหม่ทั้งหมด |
+| `pscp.py readme` | อัปเดตสถิติและสร้างตารางใน [`README.md`](README.md) ใหม่ทั้งหมด |
 | `pscp.py doctor` | ตรวจสอบความสอดคล้องของ repo (ต้องรายงาน `Errors: none`) |
 
 ---
