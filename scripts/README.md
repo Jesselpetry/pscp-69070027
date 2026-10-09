@@ -30,7 +30,8 @@ automatically in the following order:
 
 To set or override manually:
 ```sh
-export IJUDGE_COOKIE='access_token=...'   # preferred: browser DevTools > Network > Cookie header, ~24h lifetime
+export IJUDGE_COOKIE='access_token=...'            # browser DevTools > Network > Cookie header, ~24h lifetime
+python3 .op/scripts/pscp.py submit --set-cookie    # or paste & save it interactively
 # or let the scripts mint one:
 export IJUDGE_USER=... IJUDGE_PASS=...
 ```

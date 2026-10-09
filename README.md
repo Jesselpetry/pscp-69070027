@@ -11,4 +11,5 @@ Check it out next to `main` as a worktree (once):
 git worktree add .op OP
 ```
 
-Full usage is in [`scripts/README.md`](scripts/README.md).
+- [`CONTRIBUTE.md`](CONTRIBUTE.md) — **agent operations guide**: the full workflow in one doc (architecture, auth, commands, pipeline, conventions, commit & ihelp).
+- [`scripts/README.md`](scripts/README.md) — tooling reference (command flags, data files, write rules).
