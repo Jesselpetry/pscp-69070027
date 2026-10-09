@@ -26,8 +26,8 @@
 
 ## 📊 Overall Progress Dashboard
 
-- **Total Problems Tracked**: `222`
-- **✅ Solved / Passed**: `104` (46.8%)
+- **Total Problems Tracked**: `224`
+- **✅ Solved / Passed**: `106` (47.3%)
 - **🔄 In Progress / Pending**: `118`
 
 ### 📅 Weekly Progress (นับตั้งแต่สัปดาห์แรกที่เปิดเทอม)
@@ -47,7 +47,7 @@
 | **Week 11** | การจำลองการทำงานและเซต (Simulation, String Processing & Sets) | 16 | 0 | 16 | **0.0%** |
 | **Week 12** | ดิกชันนารีและเซตขั้นสูง (Advanced Dictionaries, Sets & Algorithms) | 16 | 0 | 16 | **0.0%** |
 | **Week 13** | การเรียกซ้ำ (Recursion & Divide and Conquer) | 13 | 2 | 11 | **15.4%** |
-| **Week 14** | ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test) | 26 | 0 | 26 | **0.0%** |
+| **Week 14** | ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test) | 28 | 2 | 26 | **7.1%** |
 
 ### 🏷️ Category Breakdown
 
@@ -64,7 +64,7 @@
 
 ```
 pscp-69070027/           # branch main — โจทย์ + โค้ดของตัวเอง
-├── oj/                  # โจทย์ปกติ + Midterm + Mini Exam (186 โฟลเดอร์): oj<id>-<Name>/ → problem.md, main.py (ลงท้าย ✅ = ผ่านแล้ว)
+├── oj/                  # โจทย์ปกติ + Midterm + Mini Exam (188 โฟลเดอร์): oj<id>-<Name>/ → problem.md, main.py (ลงท้าย ✅ = ผ่านแล้ว)
 ├── oj<id>/              # Learning Log (36 โฟลเดอร์): main.py, problem.md, submission.md (+ ai_reflection.md)
 ├── recommended/         # สรุปโจทย์แนะนำที่เขียนเอง (10 ข้อ) + สรุป ce-kmitl
 ├── AI-Guidelines-PSCP/  # แนวทางการใช้ AI ของรายวิชา
@@ -73,8 +73,8 @@ pscp-69070027/           # branch main — โจทย์ + โค้ดขอ�
 ├── CONTRIBUTE.md        # วิธีเพิ่มโจทย์และส่งงาน
 └── .op/                 # worktree ของ branch OP (gitignored บน main)
     ├── scripts/         # 10 scripts + ijudge/ (shared package)
-    ├── data/            # course.json, oj_problems.json (222 ข้อ), all_problems_detail.json (221 ข้อ), html_cache/ (gitignored)
-    ├── solutions/       # เฉลยครบ 134 ข้อ: oj<id>/main.py
+    ├── data/            # course.json, oj_problems.json (224 ข้อ), all_problems_detail.json (223 ข้อ), html_cache/ (gitignored)
+    ├── solutions/       # เฉลยครบ 224 ข้อ: oj<id>/main.py
     └── docs/            # PLAN.md
 ```
 
@@ -84,10 +84,8 @@ pscp-69070027/           # branch main — โจทย์ + โค้ดขอ�
 
 | Branch | บทบาท | Commit ล่าสุด | นำ / ตาม อีก branch | ยังไม่ push |
 | :--- | :--- | :--- | :---: | :---: |
-| `main` | โจทย์ + โค้ดของตัวเอง | `00b96b0` · 2026-10-07 | 2 / 3 | 4 |
-| `OP` | scripts + data + เฉลยครบใน `solutions/` | `540a538` · 2026-10-07 | 3 / 2 | - |
-
-> `solutions/2026-s1` เป็น branch เก่า — ถูกแทนที่ด้วย `OP` (`solutions/`) แล้ว ลบได้เมื่อตรวจว่าโค้ดครบ
+| `main` | โจทย์ + โค้ดของตัวเอง | `68352ec` · 2026-10-07 | 4 / 12 | 0 |
+| `OP` | scripts + data + เฉลยครบใน `solutions/` | `d1ae128` · 2026-10-08 | 12 / 4 | 0 |
 
 ```bash
 git worktree add .op OP              # ครั้งเดียว ถ้ายังไม่มี
@@ -433,7 +431,7 @@ python3 .op/scripts/pscp.py readme   # รัน script จาก root ของ
 
 ### 📅 Week 14: ชุดข้อสอบย่อยจำลอง (Mini Exam / Mock Test)
 
-> รวม `26` ข้อ (ผ่านแล้ว `0/26`)
+> รวม `28` ข้อ (ผ่านแล้ว `2/28`)
 
 | OJ ID | Problem Name | Status | Folder Link | Problem Spec | Solution Code |
 | :---: | :--- | :---: | :--- | :---: | :---: |
@@ -463,6 +461,8 @@ python3 .op/scripts/pscp.py readme   # รัน script จาก root ของ
 | **3549** | Book shelf | 🔄 *In Progress* | [`oj3549-MINI_EXAM_Book_shelf`](oj/oj3549-MINI_EXAM_Book_shelf) | [`problem.md`](oj/oj3549-MINI_EXAM_Book_shelf/problem.md) | [`main.py`](oj/oj3549-MINI_EXAM_Book_shelf/main.py) |
 | **3550** | Sorry | 🔄 *In Progress* | [`oj3550-MINI_EXAM_Sorry`](oj/oj3550-MINI_EXAM_Sorry) | [`problem.md`](oj/oj3550-MINI_EXAM_Sorry/problem.md) | [`main.py`](oj/oj3550-MINI_EXAM_Sorry/main.py) |
 | **3551** | Adventurer's Backpack | 🔄 *In Progress* | [`oj3551-MINI_EXAM_Adventurers_Backpack`](oj/oj3551-MINI_EXAM_Adventurers_Backpack) | [`problem.md`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/problem.md) | [`main.py`](oj/oj3551-MINI_EXAM_Adventurers_Backpack/main.py) |
+| **3599** | SumOfNumber | ✅ **Passed** | [`oj3599-SumOfNumber ✅`](oj/oj3599-SumOfNumber%20%E2%9C%85) | [`problem.md`](oj/oj3599-SumOfNumber%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3599-SumOfNumber%20%E2%9C%85/main.py) |
+| **3600** | แคลอรี่ | ✅ **Passed** | [`oj3600-Calories ✅`](oj/oj3600-Calories%20%E2%9C%85) | [`problem.md`](oj/oj3600-Calories%20%E2%9C%85/problem.md) | [`main.py`](oj/oj3600-Calories%20%E2%9C%85/main.py) |
 
 ---
 
@@ -471,9 +471,9 @@ python3 .op/scripts/pscp.py readme   # รัน script จาก root ของ
 ไฟล์ทั้งหมดในหัวข้อนี้อยู่บน branch `OP` (worktree `.op/`) ไม่ใช่ `main`
 
 - [`data/course.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/course.json) — Course config: week windows (release dates), week titles, category tags, folder names, midterm map. Adding a week = one entry here.
-- [`data/oj_problems.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/oj_problems.json) — Summary registry (222 problems): id, week, status, pass stats, deadline, release date, and category flags.
-- [`data/all_problems_detail.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/all_problems_detail.json) — Detail registry (221 problems): problem statements, input/output specifications, time/memory limits, and sample testcases.
-- [`solutions/`](https://github.com/Jesselpetry/pscp-69070027/tree/OP/solutions) — Archived reference code (134 problems): `solutions/oj<id>/main.py`.
+- [`data/oj_problems.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/oj_problems.json) — Summary registry (224 problems): id, week, status, pass stats, deadline, release date, and category flags.
+- [`data/all_problems_detail.json`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/data/all_problems_detail.json) — Detail registry (223 problems): problem statements, input/output specifications, time/memory limits, and sample testcases.
+- [`solutions/`](https://github.com/Jesselpetry/pscp-69070027/tree/OP/solutions) — Archived reference code (224 problems): `solutions/oj<id>/main.py`.
 - [`scripts/pscp.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/pscp.py) — Single entry point: `python3 .op/scripts/pscp.py <command>` runs every script below.
 - [`scripts/scrape_all_oj_problems.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/scrape_all_oj_problems.py) — iJudge scraper: summary + detail registries, with a React Server Component (RSC) stream resolver.
 - [`scripts/render_problems.py`](https://github.com/Jesselpetry/pscp-69070027/blob/OP/scripts/render_problems.py) — Registry → `problem.md` for every problem + `main.py` stubs for new ones (offline, idempotent).
