@@ -146,23 +146,102 @@ def validate_cookie(cookie: str) -> dict[str, Any]:
     }
 
 
+def is_cookie_expired(cookie: str | None) -> bool:
+    """Check whether an access_token cookie has passed expiration."""
+    if not cookie:
+        return True
+    try:
+        import base64
+        import time
+        token = cookie.split("access_token=")[-1].split(";")[0].strip()
+        parts = token.split(".")
+        if len(parts) >= 2:
+            padding = "=" * (4 - len(parts[1]) % 4)
+            payload = json.loads(base64.urlsafe_b64decode(parts[1] + padding))
+            exp = payload.get("exp")
+            if exp and time.time() >= exp:
+                return True
+            return False
+    except Exception:
+        pass
+    return False
+
+
+def find_browser_cookie() -> str | None:
+    """Extract an active iJudge cookie from browser profiles (Zen/Firefox)."""
+    import glob
+    import shutil
+    import sqlite3
+
+    zen_dirs = glob.glob(
+        os.path.expanduser(
+            "~/Library/Application Support/zen/Profiles/*.Default*"
+        )
+    )
+    for d in zen_dirs:
+        db_path = os.path.join(d, "cookies.sqlite")
+        if os.path.isfile(db_path):
+            temp_db = f"/tmp/ijudge_cookie_{os.getpid()}.sqlite"
+            try:
+                shutil.copy2(db_path, temp_db)
+                conn = sqlite3.connect(temp_db)
+                cur = conn.cursor()
+                query = (
+                    "SELECT value FROM moz_cookies "
+                    "WHERE host LIKE '%ijudge%' AND name='access_token'"
+                )
+                cur.execute(query)
+                row = cur.fetchone()
+                conn.close()
+                if row and row[0]:
+                    candidate = f"access_token={row[0]}"
+                    if not is_cookie_expired(candidate):
+                        return candidate
+            except Exception:
+                pass
+            finally:
+                if os.path.exists(temp_db):
+                    try:
+                        os.remove(temp_db)
+                    except OSError:
+                        pass
+    return None
+
+
 def resolve_cookie(config_file: str = CONFIG_FILE, quiet: bool = False) -> str:
     """Find a usable session cookie, minting a fresh one as a last resort.
 
-    Order: IJUDGE_COOKIE env -> cached config -> username/password sign-in.
+    Order: IJUDGE_COOKIE env -> cached config -> browser profile -> sign-in.
     """
     env_cookie = os.environ.get("IJUDGE_COOKIE")
     if env_cookie and env_cookie.strip():
-        return env_cookie.strip()
+        if not is_cookie_expired(env_cookie):
+            return env_cookie.strip()
 
+    cached = ""
     if os.path.exists(config_file):
         try:
             with open(config_file, "r", encoding="utf-8") as f:
                 cached = (json.load(f).get("cookie") or "").strip()
-            if cached:
+            if cached and not is_cookie_expired(cached):
                 return cached
         except (OSError, ValueError) as e:
-            print(f"[!] Warning: could not read {config_file}: {e}", file=sys.stderr)
+            print(f"[!] Warning: could not read {config_file}: {e}",
+                  file=sys.stderr)
+
+    # Auto-extract from browser profile if cached cookie is expired or missing
+    browser_cookie = find_browser_cookie()
+    if browser_cookie:
+        if not quiet:
+            print("[*] Automatically refreshed iJudge session cookie "
+                  "from browser profile.")
+        config = load_config(config_file)
+        config["cookie"] = browser_cookie
+        save_config(config, config_file)
+        return browser_cookie
+
+    if cached:
+        return cached
 
     if not IJUDGE_USERNAME or not IJUDGE_PASSWORD:
         raise AuthError(

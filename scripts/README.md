@@ -20,9 +20,15 @@ git worktree add .op OP          # once, from the main checkout
 pip install -r .op/scripts/requirements.txt
 ```
 
-Commands that talk to iJudge need a session. Credentials come from the
-environment only — nothing is hardcoded:
+Commands that talk to iJudge need an active session. The tools resolve this
+automatically in the following order:
 
+1. `IJUDGE_COOKIE` environment variable (if non-expired).
+2. Cached token in `submit_config.json` (if non-expired).
+3. **Auto-refresh from local browser profile** (e.g. Zen Browser SQLite cookies).
+4. Automated sign-in via `IJUDGE_USER` and `IJUDGE_PASS`.
+
+To set or override manually:
 ```sh
 export IJUDGE_COOKIE='access_token=...'   # preferred: browser DevTools > Network > Cookie header, ~24h lifetime
 # or let the scripts mint one:
@@ -30,6 +36,28 @@ export IJUDGE_USER=... IJUDGE_PASS=...
 ```
 
 `submit_config.json` (gitignored) caches the session token. Never commit it.
+
+## Fast-Track Workflow
+
+When new problems are dropped:
+
+```sh
+# 1. Scrape & create stubs
+python3 .op/scripts/pscp.py scrape --only <ids>
+
+# 2. Write code on main in oj/oj<id>-<Name>/main.py, then test
+python3 .op/scripts/pscp.py test <id>
+
+# 3. Submit directly to iJudge
+python3 .op/scripts/pscp.py submit --ids <ids> --yes
+
+# 4. Post-pass sync (status + archive + readme + doctor)
+python3 .op/scripts/pscp.py status && python3 .op/scripts/pscp.py archive && python3 .op/scripts/pscp.py readme && python3 .op/scripts/pscp.py doctor
+
+# 5. Commit & push both branches
+git add -A && git commit -m "feat(oj): complete <ids>, update README" && git push origin main
+git -C .op add -A && git -C .op commit -m "feat(solutions): add <ids> solutions" && git -C .op push origin OP
+```
 
 ## Commands
 
