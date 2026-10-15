@@ -9,7 +9,7 @@ def gaps(cuts, size):
 
 def main():
     """[LEARNING LOGS] หั่นขนมปัง"""
-    w, h, m, n = map(int, input().split())
+    w, h = map(int, input().split()[:2])
     xs = list(map(int, input().split()))
     ys = list(map(int, input().split()))
     widths = sorted(gaps(xs, w), reverse=True)

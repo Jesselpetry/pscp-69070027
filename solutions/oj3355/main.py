@@ -15,6 +15,8 @@ def main():
         if v == -1:
             break
         nums.append(v)
+    if not nums:
+        return
     parts = []
     start = prev = nums[0]
     for v in nums[1:]:

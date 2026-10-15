@@ -7,7 +7,7 @@ def main():
     names = ["Plastic", "Can", "Glass"]
     for _ in range(n):
         a = [float(x) for x in input().split()]
-        parts = ["{:.1f}".format(sum(a))]
+        parts = [f"{sum(a):.1f}"]
         if sum(a) > 50:
             parts.append("Overloaded")
         for i in range(3):

@@ -9,7 +9,7 @@ def main():
         nxt[i] = int(input())
     seen = set()
     cur = s
-    while cur != 0 and cur not in seen:
+    while cur and cur not in seen:
         seen.add(cur)
         cur = nxt[cur]
     print(len(seen))

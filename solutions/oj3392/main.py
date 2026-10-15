@@ -9,7 +9,7 @@ def main():
         print("Input number", i + 1, "stored.")
     while True:
         c = int(input())
-        if c == 0:
+        if not c:
             break
         if c == 1:
             print("Original order:", *a)

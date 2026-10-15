@@ -23,8 +23,7 @@ def main():
     for v in cov + cov:
         if v:
             run += 1
-            if run > ans:
-                ans = run
+            ans = max(ans, run)
         else:
             run = 0
     print(ans)

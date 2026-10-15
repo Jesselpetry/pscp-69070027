@@ -15,8 +15,7 @@ def main():
         for lo, hi in bridges:
             if lo <= a < hi:
                 count += 1
-        if count > ans:
-            ans = count
+        ans = max(ans, count)
     print(ans)
 
 

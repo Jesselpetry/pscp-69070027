@@ -6,7 +6,7 @@ import ast
 def main():
     """PickThem"""
     nums = ast.literal_eval(input())
-    ans = [x for x in nums if x % 2 == 0]
+    ans = [x for x in nums if not x % 2]
     if ans:
         for x in ans:
             print(x)

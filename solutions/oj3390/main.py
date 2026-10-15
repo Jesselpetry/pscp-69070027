@@ -7,10 +7,10 @@ def main():
     r = -1
     c = -1
     for i in range(5):
-        if sum(g[i]) % 2 != 0:
+        if sum(g[i]) % 2:
             r = i
     for j in range(5):
-        if sum(g[i][j] for i in range(5)) % 2 != 0:
+        if sum(g[i][j] for i in range(5)) % 2:
             c = j
     print(r, c)
 
