@@ -40,7 +40,7 @@ OJ_DIR = paths.OJ_DIR
 
 DEFAULT_COURSE_ID = course_config.course_id("regular")
 MIDTERM_COURSE_ID = course_config.course_id("midterm")
-CURRENT_ACTION_ID = "7fb7acaef042f69199bda46c6a7a0f2b05848f3aee"
+CURRENT_ACTION_ID = "7f0791bfdf370f7436a70c9d5df88e97899199dc7b"
 DEFAULT_HEADERS = {
     "User-Agent": USER_AGENT,
     "Accept": "text/x-component",
@@ -371,15 +371,15 @@ def resolve_server_action_id(problem_id, cookie):
         with urllib.request.urlopen(req, timeout=10) as resp:
             page_html = resp.read().decode("utf-8", errors="ignore")
 
-        chunks = re.findall(r'\"static/chunks/([^\"]+)\"', page_html)
-        for c in chunks:
+        chunks = re.findall(r'static/chunks/([^"\\>]+)', page_html)
+        for c in set(chunks):
             c_clean = c.replace("\\", "").strip()
             if "rightpanel" in c_clean or "default-" in c_clean:
                 chunk_url = f"https://ijudge.it.kmitl.ac.th/_next/static/chunks/{c_clean}"
                 creq = urllib.request.Request(chunk_url, headers={"User-Agent": USER_AGENT})
                 with urllib.request.urlopen(creq, timeout=10) as cresp:
                     js = cresp.read().decode("utf-8", errors="ignore")
-                    m = re.search(r'createServerReference\)\(\"([a-f0-9]+)\",[^,]+,[^,]+,[^,]+,\"submitCodeToServer\"', js)
+                    m = re.search(r'createServerReference\)?\(\"([a-f0-9]+)\",[^,]+,[^,]+,[^,]+,\"submitCodeToServer\"', js)
                     if m:
                         CURRENT_ACTION_ID = m.group(1)
                         DEFAULT_HEADERS["next-action"] = CURRENT_ACTION_ID
