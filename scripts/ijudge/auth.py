@@ -184,8 +184,16 @@ def find_browser_cookie() -> str | None:
             temp_db = f"/tmp/ijudge_cookie_{os.getpid()}.sqlite"
             try:
                 shutil.copy2(db_path, temp_db)
+                for ext in ("-wal", "-shm"):
+                    wal_file = db_path + ext
+                    if os.path.isfile(wal_file):
+                        shutil.copy2(wal_file, temp_db + ext)
                 conn = sqlite3.connect(temp_db)
                 cur = conn.cursor()
+                try:
+                    cur.execute("PRAGMA wal_checkpoint(FULL)")
+                except Exception:
+                    pass
                 query = (
                     "SELECT value FROM moz_cookies "
                     "WHERE host LIKE '%ijudge%' AND name='access_token'"
@@ -200,11 +208,13 @@ def find_browser_cookie() -> str | None:
             except Exception:
                 pass
             finally:
-                if os.path.exists(temp_db):
-                    try:
-                        os.remove(temp_db)
-                    except OSError:
-                        pass
+                for suffix in ("", "-wal", "-shm"):
+                    fpath = temp_db + suffix
+                    if os.path.exists(fpath):
+                        try:
+                            os.remove(fpath)
+                        except OSError:
+                            pass
     return None
 
 

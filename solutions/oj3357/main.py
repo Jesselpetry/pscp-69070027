@@ -1,12 +1,10 @@
 """ [LEARNING LOGS] Giraffe """
-import sys
 
 
 def main():
     """[LEARNING LOGS] Giraffe"""
-    data = list(map(int, sys.stdin.read().split()))
-    n = data[0]
-    h = data[1:1 + n]
+    n = int(input())
+    h = [int(input()) for _ in range(n)]
     count = 0
     for i in range(n):
         taller_left = i == 0 or h[i] > h[i - 1]

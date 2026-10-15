@@ -4,7 +4,7 @@
 def gaps(cuts, size):
     """ช่วงห่างระหว่างรอยตัดที่เรียงแล้ว รวมขอบ 0 และ size"""
     edges = [0] + cuts + [size]
-    return [edges[i + 1] - edges[i] for i in range(len(edges) - 1)]
+    return [b - a for a, b in zip(edges, edges[1:])]
 
 
 def main():

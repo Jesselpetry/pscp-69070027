@@ -1,7 +1,5 @@
 """ นักล่าอสูร """
 
-import sys
-
 
 def main():
     """นักล่าอสูร"""
@@ -10,7 +8,6 @@ def main():
         ("Hand Demon", 2), ("Drum Demon", 3), ("Mugen Train", 2),
         ("Upper Moon", 3),
     ]
-    guesses = iter(int(x) for x in sys.stdin.read().split())
     queue = list(order)
     kills = 0
     attacks = 0
@@ -20,7 +17,7 @@ def main():
         out.append(name)
         wrong = 0
         while True:
-            g = next(guesses)
+            g = int(input())
             attacks += 1
             if g == weak:
                 out.append("kill")

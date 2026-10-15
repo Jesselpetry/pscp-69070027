@@ -1,13 +1,18 @@
 """ [LEARNING LOGS] Shorten """
-import sys
 
 
 def main():
     """[LEARNING LOGS] Shorten"""
     nums = []
-    for token in sys.stdin.read().split():
-        v = int(token)
-        if v == -1:                       # เจอ -1 หยุดรับ
+    while True:
+        try:
+            line = input().strip()
+        except EOFError:
+            break
+        if not line:
+            continue
+        v = int(line)
+        if v == -1:
             break
         nums.append(v)
     parts = []
